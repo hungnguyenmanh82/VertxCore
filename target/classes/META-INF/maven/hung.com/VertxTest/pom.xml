@@ -9,6 +9,7 @@
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-core</artifactId>
+			<!-- version 3.5.0 change name of some function -->
 			<version>3.4.2</version>
 		</dependency>
 		<!-- Client -->
@@ -30,7 +31,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
+				<version>3.7.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -41,9 +42,12 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<groupId>org.apache.maven.plugins</groupId>
 				<version>2.4.1</version>
+
 				<executions>
+					<!-- create *.jar 1 file here -->
 					<execution>
-						<id>make-executable-jar-with-dependencies</id>
+						<!-- id phải duy nhất -->
+						<id>build-1</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>
@@ -52,12 +56,55 @@
 							<archive>
 								<manifest>
 									<addClasspath>true</addClasspath>
-									<mainClass>hung.com.server.VertxHttpServerTest</mainClass>
+									<mainClass>hung.com.http.server.HttpServerMain</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
+							<finalName>HttpServerMain.jar</finalName>
+						</configuration>
+					</execution>
+					<!-- create *.jar 2 file here -->
+					<execution>
+						<!-- id phải duy nhất -->
+						<id>build-2</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<archive>
+								<manifest>
+									<addClasspath>true</addClasspath>
+									<mainClass>hung.com.http.server.HttpServerHandlerMain</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<finalName>HttpServerHandlerMain.jar</finalName>
+						</configuration>
+					</execution>
+					<!-- -->
+					<execution>
+						<!-- id phải duy nhất -->
+						<id>build-3</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<archive>
+								<manifest>
+									<addClasspath>true</addClasspath>
+									<mainClass>hung.com.basicSample.VertxTestMain1</mainClass>
+								</manifest>
+							</archive>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<finalName>VertxTestMain1.jar</finalName>
 						</configuration>
 					</execution>
 				</executions>
