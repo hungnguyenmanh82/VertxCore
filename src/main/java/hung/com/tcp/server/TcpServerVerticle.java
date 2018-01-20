@@ -54,13 +54,13 @@ public class TcpServerVerticle extends AbstractVerticle {
         server.listen(10000);
 //        Thread.currentThread().sleep(5000);//5000ms
         //server.close();
-        server.close(new Handler<AsyncResult<Void>>() {
+/*        server.close(new Handler<AsyncResult<Void>>() {
             @Override
             public void handle(AsyncResult result) {
                 if(result.succeeded()){
                 	 System.out.println("tcp server was closed");
                 }
             }
-        });
+        });*/
     }
 }
