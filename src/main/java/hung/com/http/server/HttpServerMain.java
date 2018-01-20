@@ -11,6 +11,6 @@ public class HttpServerMain {
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
 		//get a new instance of Vertx => tương ứng 1 thread thì đúng hơn.
 		Vertx vertx = Vertx.vertx();
-		vertx.deployVerticle(new VertxHttpServerVerticle());		
+		vertx.deployVerticle(new VertxHttpServerVerticle()); 		
 	}
 }

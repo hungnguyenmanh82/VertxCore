@@ -2,6 +2,11 @@ package hung.com.eventbus;
 
 import io.vertx.core.Vertx;
 
+/**
+ * Eventbus là tính năng của Vertx quản lý cho phép các Verticle message nội bộ với nhau.
+ * Vertx sẽ quản lý message, tạo event asynchnous tới các Verticle.
+ * Vertx sẽ cấp phát thread cho các Verticles. 
+ */
 public class EventBusExample {
 	public static void main(String[] args) throws Exception {
 		System.out.println("main(): thread="+Thread.currentThread().getId());

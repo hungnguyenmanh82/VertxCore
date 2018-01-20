@@ -8,6 +8,7 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.http.HttpServerResponse;
 
 /**
  * 
@@ -37,17 +38,37 @@ public class VertxHttpServerVerticle extends AbstractVerticle{
 		        System.out.println("path = "+ request.path());
 		        request.getParam("p1");
 		        
+		        //=========================== body of request ==============
 		        if(request.method() == HttpMethod.POST){
-		        	//asynchronous get body of post request (non-blocking)
+		        	System.out.println("POST request");
+		        	//asynchronous get body of post request (non-blocking).
+		        	// event is called many times
 		            request.handler(new Handler<Buffer>() {
 		                @Override
 		                public void handle(Buffer buffer) {
-		                    //dựa vào Buffer để biết khi nào kết thúc body
-		                	//buffer trả về -1 là kết thúc.
+		                    //Vertx dùng event (ko phải stream) nên nó biết khi nào kết thúc
+		                	// event will be triggered until body end
 		                	//ở tầng giao thức http sẽ có cách xác định khi nào request kết thúc
 		                }
 		            });
 		        }
+		        
+		        //============================= response ===================
+		        HttpServerResponse response = request.response();
+		        response.setStatusCode(200);
+		        String body = "Verticle HttpServer body";
+		        //header phải gửi trc
+		        response.headers()
+		            .add("Content-Length", String.valueOf(body.length()))
+		            .add("Content-Type", "text/html")
+		        ;
+		        
+		        //this function will return immediately
+		        response.write(body); //asynchronous write by Vertx
+		        //asynchronously check whether socket's write buffer is full or not
+//		        response.writeQueueFull(); 
+		        response.end(); //close socket
+		        //httpServer.close();
 		    }
 		});
 
