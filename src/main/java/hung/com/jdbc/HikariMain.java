@@ -26,7 +26,7 @@ public class HikariMain {
 		//xem tài liệu cụ thể của C300 và Hikari để biết tên các trường này
 		JsonObject config = new JsonObject()
 				.put("provider_class", "io.vertx.ext.jdbc.spi.impl.HikariCPDataSourceProvider")
-				.put("url", "jdbc:hsqldb:mem:test?shutdown=true")
+				.put("url", "jdbc:hsqldb:mem:test?shutdown=true")  ////auto detect base on url
 				.put("driverClassName", "org.hsqldb.jdbcDriver")  //= "driver_class" của C3P0
 				.put("maximumPoolSize", 30)          //= "max_pool_size" của  C3P0
 				.put("username", "user_name")        //= "user" của C3P0

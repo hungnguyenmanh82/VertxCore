@@ -13,6 +13,8 @@ import io.vertx.ext.sql.SQLConnection;
 /**
  * http://vertx.io/docs/vertx-jdbc-client/java/
  * 
+ * Cần add lib của MySQl, Hsqldb... vào Maven thì mới chạy đc
+ * 
  */
 public class C3P0Main {
 
