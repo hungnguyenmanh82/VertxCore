@@ -8,6 +8,11 @@ public class VertxClientMain1 {
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
 		//get a new instance of Vertx => tương ứng 1 thread thì đúng hơn.
 		Vertx vertx = Vertx.vertx();
-		vertx.deployVerticle(new HttpClientVerticle()); 		
+		//tạo 5 connect tới server
+		vertx.deployVerticle(new HttpClientVerticle()); 
+/*		vertx.deployVerticle(new HttpClientVerticle());
+		vertx.deployVerticle(new HttpClientVerticle()); 
+		vertx.deployVerticle(new HttpClientVerticle()); 
+		vertx.deployVerticle(new HttpClientVerticle()); */
 	}
 }

@@ -32,7 +32,7 @@ public class VertxHttpServerVerticle extends AbstractVerticle{
 		    @Override
 		    public void handle(HttpServerRequest request) {
 		    	//tại đây phần header đã ok => the same as Tomcat NIO
-		        System.out.println("incoming request!: thread="+Thread.currentThread().getId());
+		        System.out.println("incoming connect request!: thread="+Thread.currentThread().getId());
 		        
 		        System.out.println("uri = "+ request.uri());
 		        System.out.println("path = "+ request.path());
