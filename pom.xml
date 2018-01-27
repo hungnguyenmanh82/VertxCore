@@ -17,6 +17,7 @@
 			<artifactId>vertx-jdbc-client</artifactId>
 			<version>3.4.2</version>
 		</dependency>
+		
 		<!-- Client -->
 		<dependency>
 			<groupId>junit</groupId>

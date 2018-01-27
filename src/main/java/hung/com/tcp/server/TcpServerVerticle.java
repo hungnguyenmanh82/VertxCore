@@ -41,7 +41,9 @@ public class TcpServerVerticle extends AbstractVerticle {
                 Buffer outBuffer = Buffer.buffer(1000); //size of buffer
                 outBuffer.appendString("<= (send) response from server asynchronous");
                 
-                //Vertx don't have event for write =>much check it
+                //Vertx don't have event khi write socket finish
+                //writeQueue => chỉ số buffer đc lưu vào Queue để ghi vào socket
+//                netSocket.setWriteQueueMaxSize(2);
                 if(netSocket.writeQueueFull() == false) {//asynchronous function check
                 	//asynchronous by Vertx, it finish when writeQueueFull() = false
                 	netSocket.write(outBuffer); 

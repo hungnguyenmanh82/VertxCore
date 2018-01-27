@@ -28,7 +28,7 @@ public class C3P0Main {
 		//xem tài liệu cụ thể của C300 và Hikari để biết tên các trường này
 		JsonObject config = new JsonObject()				
 				.put("url", "jdbc:hsqldb:mem:test?shutdown=true")
-				.put("driver_class", "org.hsqldb.jdbcDriver")
+				.put("driver_class", "org.hsqldb.jdbcDriver")    //auto detect base on url
 				.put("max_pool_size", 30)
 				.put("user", "user_name")
 				.put("password", "1234");

@@ -18,6 +18,9 @@ public class MyVerticle1 extends AbstractVerticle {
 
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {	
+//		this.context;  //quản lý tất cả tài nguyên của Verticle
+//		this.context.isWorkerContext()
+//		this.context.isMultiThreadedWorkerContext()
 		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId());
 	}
 
