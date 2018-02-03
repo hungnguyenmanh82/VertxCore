@@ -26,7 +26,7 @@ public class BlockingVerticle extends AbstractVerticle {
 		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId());
 		
 		//Future<String>  => String là giá trị trả về của Future 
-		//run on another thread
+		//run on another thread (it is not Verticle thread)
 		Handler blockingHandler = new Handler<Future<String>>() {
 			public String test = "abc";
 			//Future này quản lý bởi Vertx, ko phải Verticle
@@ -47,7 +47,8 @@ public class BlockingVerticle extends AbstractVerticle {
 			};
 		};
 		
-		//oder = false => worker thread
+		//oder = false => worker thread context (các blockingHandler tiếp theo sẽ độc lập chạy parallel)
+		//oder = true => theo thứ tự các blockingHandler sẽ chay nối tiếp trên 1 context khac với với Verticle
 		vertx.executeBlocking(blockingHandler, false, returnHandler);
 		
 		//Java lambda syntax

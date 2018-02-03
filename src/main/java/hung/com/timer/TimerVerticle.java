@@ -27,11 +27,15 @@ public class TimerVerticle extends AbstractVerticle {
 		    	System.out.println("timer: thread="+Thread.currentThread().getId());
 		    }
 		});
+		
+//		vertx.cancelTimer(timerID);
+		
 	}
 
 	@Override
 	public void stop(Future<Void> stopFuture) throws Exception {
 		System.out.println("MyVerticle.stop(): thread=" + Thread.currentThread().getId());
 	}
+	
 
 }
