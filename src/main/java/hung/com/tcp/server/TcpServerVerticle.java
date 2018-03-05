@@ -25,10 +25,14 @@ public class TcpServerVerticle extends AbstractVerticle {
             @Override
             public void handle(NetSocket netSocket) {
             	System.out.println("incoming connect request!: thread="+Thread.currentThread().getId());
-                                
+                 
+            	
                 //=============== read data from socket ====================== 
                 netSocket.handler(new Handler<Buffer>() {
                 	//asynchronous event 'read' called many times => streaming data
+                	//NetSocket đã đc gắn với context của Server rồi. 
+                	//code này chạy trên threadPoold của server
+                	//kể cả khi chuyển sang Vertical thì cũng chạy trên thread khác
                     @Override
                     public void handle(Buffer buffer) {
                     	System.out.println("=> read: thread="+Thread.currentThread().getId());

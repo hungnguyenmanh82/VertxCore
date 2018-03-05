@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/main/java/hung/com/basicSample/MultiInstanceMain.java=UTF-8
 encoding//src/main/java/hung/com/basicSample/MultiVertxHttpServerMain.java=UTF-8
 encoding//src/main/java/hung/com/basicSample/MyVerticle1.java=UTF-8
 encoding//src/main/java/hung/com/basicSample/VertxTestMain1.java=UTF-8

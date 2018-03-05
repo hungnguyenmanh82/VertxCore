@@ -34,10 +34,21 @@ public class VertxHttpServerVerticle extends AbstractVerticle{
 		    	//tại đây phần header đã ok => the same as Tomcat NIO
 		        System.out.println("incoming connect request!: thread="+Thread.currentThread().getId());
 		        
-		        System.out.println("uri = "+ request.uri());
+		        /**
+		         * url = http://localhost:81/atm?id=1&command=ejm
+		         * uri = /atm?id=1&command=ejm
+		         * path = /atm
+		         * id = 1
+		         * command = ejm
+		         */
+		        System.out.println("uri = "+ request.uri()); // 
 		        System.out.println("path = "+ request.path());
-		        request.getParam("p1");
 		        
+		        String id = request.getParam("id");
+		        System.out.println("id = "+ id);
+		        
+		        String command = request.getParam("command");
+		        System.out.println("command = "+ command);
 		        //=========================== body of request ==============
 		        if(request.method() == HttpMethod.POST){
 		        	System.out.println("POST request");
