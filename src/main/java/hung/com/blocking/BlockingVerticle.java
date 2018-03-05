@@ -33,7 +33,8 @@ public class BlockingVerticle extends AbstractVerticle {
 			@Override
 			public void handle(Future<String> future) {
 				String result = "blockingHandler: thread="+Thread.currentThread().getId();
-				  future.complete(result);
+				//future đc dùng cho asynchronous function ở trong hàm handle này.	
+				future.complete(result);   //phải gọi hàm này thì function này mới đc coi là kết thúc.
 				System.out.println(test);
 			}
 			
@@ -47,8 +48,8 @@ public class BlockingVerticle extends AbstractVerticle {
 			};
 		};
 		
-		//oder = false => worker thread context (các blockingHandler tiếp theo sẽ độc lập chạy parallel)
-		//oder = true => theo thứ tự các blockingHandler sẽ chay nối tiếp trên 1 context khac với với Verticle
+		//order = false => worker thread context (các blockingHandler tiếp theo sẽ độc lập chạy parallel)
+		//order = true => theo thứ tự các blockingHandler sẽ chay nối tiếp trên 1 context khac với với Verticle
 		vertx.executeBlocking(blockingHandler, false, returnHandler);
 		
 		//Java lambda syntax

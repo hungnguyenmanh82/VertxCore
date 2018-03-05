@@ -18,6 +18,7 @@ public class MultiVertxHttpServerMain {
 		//================== Vertx2==================
 		Vertx vertx1 = Vertx.vertx();
 		vertx1.deployVerticle(new VertxHttpServerVerticle(), new Handler<AsyncResult<String>>(){
+			//hàm này trigger khi VertxHttpServerVerticle.start(future) hoàn thành asynchronous
 			@Override
 			public void handle(AsyncResult<String> stringAsyncResult) {
 				System.out.println(" handler => vertx.deployVerticle(): thread="+Thread.currentThread().getId());

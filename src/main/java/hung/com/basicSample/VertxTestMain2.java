@@ -14,6 +14,7 @@ public class VertxTestMain2 {
 		//register Verticale to capture event.
 		//asynchronous call MyVerticle1.start() in worker thread
 		vertx.deployVerticle(new MyVerticle1(), new Handler<AsyncResult<String>>(){
+			//hàm này đc gọi sau khi hàm MyVerticle1.start() trả về giá trị (lưu ý Future.complete() nếu dùng asynchronous start() )
 			@Override
 			public void handle(AsyncResult<String> stringAsyncResult) {
 				System.out.println("vertx.deployVerticle(): thread="+Thread.currentThread().getId());
