@@ -12,11 +12,11 @@ VertX có 1 thread riêng để xử lý phân loại event.
 Vertx dựa và thông tin đính kèm để gửi nó tới Queue của Verticle.
 sau đó VertX sẽ assign thread để chạy event ở của Verticle
  */
-public class TimerVerticle extends AbstractVerticle {
+public class TimerVerticle2 extends AbstractVerticle {
 
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {	
-		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId());
+		System.out.println("MyVerticle2.start(): thread="+Thread.currentThread().getId());
 		
 //		vertx.setTimer(delay, handler)
 //		vertx.setPeriodic(delay, handler)
@@ -28,7 +28,7 @@ public class TimerVerticle extends AbstractVerticle {
 			//run on thread of Verticle
 		    @Override
 		    public void handle(Long aLong) {
-		    	System.out.println("timer1.1: thread="+Thread.currentThread().getId());
+		    	System.out.println("timer2.1 : thread="+Thread.currentThread().getId());
 		    }
 		});
 		
@@ -36,10 +36,14 @@ public class TimerVerticle extends AbstractVerticle {
 			//run on thread of Verticle
 		    @Override
 		    public void handle(Long aLong) {
-		    	System.out.println("timer1.2s: thread="+Thread.currentThread().getId());
+		    	System.out.println("timer2.2: thread="+Thread.currentThread().getId());
 		    }
 		});
 		
+		//check timer có cùng context với Verticle ko?
+		//nếu cùng context thì cac timer này phải xử lý sau 6s (đúng là như vậy)
+		Thread.sleep(6000);
+		System.out.println("verticle sleep 6s thread="+Thread.currentThread().getId());
 //		vertx.cancelTimer(timerID);
 	}
 

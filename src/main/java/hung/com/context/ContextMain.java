@@ -23,7 +23,7 @@ public class ContextMain {
 		}
 
 		//register Verticale with Vertex instance to capture event.
-		vertx.deployVerticle(new ContextVerticle(),new DeploymentOptions().setWorker(true)); //asynchronous call MyVerticle1.start() in worker thread
+		vertx.deployVerticle(new ContextVerticle(),new DeploymentOptions().setWorker(false)); //asynchronous call MyVerticle1.start() in worker thread
 		vertx.deployVerticle(new ContextVerticle2()); 
 		Thread.currentThread().sleep(5000);
 		

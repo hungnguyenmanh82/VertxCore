@@ -38,6 +38,7 @@ public class TcpClientVerticle extends AbstractVerticle {
 					//asynchronous event 'read' called many times => streaming data
 					@Override
 					public void handle(Buffer buffer) {
+						//it run on context of Socket, not run on context of This vertical
 						System.out.println("=> incoming data: length = "+buffer.length());
 						System.out.println(buffer.getString(0, buffer.length()));
 					}
