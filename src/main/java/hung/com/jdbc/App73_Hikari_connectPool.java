@@ -17,7 +17,7 @@ import io.vertx.ext.sql.SQLConnection;
  * config cho Hikari:
  * https://github.com/brettwooldridge/HikariCP#configuration-knobs-baby
  */
-public class HikariMain {
+public class App73_Hikari_connectPool {
 
 	public static void main(String[] args) {
 		Vertx vertx = Vertx.vertx();

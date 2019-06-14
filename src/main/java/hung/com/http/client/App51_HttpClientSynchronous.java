@@ -9,7 +9,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class HttpClient {
+/**
+ * Using OkHttp to test Http client Synchronous
+ */
+public class App51_HttpClientSynchronous {
 
 	public static void main(String[] args) throws Exception {
 		test_OkHttp_Get_Synchronous();

@@ -21,6 +21,8 @@ public class HttpClientVerticle extends AbstractVerticle {
         	//asynchronous callback function only 1 time when receive header of response
         	@Override
             public void handle(HttpClientResponse httpClientResponse) {
+        		
+        		//================== header response asynchronous ===========================
         		System.out.println("====================response===================");
         		System.out.println("status code = " + httpClientResponse.statusCode());
         		MultiMap header = httpClientResponse.headers();

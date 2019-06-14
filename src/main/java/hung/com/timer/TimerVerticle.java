@@ -36,7 +36,7 @@ public class TimerVerticle extends AbstractVerticle {
 			//run on thread of Verticle
 		    @Override
 		    public void handle(Long aLong) {
-		    	System.out.println("timer1.2s: thread="+Thread.currentThread().getId());
+		    	System.out.println("timer1.2: thread="+Thread.currentThread().getId());
 		    }
 		});
 		

@@ -16,6 +16,7 @@ public class TcpClientVerticle extends AbstractVerticle {
 	public void start() {
 		NetClient tcpClient = vertx.createNetClient();
 		
+		// server port = 10000
 		tcpClient.connect(10000, "localhost",
 				new  Handler<AsyncResult<NetSocket>>(){
 			//asynchronous event when socket is connected => called only 1 time
@@ -24,6 +25,7 @@ public class TcpClientVerticle extends AbstractVerticle {
 				NetSocket netSocket = result.result();
 
 				//====================== write data to socket =================
+				// có thể dùng Blocking code để write data trên 1 thread khác 
 				Buffer outBuffer = Buffer.buffer(1000); //size of buffer
 				outBuffer.appendString("<= client send(write) data to server asynchronously");
 

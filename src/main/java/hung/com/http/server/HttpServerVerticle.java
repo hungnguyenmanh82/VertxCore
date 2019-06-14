@@ -19,7 +19,7 @@ Vertx thay mặt Vertical làm mọi thứ, bắt event.
 Khi có event, Vertx sẽ trả về và gọi Vertical xử lý
 Tất nhiên, Vertx phải cấp phát thread cho Verticle 
  */
-public class VertxHttpServerVerticle extends AbstractVerticle{
+public class HttpServerVerticle extends AbstractVerticle{
 	private HttpServer httpServer = null;
 
 	//run on a worker thread

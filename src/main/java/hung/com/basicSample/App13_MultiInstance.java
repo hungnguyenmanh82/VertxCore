@@ -4,10 +4,11 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 
 /**
- * hỗ trợ Multi Verticle dùng thread pool
+ * vd: hỗ trợ chạy Multi Verticle instance dùng thread pool
+ * Vertical: đc xem là các task. Nhiều Vertical có thể asign cho 1 thread trong thread pool.
  *
  */
-public class MultiInstanceMain {
+public class App13_MultiInstance {
 
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
@@ -15,7 +16,7 @@ public class MultiInstanceMain {
 		Vertx vertx = Vertx.vertx();
 
 		DeploymentOptions options = new DeploymentOptions()
-				.setInstances(6)          //create 6 instances here
+				.setInstances(6)          //create 6 instances of Verticals
 				.setWorkerPoolName("abc")
 				.setWorkerPoolSize(3)
 				.setWorker(true);

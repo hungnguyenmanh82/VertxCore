@@ -8,12 +8,19 @@ import io.vertx.core.Vertx;
 
 /**
  * 
-Vertical:  được hiểu như là 1 đối tượng tương tác. 
+Vertical:  được hiểu như là 1 đối tượng (đơn vị quản lý tài nguyên) 
+   by default: vertical sẽ đc asign thread để đảm bảo tài nguyên ko bị tranh chấp giữa 2 thread.
+    1 Thời điểm chỉ 1 thread đc assyn truy cập tài nguyên vertical
+   //=======
    Các Vertical tương tác với nhau qua cơ chế message (có thể tương tác với ngoài), 
    chứa các function callback để nhận event đăng ký với Vertx. 
    Và gửi event (or message) tới Vertx.  
-   VertX sẽ quản lý cấp phát thread cho Vertical => có vẻ như thread pool. 
-   Chứ thread ko găn cố định với Vertical.  1 thread có thể dùng lại cho nhiều vertical.
+   //=======
+   VertX sẽ quản lý cấp phát thread cho Vertical từ thread pool.  
+   1 thread có thể dùng lại cho nhiều vertical
+   //=============
+   blocking execute code: Là 1 đoạn code đc Verticle trigger để chạy Asynchronous với Verticle (chạy song song).
+    Sau khi chạy xong đoạn code này nó sinh event gửi tới Verticle qua Vertx.  
 
  */
 public class BlockingVerticle extends AbstractVerticle {
@@ -25,7 +32,8 @@ public class BlockingVerticle extends AbstractVerticle {
 //		this.context.isMultiThreadedWorkerContext()
 		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId());
 		
-		//Future<String>  => String là giá trị trả về của Future 
+		
+		//BlockingHanderler: là 1 đoạn code đc chạy Asynchronous với Vertical
 		//run on another thread (it is not Verticle thread)
 		Handler blockingHandler = new Handler<Future<String>>() {
 			public String test = "abc";
@@ -52,7 +60,7 @@ public class BlockingVerticle extends AbstractVerticle {
 		//order = true => theo thứ tự các blockingHandler sẽ chay nối tiếp trên 1 context khac với với Verticle
 		vertx.executeBlocking(blockingHandler, false, returnHandler);
 		
-		//Java lambda syntax
+		//Cách 2: Java lambda syntax  => ko nên dùng vì cú pháp này ko tường minh
 /*		vertx.executeBlocking(future -> {
 			  // Call some blocking API that takes a significant amount of time to return
 			  String result = "hello";

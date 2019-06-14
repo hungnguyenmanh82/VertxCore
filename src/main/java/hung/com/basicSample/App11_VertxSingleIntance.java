@@ -1,15 +1,19 @@
-package hung.com.blocking;
+package hung.com.basicSample;
 
 import io.vertx.core.Vertx;
 
-public class BlockingCodeMain {
+/**
+ * vd: Khởi tạo 1 vertical  < xem khái niệm vertical>
+ *
+ */
+public class App11_VertxSingleIntance {
 
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
 		//create a new instance Vertx => a worker thread
 		Vertx vertx = Vertx.vertx();
 		//register Verticale with Vertex instance to capture event.
-		vertx.deployVerticle(new BlockingVerticle()); //asynchronous call MyVerticle1.start() in worker thread
+		vertx.deployVerticle(new MyVerticle1()); //asynchronous call MyVerticle1.start() in worker thread
 		
 		Thread.currentThread().sleep(3000);
 		
