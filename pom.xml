@@ -62,13 +62,13 @@
 							<archive>
 								<manifest>
 									<addClasspath>true</addClasspath>
-									<mainClass>hung.com.http.server.HttpServerMain</mainClass>
+									<mainClass>hung.com.http.server.App61_HttpServer</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>HttpServerMain.jar</finalName>
+							<finalName>App61_HttpServer.jar</finalName>
 						</configuration>
 					</execution>
 					<!-- create *.jar 2 file here -->
@@ -83,13 +83,13 @@
 							<archive>
 								<manifest>
 									<addClasspath>true</addClasspath>
-									<mainClass>hung.com.http.server.HttpServerHandlerMain</mainClass>
+									<mainClass>hung.com.http.server.App62_HttpServerHandler</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>HttpServerHandlerMain.jar</finalName>
+							<finalName>App62_HttpServerHandler.jar</finalName>
 						</configuration>
 					</execution>
 					<!-- ===================jar========================== -->
@@ -104,13 +104,13 @@
 							<archive>
 								<manifest>
 									<addClasspath>true</addClasspath>
-									<mainClass>hung.com.basicSample.VertxTestMain1</mainClass>
+									<mainClass>hung.com.basicSample.App11_VertxSingleIntance</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>VertxTestMain1.jar</finalName>
+							<finalName>App11_VertxSingleIntance.jar</finalName>
 						</configuration>
 					</execution>
 					<!-- ===================jar========================== -->
@@ -125,13 +125,13 @@
 							<archive>
 								<manifest>
 									<addClasspath>true</addClasspath>
-									<mainClass>hung.com.tcp.server.TcpServerMain</mainClass>
+									<mainClass>hung.com.tcp.server.App91_TcpServer</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>TcpServerMain.jar</finalName>
+							<finalName>App91_TcpServer.jar</finalName>
 						</configuration>
 					</execution>
 				</executions>
