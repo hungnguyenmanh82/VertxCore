@@ -5,7 +5,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 
 /**
- * vd: Khởi tạo 1 vertical  < xem khái niệm vertical>
+ * vd: Asign Threadpool cho verticle
  *
  */
 public class App15_VertxThreadPool {
@@ -28,7 +28,7 @@ public class App15_VertxThreadPool {
 		//==================== verticle dùng Threadpool riêng ko dùng của Vertx =================
 		// tức là mỗi lần Verticle nhận đc event nó sẽ lấy thread trong threadpool của nó, ko dùng chung threadpool với Vertx
 		DeploymentOptions options = new DeploymentOptions()
-				.setWorkerPoolName("*TcpServerThreadPool")
+				.setWorkerPoolName("*TcpServerThreadPool")   //WorkerPoolName là duy nhất, có thể dùng lại để share với các Verticle khác
 				.setWorkerPoolSize(10)  //thread for server, not client
 				.setWorker(true);   //true: mỗi event đc assign 1 thread trong pool (các event độc lập, ko phụ thuộc nhau).
 		

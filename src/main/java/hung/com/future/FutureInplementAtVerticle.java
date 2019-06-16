@@ -10,9 +10,12 @@ import io.vertx.core.file.FileSystem;
 
 /**
  * 
-
+Future<Type>:  extends Handler<type> và AsyncResult<type> => là kết hợp 2 class này để tạo funtion point (làm call back function khi có event).
+ Khi 2 hàm future.complete(result) or future.fail(result) đc gọi thì lập tức nó sẽ gọi hàm callback của nó là Handler.handle(AsyncResult<result>). 
+Future là function point => thread nào gọi nó thì nó chạy trên thread đó (đã test).
 
  */
+
 public class FutureInplementAtVerticle extends AbstractVerticle {
 
 	private Future<String> futureTest;

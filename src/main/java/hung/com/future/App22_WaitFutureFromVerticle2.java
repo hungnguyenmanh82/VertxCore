@@ -14,10 +14,11 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.core.net.NetServer;
 
 /**
-Future:là 1 class chứa function để tạo event Future.complete(), Future.fail() kèm giá trị trả về result là kiểu tùy ý (String, int, object..). 
- Future đc tạo ở context nào thì  thuộc về context đó (ở Verticle context nào thì thuộc về context đó).
-  Future sẽ trigger event cho Context mà nó thuộc về.  Có nghĩa là trong Future phải chứa thông tin của Context nó thuộc về.  
-  VertX implicit phần thiết lập Future => bản chất là Future đc tạo ở thread của verticle context nào thì nó thuộc về Verticle đó và sẽ trigger cho Verticle đó. 
+ * 
+Future<Type>:  extends Handler<type> và AsyncResult<type> => là kết hợp 2 class này để tạo funtion point (làm call back function khi có event).
+ Khi 2 hàm future.complete(result) or future.fail(result) đc gọi thì lập tức nó sẽ gọi hàm callback của nó là Handler.handle(AsyncResult<result>). 
+Future là function point => thread nào gọi nó thì nó chạy trên thread đó (đã test).
+
  */
 public class App22_WaitFutureFromVerticle2 {
 

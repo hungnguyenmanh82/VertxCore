@@ -13,10 +13,10 @@ import io.vertx.core.net.NetSocket;
 /**
  * http://vertx.io/docs/vertx-core/java/#_concurrent_composition
  * 
- * VD: tạo 2 server. Và bắt sự kiện cả 2 server khởi tạo xong hoàn toàn.
- * 
- * 	Future: đc hiểu là 1 event
- *  CompositeFuture: sẽ đc trigger event khi cả 2 server đc khởi tạo xong.
+Future<Type>:  extends Handler<type> và AsyncResult<type> => là kết hợp 2 class này để tạo funtion point (làm call back function khi có event).
+ Khi 2 hàm future.complete(result) or future.fail(result) đc gọi thì lập tức nó sẽ gọi hàm callback của nó là Handler.handle(AsyncResult<result>). 
+Future là function point => thread nào gọi nó thì nó chạy trên thread đó (đã test).
+
  */
 public class App24_CompositeFuture_any {
 

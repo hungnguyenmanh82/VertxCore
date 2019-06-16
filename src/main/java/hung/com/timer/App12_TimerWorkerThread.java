@@ -19,8 +19,8 @@ public class App12_TimerWorkerThread {
 
 		Vertx vertx = Vertx.vertx();
 		//============================== case1: timer đc set o Verticle  ==============
-		vertx.deployVerticle(new TimerVerticle(),options);
-		vertx.deployVerticle(new TimerVerticle2(),options);	
+		vertx.deployVerticle(new TimerVerticle());  //default = standard verticle
+		vertx.deployVerticle(new TimerVerticle2());	 //default = standard verticle
 		
 		//==============================case2: timer ở ngoài ========================
 		long timerID = vertx.setTimer(4000,new  Handler<Long>() {

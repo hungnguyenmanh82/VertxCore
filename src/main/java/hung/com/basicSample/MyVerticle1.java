@@ -6,7 +6,7 @@ import io.vertx.core.Vertx;
 
 /**
  * 
-Vertical:  được hiểu như là 1 đối tượng (đơn vị quản lý tài nguyên) 
+Verticle:  được hiểu như là 1 đối tượng (đơn vị quản lý tài nguyên) 
    by default: vertical sẽ đc asign thread để đảm bảo tài nguyên ko bị tranh chấp giữa 2 thread.
     1 Thời điểm chỉ 1 thread đc assyn truy cập tài nguyên vertical
    //=======

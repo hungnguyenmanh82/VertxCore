@@ -42,7 +42,7 @@ public class HttpServerVerticle extends AbstractVerticle{
 		         * id = 1
 		         * command = ejm
 		         */
-		        System.out.println("uri = "+ request.uri()); // 
+		         
 		        System.out.println("path = "+ request.path());
 		        
 		        String id = request.getParam("id");
@@ -71,7 +71,8 @@ public class HttpServerVerticle extends AbstractVerticle{
 		        }
 		        
 		        //============================= response ===================
-		        // phần này nên dùng Blocking code để run nó trên 1 thread khác
+		        //cách 1: phần này nên dùng Blocking code để run nó trên 1 thread khác
+		        // cách 2: chuyển phần này sang Verticle khác để xử lý
 		        HttpServerResponse response = request.response();
 		        response.setStatusCode(200);
 		        String body = "Verticle HttpServer body";

@@ -1,7 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/main/java/hung/com/basicSample/App11_VertxSingleIntance.java=UTF-8
 encoding//src/main/java/hung/com/basicSample/App12_VertxHandler.java=UTF-8
-encoding//src/main/java/hung/com/basicSample/App12_VertxThreadPool.java=UTF-8
 encoding//src/main/java/hung/com/basicSample/App13_MultiInstance.java=UTF-8
 encoding//src/main/java/hung/com/basicSample/App14_MultiVertxHttpServerMain.java=UTF-8
 encoding//src/main/java/hung/com/basicSample/App15_VertxThreadPool.java=UTF-8

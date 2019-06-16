@@ -14,7 +14,7 @@ import io.vertx.core.eventbus.Message;
  * Nhiều Verticle sẽ chỉ chạy trên 1 thread.
  * 
  * Verticle thực chất giữ function callback để khi có event thì Vertx gọi. 
- * Verticle chứa Queue của nó. Nhưng Vertx sẽ truy cập queue này và call Verticle run
+ * Verticle chứa Event Queue của nó. Nhưng Vertx sẽ truy cập queue này và call Verticle run
  * 
  * Tuy nhiên Vertx sinh ra nhiều thread để quản lý event:
  *  + 1 thread để run callback function khi có event
@@ -37,8 +37,11 @@ public class EventBusReceiverVerticle extends AbstractVerticle {
     	//vertx member of AbstractVerticle  => where this Verticle was deployed
     	//consumer=(register to receive event): this Verticle context đăng ký nhận Event từ Vertx
     	// event đc xử lý trên threadpool của Verticle context này
-    	String EventId = "anAddress";
-    	vertx.eventBus().consumer(EventId,new Handler<Message<String>>() { //có thể thay String bằng kiểu khác: object, int,float...
+    	// address: của bên nhận và gửi phải giống nhau để giao tiếp với nhau
+    	// Message<String> = address + body
+    	// body kiểu String
+    	String address = "anAddress";
+    	vertx.eventBus().consumer(address,new Handler<Message<String>>() { //có thể thay String bằng kiểu khác: object, int,float...
 			@Override
 			public void handle(Message<String> message) {
 				System.out.println("***Handle(): EventBusReceiverVerticle:Consumer():"+
@@ -46,7 +49,7 @@ public class EventBusReceiverVerticle extends AbstractVerticle {
 											", thread="+Thread.currentThread().getId());
 				System.out.println("receive Message: name="+ name +  
 											", address="+ message.address()+ 
-												", body=" +message.body());
+												", body=" +message.body());  //body kiểu string
 			}
     		
 		} );
