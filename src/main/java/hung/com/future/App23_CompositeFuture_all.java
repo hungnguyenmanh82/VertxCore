@@ -31,6 +31,7 @@ public class App23_CompositeFuture_all {
 			
 			@Override
 			public void handle(HttpServerRequest request) {
+				//dùng Browser để test:  http://localhost:8080/abc
 				System.out.println("uri = "+ request.uri()); //
 				System.out.println("httpserver requestHandler: thread=" + Thread.currentThread().getId());
 			}
@@ -51,6 +52,7 @@ public class App23_CompositeFuture_all {
 			
 			@Override
 			public void handle(NetSocket netSocket) {
+				//http base trên tcp => //dùng Browser để test:  http://localhost:8081/abc
 				System.out.println("TCP server connectHandler: thread=" + Thread.currentThread().getId());			
 			}
 		});
@@ -60,13 +62,17 @@ public class App23_CompositeFuture_all {
 		int tcpPort = 8081;
 		netServer.listen(tcpPort,netServerFuture); //= netServerFuture.completer()
 
+		//==================================== future 3 ===========================================
+		Future<String> futureTest = Future.future(); //fut1: gắn với context của Vertx
+
+		vertx.deployVerticle(new FutureInplementAtVerticle(futureTest));
 		
 		//=====================================  wait 2 server start ==================================
 		//chờ cho 2 Server đc khởi tạo thành công (listening) or fail
 		//CompositeFuture: nếu 1 trong 2 fail thì tất cả fail
 		// đăng ký nhận future ở context hiện tại
-		CompositeFuture.all(httpServerFuture, netServerFuture).setHandler(new Handler<AsyncResult<CompositeFuture>>() {
-
+		CompositeFuture.all(httpServerFuture, netServerFuture, futureTest).setHandler(new Handler<AsyncResult<CompositeFuture>>() {
+			// code này sẽ run tren thread của Future hoàn thành cuối cùng
 			@Override
 			public void handle(AsyncResult<CompositeFuture> event) {
 				if (event.succeeded()) {

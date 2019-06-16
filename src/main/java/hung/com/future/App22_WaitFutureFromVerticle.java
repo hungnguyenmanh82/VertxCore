@@ -33,6 +33,7 @@ public class App22_WaitFutureFromVerticle {
 		// Future<Void> và AsyncResult<Void> cùng kiểu <Void>	
 		futureCreateFile.setHandler(new Handler<AsyncResult<Void>>() {
 			// code này run trên cùng thread với CreateFile đc cấp phát bởi threadpool của vertx context (đã test)
+			// Createfile() call futureCreateFile.complete(result) or futureCreateFile.fail(result)
 			@Override
 			public void handle(AsyncResult<Void> event) {
 				if( event.succeeded()){

@@ -27,14 +27,15 @@ public class App22_WaitFutureFromVerticle2 {
 
 		VertxOptions option = new VertxOptions().setWorkerPoolSize(4);
 		Vertx vertx = Vertx.vertx(option);
-		Future<String> futureTest = Future.future(); //fut1: gắn với context của Vertx
+		Future<String> futureTest = Future.future(); //futureTest: gắn với context của Vertx
 
 		vertx.deployVerticle(new FutureInplementAtVerticle(futureTest));
 
 
 		// Future<Void> và AsyncResult<Void> cùng kiểu <Void>	
 		futureTest.setHandler(new Handler<AsyncResult<String>>() {
-			// code này run trên cùng thread với CreateFile đc cấp phát bởi threadpool của vertx context (đã test)
+			// code này run trên cùng thread gọi hàm futureTest.complete(result) or futureTest.fail(result)
+			// ở vd này là cùng thread với FutureInplementAtVerticle
 			@Override
 			public void handle(AsyncResult<String> event) {
 				if( event.succeeded()){

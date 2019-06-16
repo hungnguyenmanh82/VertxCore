@@ -31,7 +31,7 @@ public class FutureInplementAtVerticle extends AbstractVerticle {
 		
 		Thread.currentThread().sleep(2000); //wait for vertx.close() finished
 		
-		String result = "****result here";
+		String result = "futureTest****result here";
 		futureTest.complete(result);
 		
 	}
