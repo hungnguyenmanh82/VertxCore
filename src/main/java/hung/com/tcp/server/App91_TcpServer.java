@@ -1,5 +1,6 @@
 package hung.com.tcp.server;
 
+import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 
 /**
@@ -11,6 +12,13 @@ public class App91_TcpServer {
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
 		//get a new instance of Vertx => tương ứng 1 thread thì đúng hơn.
 		Vertx vertx = Vertx.vertx();
-		vertx.deployVerticle(new TcpServerVerticle());	
+		
+		DeploymentOptions options = new DeploymentOptions()
+				.setWorkerPoolName("*TcpServerThreadPool")
+				.setWorkerPoolSize(10)  //thread for server, not client
+				.setWorker(true);   //true: mỗi event đc assign 1 thread trong pool (các event độc lập, ko phụ thuộc nhau).
+		
+		// event là event Open Socket nên độc lập nhau
+		vertx.deployVerticle(new TcpServerVerticle(), options);	
 	}
 }

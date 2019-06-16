@@ -19,6 +19,7 @@ Vertical:  được hiểu như là 1 đối tượng (đơn vị quản lý tà
    //=======
    VertX sẽ quản lý cấp phát thread cho Vertical từ thread pool.  
    1 thread có thể dùng lại cho nhiều vertical
+   
 
  */
 public class ContextVerticle extends AbstractVerticle {
@@ -28,6 +29,8 @@ public class ContextVerticle extends AbstractVerticle {
 
 		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId());
 
+		// context của Verticle khác Vertx Context
+		// các verticle khác nhau thì context khác nhau
 		Context context = vertx.getOrCreateContext();
 		if (context.isEventLoopContext()) {
 			System.out.println("Verticle: Context attached to Event Loop: "+ context.deploymentID());
@@ -40,7 +43,10 @@ public class ContextVerticle extends AbstractVerticle {
 		}
 
 		//Future<String>  => String là giá trị trả về của Future 
-		//run on another thread
+		//BlockingHanderler: thuộc Vertx context => chạy trên threadpool của Vertx context
+		//bất key Event, hay task nào tạo ra trong Blocking code đều thuộc quản lý của Context hiện tại => đều run trên thread của Verticle
+		//Trong khi Event, task sinh ra ở Blocking-code lại thuộc context của Verticle tạo ra “blocking-code” => 
+		//event hay task này sẽ chạy trên thread (or threadpool) của Verticle (ko chạy trên vertx context).
 		Handler blockingHandler = new Handler<Future<String>>() {
 			public String test = "abc";
 			//Future này quản lý bởi Vertx, ko phải Verticle
@@ -59,7 +65,7 @@ public class ContextVerticle extends AbstractVerticle {
 				}
 				//
 				String result = "MyVerticle.start(): thread="+Thread.currentThread().getId();
-				future.complete(result);
+				future.complete(result);  //sẽ gửi event tới context của Verticle
 				System.out.println(test);
 			}
 
@@ -73,6 +79,8 @@ public class ContextVerticle extends AbstractVerticle {
 			};
 		};
 
+		//order = false => sẽ có ưu tiên cao hơn. chạy trên thread độc lập ko quan tâm order trong queue
+		//by default (function 2 tham số): order = true => chạy theo order trong queue 
 		vertx.executeBlocking(blockingHandler,false ,returnHandler);
 
 		//Java lambda syntax

@@ -35,8 +35,10 @@ public class EventBusReceiverVerticle extends AbstractVerticle {
     									", thread="+Thread.currentThread().getId());
     	
     	//vertx member of AbstractVerticle  => where this Verticle was deployed
-    	//consumer=(register to receive event): this Verticle đăng ký nhận message từ Vertx
-    	vertx.eventBus().consumer("anAddress",new Handler<Message<String>>() {
+    	//consumer=(register to receive event): this Verticle context đăng ký nhận Event từ Vertx
+    	// event đc xử lý trên threadpool của Verticle context này
+    	String EventId = "anAddress";
+    	vertx.eventBus().consumer(EventId,new Handler<Message<String>>() { //có thể thay String bằng kiểu khác: object, int,float...
 			@Override
 			public void handle(Message<String> message) {
 				System.out.println("***Handle(): EventBusReceiverVerticle:Consumer():"+

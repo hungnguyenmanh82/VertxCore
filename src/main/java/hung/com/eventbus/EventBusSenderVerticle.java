@@ -18,7 +18,8 @@ public class EventBusSenderVerticle extends AbstractVerticle {
     								",thread="+Thread.currentThread().getId());
     	
     	//publish() method sends the message to all verticles listening on a given address.
-        vertx.eventBus().publish("anAddress", "=>Message publicly");
+    	String EventId = "anAddress";
+        vertx.eventBus().publish(EventId, "=>Message publicly");  //có thể Message Content String bằng kiểu khác: object, int,float...
         
         //The send() method sends the message to just one of the listening verticles.
         //Which verticle receives the message is decided by Vert.x 

@@ -1,0 +1,90 @@
+package hung.com.future;
+
+import io.vertx.core.AsyncResult;
+import io.vertx.core.CompositeFuture;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.net.NetServer;
+import io.vertx.core.net.NetSocket;
+
+/**
+ * http://vertx.io/docs/vertx-core/java/#_concurrent_composition
+ * 
+ * VD: tạo 2 server. Và bắt sự kiện cả 2 server khởi tạo xong hoàn toàn.
+ * 
+ * 	Future: đc hiểu là 1 event
+ *  CompositeFuture: sẽ đc trigger event khi cả 2 server đc khởi tạo xong.
+ */
+public class App23_CompositeFuture_all {
+
+	public static void main(String[] args) throws InterruptedException{
+		System.out.println("main(): thread=" + Thread.currentThread().getId());
+		Vertx vertx = Vertx.vertx();
+		
+		//===================================== http server =======================================
+		HttpServer httpServer = vertx.createHttpServer();  //http server đc tạo trên Vertx context (ko có Verticle)
+
+		httpServer.requestHandler(new Handler<HttpServerRequest>() {
+			
+			@Override
+			public void handle(HttpServerRequest request) {
+				System.out.println("uri = "+ request.uri()); //
+				System.out.println("httpserver requestHandler: thread=" + Thread.currentThread().getId());
+			}
+		});
+		// future để quản lý event => thông báo khi http Server listen thành công trên port (port ko bị chiếm dụng bởi app khac) 
+		// future đc tạo gắn với context nào sẽ tạo event để gửi về context đó
+		// future extends Handler<AsynResultc<Object>> vì thế dùng future như Handler đc
+		// Handler của future khi đc handle() sẽ gửi Event tới Context gắn với nó cung AsyncResult
+		// Handler bản chất là runable thôi
+		Future<HttpServer> httpServerFuture = Future.future();
+		int httpPort = 8080;
+		httpServer.listen(httpPort,httpServerFuture); //= httpServerFuture.completer() = Handler
+		
+		
+		//===================================== TCP server ================================================
+		NetServer netServer = vertx.createNetServer(); //tcp server đc tạo trên Vertx Context => threadpool của Vertx context
+		netServer.connectHandler(new Handler<NetSocket>() {
+			
+			@Override
+			public void handle(NetSocket netSocket) {
+				System.out.println("TCP server connectHandler: thread=" + Thread.currentThread().getId());			
+			}
+		});
+		
+		// future để quản lý event => thông báo TCP server listen thành công trên port
+		Future<NetServer> netServerFuture = Future.future();
+		int tcpPort = 8081;
+		netServer.listen(tcpPort,netServerFuture); //= netServerFuture.completer()
+
+		
+		//=====================================  wait 2 server start ==================================
+		//chờ cho 2 Server đc khởi tạo thành công (listening) or fail
+		//CompositeFuture: nếu 1 trong 2 fail thì tất cả fail
+		// đăng ký nhận future ở context hiện tại
+		CompositeFuture.all(httpServerFuture, netServerFuture).setHandler(new Handler<AsyncResult<CompositeFuture>>() {
+
+			@Override
+			public void handle(AsyncResult<CompositeFuture> event) {
+				if (event.succeeded()) {
+					// All servers started
+					System.out.println("all server started successfully");  
+				} else {
+					// At least one server failed
+					System.out.println("At least one server failed"); 
+				}
+
+				System.out.println("CompositeFuture: thread=" + Thread.currentThread().getId());
+			}
+		});
+
+		// app ko stop với Main() stop vì có 1 worker thread quản lý Vertx có loop bắt Event
+		//vertx.close();
+		
+		Thread.currentThread().sleep(3000);
+	}
+
+}

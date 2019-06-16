@@ -11,7 +11,7 @@ public class App41_EventBus {
 	public static void main(String[] args) throws Exception {
 		System.out.println("main(): thread="+Thread.currentThread().getId());
 		Vertx vertx = Vertx.vertx();
-		
+
 
 		//mỗi Vertical sẽ đc cấp phát 1 thread riêng để xử lý nhận message
 		//vertx sẽ đứng ra làm trung gian phân phối message event giữa các vertical
@@ -25,5 +25,8 @@ public class App41_EventBus {
 		vertx.deployVerticle(new EventBusSenderVerticle("S2"));
 		Thread.sleep(3000);
 		vertx.deployVerticle(new EventBusSenderVerticle("S3"));
+
+		// app ko stop với Main() stop vì có 1 worker thread quản lý Vertx có loop bắt Event
+		//vertx.close();
 	}
 }

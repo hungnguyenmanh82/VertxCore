@@ -31,6 +31,7 @@ public class HttpServerVerticle extends AbstractVerticle{
 		httpServer.requestHandler(new Handler<HttpServerRequest>() {
 		    @Override
 		    public void handle(HttpServerRequest request) {
+		    	//Request chỉ 1 lần duy nhất, vì thế các Request ko có tính phụ thuộc tuần tự => nên dùng Worker Verticle với Thread Pool
 		    	//tại đây phần header đã ok => the same as Tomcat NIO
 		        System.out.println("incoming connect request!: thread="+Thread.currentThread().getId());
 		        
@@ -54,9 +55,14 @@ public class HttpServerVerticle extends AbstractVerticle{
 		        	System.out.println("POST request");
 		        	//asynchronous get body of post request (non-blocking).
 		        	// event is called many times
+		        	// Nên di chuyển phần code này vào Verticle khác (Vertx Context khác) để xử lý tuần tự event
+		        	// (dùng Standard Vertical để đảm bảo tính tuần tự)
 		            request.handler(new Handler<Buffer>() {
 		                @Override
 		                public void handle(Buffer buffer) {
+		                	// đoạn code này chạy trên Thread cấp cho Verticle (trong context của Verticle) => khi gọi lặp lại sẽ vẫn đảm bảo tính tuần tự.
+		                	// (dùng Standard Vertical để đảm bảo tính tuần tự)
+		                	// nếu muốn chạy trên thread khác thì dùng Blocking Code
 		                    //Vertx dùng event (ko phải stream) nên nó biết khi nào kết thúc
 		                	// event will be triggered until body end
 		                	//ở tầng giao thức http sẽ có cách xác định khi nào request kết thúc
@@ -65,6 +71,7 @@ public class HttpServerVerticle extends AbstractVerticle{
 		        }
 		        
 		        //============================= response ===================
+		        // phần này nên dùng Blocking code để run nó trên 1 thread khác
 		        HttpServerResponse response = request.response();
 		        response.setStatusCode(200);
 		        String body = "Verticle HttpServer body";

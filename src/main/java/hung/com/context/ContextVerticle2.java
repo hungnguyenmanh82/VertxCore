@@ -28,6 +28,8 @@ public class ContextVerticle2 extends AbstractVerticle {
 
 		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId());
 
+		// context của Verticle khác Vertx Context
+		// các verticle khác nhau thì context khác nhau
 		Context context = vertx.getOrCreateContext();
 		if (context.isEventLoopContext()) {
 			System.out.println("Verticle2: Context attached to Event Loop: "+ context.deploymentID());
@@ -40,7 +42,10 @@ public class ContextVerticle2 extends AbstractVerticle {
 		}
 
 		//Future<String>  => String là giá trị trả về của Future 
-		//run on another thread
+		//BlockingHanderler: thuộc Vertx context => chạy trên threadpool của Vertx context
+		//bất key Event, hay task nào tạo ra trong Blocking code đều thuộc quản lý của Context hiện tại => đều run trên thread của Verticle
+		//Trong khi Event, task sinh ra ở Blocking-code lại thuộc context của Verticle tạo ra “blocking-code” => 
+		//event hay task này sẽ chạy trên thread (or threadpool) của Verticle (ko chạy trên vertx context).
 		Handler blockingHandler = new Handler<Future<String>>() {
 			public String test = "abc";
 			//Future này quản lý bởi Vertx, ko phải Verticle
@@ -60,7 +65,7 @@ public class ContextVerticle2 extends AbstractVerticle {
 				}
 				//
 				String result = "MyVerticle.start(): thread="+Thread.currentThread().getId();
-				future.complete(result);
+				future.complete(result);  //sẽ gửi event tới context của Verticle
 				System.out.println(test);
 			}
 

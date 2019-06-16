@@ -8,7 +8,7 @@ import io.vertx.core.Vertx;
  * vertx instance sẽ asign Thread trong thread pool để chạy Vertical (khi ta Deploy Vertical).
  *  by default: threadpool = 1.
  */
-public class App12_Vertx {
+public class App12_VertxThreadPool {
 
 	public static void main(String[] args) {
 		System.out.println("start main(): thread="+Thread.currentThread().getId());

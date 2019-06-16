@@ -10,7 +10,9 @@ public class App11_VertxSingleIntance {
 
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
-		//create a new instance Vertx => a worker thread
+		
+		//create a new instance Vertx => a worker thread sinh ra để quản lý, vì thế hàm main() kết thúc nhưng App ko stop
+		// gọi vertx.close() để stop thread này
 		Vertx vertx = Vertx.vertx();
 		//register Verticale with Vertex instance to capture event.
 		vertx.deployVerticle(new MyVerticle1()); //asynchronous call MyVerticle1.start() in worker thread
