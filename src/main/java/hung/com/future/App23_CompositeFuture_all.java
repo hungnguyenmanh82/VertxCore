@@ -67,12 +67,14 @@ public class App23_CompositeFuture_all {
 
 		vertx.deployVerticle(new FutureInplementAtVerticle(futureTest));
 		
-		//=====================================  wait 2 server start ==================================
+		//=====================================  wait all Futures ==================================
 		//chờ cho 2 Server đc khởi tạo thành công (listening) or fail
 		//CompositeFuture: nếu 1 trong 2 fail thì tất cả fail
 		// đăng ký nhận future ở context hiện tại
 		CompositeFuture.all(httpServerFuture, netServerFuture, futureTest).setHandler(new Handler<AsyncResult<CompositeFuture>>() {
-			// code này sẽ run tren thread của Future hoàn thành cuối cùng
+			// code này sẽ run tren thread của Future hoàn thành cuối cùng futureTest
+			// hàm này bản chất là kết hợp của các hàm sau để chờ Event. Khi có Event nó sẽ check các Future còn lại đã finish suceeded hay chưa
+			// httpServerFuture.setHandler(), netServerFuture.setHandler(), futureTest.setHandler()
 			@Override
 			public void handle(AsyncResult<CompositeFuture> event) {
 				if (event.succeeded()) {

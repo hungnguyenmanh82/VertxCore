@@ -6,7 +6,9 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.net.NetServer;
+import io.vertx.core.net.NetSocket;
 
 /**
  * http://vertx.io/docs/vertx-core/java/#_concurrent_composition
@@ -19,26 +21,58 @@ import io.vertx.core.net.NetServer;
 public class App24_CompositeFuture_any {
 
 	public static void main(String[] args) throws InterruptedException{
+		System.out.println("main(): thread=" + Thread.currentThread().getId());
 		Vertx vertx = Vertx.vertx();
-		NetServer netServer = vertx.createNetServer(); //tcp server để thiết lập mặc định
-		HttpServer httpServer = vertx.createHttpServer();  //http server để thiết lập mặc định port 80
 		
-		// future để quản lý event => thông báo khi http Server đc khởi tạo thành công
-		// future đc tạo gắn với context nào sẽ tạo event để gửi về context đó
-		Future<HttpServer> httpServerFuture = Future.future();
-		int httpPort = 8011;
-		httpServer.listen(httpPort,httpServerFuture.completer());
+		//===================================== http server =======================================
+		HttpServer httpServer = vertx.createHttpServer();  //http server đc tạo trên Vertx context (ko có Verticle)
 
-		// future để quản lý event => thông báo TCP server đc khởi tạo thành công
-		Future<NetServer> netServerFuture = Future.future();
-		int tcpPort = 8012;
-		netServer.listen(tcpPort,netServerFuture.completer());
+		httpServer.requestHandler(new Handler<HttpServerRequest>() {
+			
+			@Override
+			public void handle(HttpServerRequest request) {
+				//dùng Browser để test:  http://localhost:8080/abc
+				System.out.println("uri = "+ request.uri()); //
+				System.out.println("httpserver requestHandler: thread=" + Thread.currentThread().getId());
+			}
+		});
+		// future để quản lý event => thông báo khi http Server listen thành công trên port (port ko bị chiếm dụng bởi app khac) 
+		// future đc tạo gắn với context nào sẽ tạo event để gửi về context đó
+		// future extends Handler<AsynResultc<Object>> vì thế dùng future như Handler đc
+		// Handler của future khi đc handle() sẽ gửi Event tới Context gắn với nó cung AsyncResult
+		// Handler bản chất là runable thôi
+		Future<HttpServer> httpServerFuture = Future.future();
+		int httpPort = 8080;
+		httpServer.listen(httpPort,httpServerFuture); //= httpServerFuture.completer() = Handler
 		
+		
+		//===================================== TCP server ================================================
+		NetServer netServer = vertx.createNetServer(); //tcp server đc tạo trên Vertx Context => threadpool của Vertx context
+		netServer.connectHandler(new Handler<NetSocket>() {
+			
+			@Override
+			public void handle(NetSocket netSocket) {
+				//http base trên tcp => //dùng Browser để test:  http://localhost:8081/abc
+				System.out.println("TCP server connectHandler: thread=" + Thread.currentThread().getId());			
+			}
+		});
+		
+		// future để quản lý event => thông báo TCP server listen thành công trên port
+		Future<NetServer> netServerFuture = Future.future();
+		int tcpPort = 8081;
+		netServer.listen(tcpPort,netServerFuture); //= netServerFuture.completer()
+
+		//==================================== future 3 ===========================================
+		Future<String> futureTest = Future.future(); //fut1: gắn với context của Vertx
+
+		vertx.deployVerticle(new FutureInplementAtVerticle(futureTest));
+		
+		//=====================================  wait all Futures ==================================
 		//chờ cho 2 Server đc khởi tạo thành công (listening) or fail
 		//CompositeFuture: nếu 1 trong 2 fail thì tất cả fail
 		// đăng ký nhận future ở context hiện tại
 		//Trường hợp đặc biệt là 1 Future event, vd dưới là 2 event (có thể có N event)
-		CompositeFuture.any(httpServerFuture, netServerFuture).setHandler(new Handler<AsyncResult<CompositeFuture>>() {
+		CompositeFuture.any(httpServerFuture, futureTest).setHandler(new Handler<AsyncResult<CompositeFuture>>() {
 			
 			@Override
 			public void handle(AsyncResult<CompositeFuture> event) {
