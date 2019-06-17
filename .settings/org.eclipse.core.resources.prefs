@@ -10,6 +10,8 @@ encoding//src/main/java/hung/com/blocking/App22_BlockingCode_WorkerExecutor.java
 encoding//src/main/java/hung/com/blocking/BlockingVerticle.java=UTF-8
 encoding//src/main/java/hung/com/blocking/BlockingVerticle_WorkerExecutor.java=UTF-8
 encoding//src/main/java/hung/com/context/App31_Context.java=UTF-8
+encoding//src/main/java/hung/com/context/App32_ContextHandlerQueue.java=UTF-8
+encoding//src/main/java/hung/com/context/ContextHandlerQueueVerticle.java=UTF-8
 encoding//src/main/java/hung/com/context/ContextVerticle.java=UTF-8
 encoding//src/main/java/hung/com/context/ContextVerticle2.java=UTF-8
 encoding//src/main/java/hung/com/eventbus/App41_EventBus.java=UTF-8

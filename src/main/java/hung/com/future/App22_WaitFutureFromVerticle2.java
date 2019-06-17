@@ -28,7 +28,7 @@ public class App22_WaitFutureFromVerticle2 {
 
 		VertxOptions option = new VertxOptions().setWorkerPoolSize(4);
 		Vertx vertx = Vertx.vertx(option);
-		Future<String> futureTest = Future.future(); //futureTest: gắn với context của Vertx
+		Future<String> futureTest = Future.future(); 
 
 		vertx.deployVerticle(new FutureInplementAtVerticle(futureTest));
 

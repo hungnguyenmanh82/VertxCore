@@ -20,14 +20,14 @@ public class App12_VertxHandler {
 		vertx.deployVerticle(new MyVerticle1(), new Handler<AsyncResult<String>>(){
 			//hàm này đc gọi sau khi hàm MyVerticle1.start() trả về giá trị (lưu ý Future.complete() nếu dùng asynchronous start() )
 			@Override
-			public void handle(AsyncResult<String> stringAsyncResult) {
+			public void handle(AsyncResult<String> asyncResult) {
 				System.out.println("vertx.deployVerticle(): thread="+Thread.currentThread().getId());
 
-				if (stringAsyncResult.succeeded()) {
+				if (asyncResult.succeeded()) {
 					//Deployment id do Vertx cấp => cái này hơi stupid
 					// vertx.undeploy(DeploymentId)
 					//(sao ko dùng pointer luôn giống với android LocalBroadCastManager)
-					System.out.println("Deployment id is: " + stringAsyncResult.result());
+					System.out.println("Deployment id is: " + asyncResult.result());
 				} else {
 					System.out.println("Deployment failed!");  //vì chưa đc cấp id
 				}

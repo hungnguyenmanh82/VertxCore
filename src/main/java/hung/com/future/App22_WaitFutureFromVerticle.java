@@ -26,7 +26,7 @@ public class App22_WaitFutureFromVerticle {
 		System.out.println("main(): thread=" + Thread.currentThread().getId());
 		
 		Vertx vertx = Vertx.vertx();
-		Future<Void> futureCreateFile = Future.future(); //fut1: gắn với context của Vertx
+		Future<Void> futureCreateFile = Future.future(); 
 		
 		vertx.deployVerticle(new FutureCreateFileVerticle(futureCreateFile));
 		
