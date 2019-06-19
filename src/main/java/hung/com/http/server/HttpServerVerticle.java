@@ -1,6 +1,7 @@
 package hung.com.http.server;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -24,7 +25,7 @@ public class HttpServerVerticle extends AbstractVerticle{
 
 	//run on a worker thread
 	@Override
-	public void start() throws Exception {
+	public void start(Future<Void> startFuture) throws Exception {
 		System.out.println("MyVerticle started! port=81: thread="+Thread.currentThread().getId());
 		httpServer = vertx.createHttpServer();
 		
@@ -91,7 +92,19 @@ public class HttpServerVerticle extends AbstractVerticle{
 		    }
 		});
 
-		httpServer.listen(81);  //port = 81
+		httpServer.listen(81, new Handler<AsyncResult<HttpServer> >() {			
+			@Override
+			public void handle(AsyncResult<HttpServer> result) {
+				if (result.succeeded()) {
+					   // thông báo khởi tạo thành công, cho phia vertx.deployVerticle(verticle, handler<AsyncResult<void>>)
+					   // <xem Future concept>
+				       startFuture.complete();  
+				     } else {
+				       startFuture.fail(result.cause());
+				     }
+				
+			}
+		});//port = 81
 	}
 	
 	// run on a worker thread

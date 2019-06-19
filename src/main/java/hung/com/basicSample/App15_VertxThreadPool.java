@@ -22,7 +22,7 @@ public class App15_VertxThreadPool {
 		Vertx vertx = Vertx.vertx(option);
 		
 		//register Verticale with Vertex instance to capture event.
-		vertx.deployVerticle(new MyVerticle1()); //asynchronous call MyVerticle1.start() in worker thread
+		vertx.deployVerticle(new MyVerticle()); //asynchronous call MyVerticle1.start() in worker thread
 		
 		
 		//==================== verticle dùng Threadpool riêng ko dùng của Vertx =================
@@ -32,7 +32,7 @@ public class App15_VertxThreadPool {
 				.setWorkerPoolSize(10)  //thread for server, not client
 				.setWorker(true);   //true: mỗi event đc assign 1 thread trong pool (các event độc lập, ko phụ thuộc nhau).
 		
-		vertx.deployVerticle(new MyVerticle1(), options); //asynchronous call MyVerticle1.start() in worker thread
+		vertx.deployVerticle(new MyVerticle(), options); //asynchronous call MyVerticle1.start() in worker thread
 		
 		
 		Thread.currentThread().sleep(3000);

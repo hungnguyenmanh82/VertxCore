@@ -72,6 +72,7 @@ public class App32_ContextHandlerQueue {
 			}
 		});
 		
+		//============================
 		verticle.getVertx().getOrCreateContext().runOnContext(new Handler<Void>() {
 			
 			@Override

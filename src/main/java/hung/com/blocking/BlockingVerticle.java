@@ -47,6 +47,9 @@ public class BlockingVerticle extends AbstractVerticle {
 
 
 		//mấu chốt là khái niệm Future
+		// BlockingHandler vẫn thuộc context của Verticle, nhưng chạy trên thread khác (xem DeploymentId ở log sẽ thấy).
+		// => BlockingHandler vẫn lưu trong 1 task queue order của Verticle context
+		// Verticle context có 2 task
 		Handler blockingHandler = new Handler<Future<String>>() {
 			public String test = "abc";
 			@Override

@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
 import io.vertx.core.buffer.Buffer;
@@ -12,8 +13,8 @@ import io.vertx.core.http.HttpClientResponse;
 public class HttpClientVerticle extends AbstractVerticle {
 
     @Override
-    public void start() throws Exception {
-        io.vertx.core.http.HttpClient httpClient = vertx.createHttpClient();
+    public void start(Future<Void> startFuture) throws Exception {
+        io.vertx.core.http.HttpClient httpClient = vertx.createHttpClient(); 
         
 //        httpClient.options(options);
         

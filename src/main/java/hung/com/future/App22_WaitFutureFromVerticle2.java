@@ -1,7 +1,7 @@
 package hung.com.future;
 
 
-import hung.com.basicSample.MyVerticle1;
+import hung.com.basicSample.MyVerticle;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;

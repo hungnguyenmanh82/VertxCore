@@ -12,7 +12,8 @@ public class App13_MultiInstance {
 
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
-		//create a new instance Vertx => a worker thread
+		
+		//vertx là singleton
 		Vertx vertx = Vertx.vertx();
 
 		DeploymentOptions options = new DeploymentOptions()
@@ -22,7 +23,7 @@ public class App13_MultiInstance {
 				.setWorker(true);
 		
 		//register Verticale with Vertex instance to capture event.
-		vertx.deployVerticle("hung.com.basicSample.MyVerticle1",options);//asynchronous call MyVerticle1.start() in worker thread
+		vertx.deployVerticle("hung.com.basicSample.MyVerticle",options);//asynchronous call MyVerticle1.start() in worker thread
 
 		Thread.currentThread().sleep(3000);
 

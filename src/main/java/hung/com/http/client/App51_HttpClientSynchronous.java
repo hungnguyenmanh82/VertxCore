@@ -21,7 +21,7 @@ public class App51_HttpClientSynchronous {
     public static void test_OkHttp_Get_Synchronous() throws Exception {
 
         // avoid creating several instances, should be singleon
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient();  
 
         // url is
         Request request = new Request.Builder()

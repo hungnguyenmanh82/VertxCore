@@ -18,18 +18,24 @@ Verticle:  được hiểu như là 1 đối tượng (đơn vị quản lý tà
    1 thread có thể dùng lại cho nhiều vertical
 
  */
-public class MyVerticle1 extends AbstractVerticle {
+public class MyVerticle extends AbstractVerticle {
 
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {	
-//		this.context;  //quản lý tất cả tài nguyên của Verticle
-//		this.context.isWorkerContext()
-//		this.context.isMultiThreadedWorkerContext()
+		//hàm này phải đc gọi để xác định quá trình Deploy thành công
+		// nếu ko phải gọi hàm startFuture.complete()
+		super.start(startFuture);   
 		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId());
+		
+
 	}
 
 	@Override
 	public void stop(Future<Void> stopFuture) throws Exception {
+		//function này cần đc gọi để xác nhận undeploy() thành công (sẽ xóa DeploymentId)
+		// hoặc phải gọi hàm stopFuture.complete()
+		super.stop(stopFuture);
+//		stopFuture.complete();
 		System.out.println("MyVerticle.stop(): thread=" + Thread.currentThread().getId());
 	}
 

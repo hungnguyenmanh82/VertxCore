@@ -6,16 +6,18 @@ import io.vertx.core.Vertx;
  * vd: Khởi tạo 1 vertical  < xem khái niệm vertical>
  *
  */
-public class App11_VertxSingleIntance {
+public class App11_DeploySingleVerticle {
 
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
 		
 		//create a new instance Vertx => a worker thread sinh ra để quản lý loop Event, vì thế hàm main() kết thúc nhưng App ko stop
 		// gọi vertx.close() để stop thread này
+		// vertx là singleton
 		Vertx vertx = Vertx.vertx();
-		//register Verticale with Vertex instance to capture event.
-		vertx.deployVerticle(new MyVerticle1()); //asynchronous call MyVerticle1.start() in worker thread
+		
+		//tạo 1 Verticle context và chạy trên Thread đc chỉ định bởi Vertx
+		vertx.deployVerticle(new MyVerticle()); //asynchronous call MyVerticle1.start() in worker thread
 		
 		Thread.currentThread().sleep(3000);
 		

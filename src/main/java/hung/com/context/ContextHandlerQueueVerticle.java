@@ -25,11 +25,16 @@ Vertical:  được hiểu như là 1 đối tượng (đơn vị quản lý tà
 public class ContextHandlerQueueVerticle extends AbstractVerticle {
 
 	@Override
-	public void start(Future<Void> startFuture) throws Exception {	
+	public void start(Future<Void> startFuture) throws Exception {
+		//hàm này phải đc gọi để xác định quá trình Deploy thành công
+		// nếu ko phải gọi hàm startFuture.complete()
+		super.start(startFuture); 
+		
 		System.out.println("ContextHandlerQueueVerticle.start(): thread="+Thread.currentThread().getId());
 		
-		//Handler đc add trên Thread của Context nào thì sẽ chạy trên Threadpool của context ấy
-		//Handler đc add vào Queue của Context chứ ko chạy luôn
+		//vertx.getOrCreateContext() sẽ trả về context gắn với Thread hiện tại:
+		// convert Current Thread => Context và trả về
+		// start() luôn chạy trên thread của Verticle context hiện tại nên sẽ trả về Verticle context		
 		vertx.getOrCreateContext().runOnContext(new Handler<Void>() {
 			
 			@Override
@@ -39,13 +44,17 @@ public class ContextHandlerQueueVerticle extends AbstractVerticle {
 			}
 		});
 		
-		System.out.println("end Verticle.start()");
+		System.out.println("end ContextHandlerQueueVerticle.start()");
 		
 	}
 
 	@Override
 	public void stop(Future<Void> stopFuture) throws Exception {
-		System.out.println("MyVerticle.stop(): thread=" + Thread.currentThread().getId());
+		//function này cần đc gọi để xác nhận undeploy() thành công (sẽ xóa DeploymentId)
+		// hoặc phải gọi hàm stopFuture.complete()
+		super.stop(stopFuture);
+//		stopFuture.complete();
+		System.out.println("ContextHandlerQueueVerticle.stop(): thread=" + Thread.currentThread().getId());
 	}
 
 }

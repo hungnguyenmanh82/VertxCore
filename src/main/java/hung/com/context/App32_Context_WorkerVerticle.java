@@ -15,13 +15,16 @@ Trong khi Event, task sinh ra ở Blocking-code lại thuộc context của Vert
 event hay task này sẽ chạy trên thread (or threadpool) của Verticle (ko chạy trên vertx context).
 
  */
-public class App31_Context {
+public class App32_Context_WorkerVerticle {
 
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("main(): thread="+Thread.currentThread().getId());
 		//create a new instance Vertx => a worker thread
 		Vertx vertx = Vertx.vertx();
 		
+		//vertx.getOrCreateContext() sẽ trả về context gắn với Thread hiện tại:
+		// convert Current Thread => Context và trả về
+		// Verticle.start() luôn chạy trên thread của Verticle context hiện tại nên sẽ trả về Verticle context	
 		Context context = vertx.getOrCreateContext();
 		if (context.isEventLoopContext()) {
 			System.out.println("main: Context attached to Event Loop: "+ context.deploymentID());
@@ -34,8 +37,7 @@ public class App31_Context {
 		}
 
 		//register Verticale with Vertex instance to capture event.
-		vertx.deployVerticle(new ContextVerticle(),new DeploymentOptions().setWorker(false)); //asynchronous call MyVerticle1.start() in worker thread
-		vertx.deployVerticle(new ContextVerticle2()); 
+		vertx.deployVerticle(new ContextVerticle1(),new DeploymentOptions().setWorker(true)); //asynchronous call MyVerticle1.start() in worker thread
 		
 		
 		// app ko stop với Main() stop vì có 1 worker thread quản lý Vertx có loop bắt Event
