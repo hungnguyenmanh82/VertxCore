@@ -1,5 +1,7 @@
 package hung.com.basicSample;
 
+import java.util.Set;
+
 import io.vertx.core.Vertx;
 
 /**
@@ -19,7 +21,15 @@ public class App11_DeploySingleVerticle {
 		//tạo 1 Verticle context và chạy trên Thread đc chỉ định bởi Vertx
 		vertx.deployVerticle(new MyVerticle()); //asynchronous call MyVerticle1.start() in worker thread
 		
-		Thread.currentThread().sleep(3000);
+		// waiting for Verticle context is allocate by Vertx
+		Thread.currentThread().sleep(500);
+		
+		Set<String> deploymentIDs = vertx.deploymentIDs();
+		System.out.println("==============  (sleeped 500ms wait for Context allocated), list of deploymentIDs: number Deployments =" + deploymentIDs.size());
+		for(String depId: deploymentIDs){
+			//
+			System.out.println(depId);
+		}
 		
 		//vertx.undeploy(DeploymentId) => DeploymentId đc cấp khi hàm Verticle.start() đc gọi
 		//asynchronous function

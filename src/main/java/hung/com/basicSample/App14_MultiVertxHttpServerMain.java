@@ -13,7 +13,7 @@ import io.vertx.core.Vertx;
  *  Xem thêm mục http protocol
  */
 public class App14_MultiVertxHttpServerMain {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException{
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
 		
 		//========================== 

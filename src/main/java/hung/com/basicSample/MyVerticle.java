@@ -22,8 +22,8 @@ public class MyVerticle extends AbstractVerticle {
 
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {	
-		//hàm này phải đc gọi để xác định quá trình Deploy thành công
-		// nếu ko phải gọi hàm startFuture.complete()
+		//hàm này phải đc gọi để xác định quá trình Deploy thành công (thì hàm vertx.deployIDs() mới trả về đúng giá trị).
+		//hoặc phải gọi hàm startFuture.complete()
 		super.start(startFuture);   
 		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId());
 		

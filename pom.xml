@@ -46,7 +46,46 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<!-- include all lib(*.jar) to output jar file -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.1</version>
 
+				<executions>
+					<!-- create *.jar 1 file here -->
+					<execution>
+						<!-- id phải duy nhất -->
+						<id>build-1</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<!-- MainClass in mainfest make a executable jar -->
+							<archive>
+								<manifest>
+									<addClasspath>true</addClasspath>
+									<mainClass>hung.com.tcp.streams.App92_TcpServer_stream</mainClass>
+								</manifest>
+							</archive>
+							<!-- get all project dependencies -->
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<finalName>App92_TcpServer_stream.jar</finalName>
+						</configuration>
+					</execution>
+					
+					<!-- create *.jar 2 file here -->
+					<!-- <execution> id phải duy nhất <id>build-2</id> <phase>package</phase> 
+						<goals> <goal>single</goal> </goals> <configuration> <archive> <manifest> 
+						<addClasspath>true</addClasspath> <mainClass>hung.com.http.server.App62_HttpServerHandler</mainClass> 
+						</manifest> </archive> <descriptorRefs> <descriptorRef>jar-with-dependencies</descriptorRef> 
+						</descriptorRefs> <finalName>App62_HttpServerHandler.jar</finalName> </configuration> 
+						</execution> -->
+				</executions>
+			</plugin>
 		</plugins>
 
 	</build>

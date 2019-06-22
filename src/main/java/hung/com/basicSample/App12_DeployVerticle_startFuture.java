@@ -1,5 +1,7 @@
 package hung.com.basicSample;
 
+import java.util.Set;
+
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -10,7 +12,7 @@ import io.vertx.core.Vertx;
  */
 public class App12_DeployVerticle_startFuture {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
 
 		//create a new instance Vertx => a worker thread sinh ra để quản lý loop Event, vì thế hàm main() kết thúc nhưng App ko stop
@@ -35,6 +37,16 @@ public class App12_DeployVerticle_startFuture {
 				}
 			}
 		});
+		
+		// waiting for Verticle context is allocate by Vertx
+		Thread.currentThread().sleep(500);
+		
+		Set<String> deploymentIDs = vertx.deploymentIDs();
+		System.out.println("==============  (sleeped 500ms wait for Context allocated), list of deploymentIDs: number Deployments =" + deploymentIDs.size());
+		for(String depId: deploymentIDs){
+			//
+			System.out.println(depId);
+		}
 
 		// app ko stop với Main() stop vì có 1 worker thread quản lý Vertx có loop bắt Event
 		//vertx.close();

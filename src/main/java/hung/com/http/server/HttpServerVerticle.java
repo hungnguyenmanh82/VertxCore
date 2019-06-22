@@ -23,6 +23,7 @@ Tất nhiên, Vertx phải cấp phát thread cho Verticle
 public class HttpServerVerticle extends AbstractVerticle{
 	private HttpServer httpServer = null;
 
+	private Buffer totalBuffer = Buffer.buffer(4000); //4k byte
 	//run on a worker thread
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {

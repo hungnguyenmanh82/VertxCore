@@ -8,6 +8,7 @@ import io.vertx.core.net.NetServer;
 import io.vertx.core.net.NetServerOptions;
 import io.vertx.core.net.NetSocket;
 
+
 public class TcpServerVerticle extends AbstractVerticle {
 
     @Override
@@ -21,7 +22,8 @@ public class TcpServerVerticle extends AbstractVerticle {
             */
         
         server.connectHandler(new Handler<NetSocket>() {
-        	//Asynchronous Event only 1 time when Socket client connect to server
+        	//Handler Event đc gắn với Verticle Context của currentThread
+            // current thread => TcpServerVerticle context
             @Override
             public void handle(NetSocket netSocket) {
             	System.out.println("incoming connect request!: thread="+Thread.currentThread().getId());
@@ -51,6 +53,14 @@ public class TcpServerVerticle extends AbstractVerticle {
                 if(netSocket.writeQueueFull() == false) {//asynchronous function check
                 	//asynchronous by Vertx, it finish when writeQueueFull() = false
                 	netSocket.write(outBuffer); 
+                }else{ //socket write buffer full
+                	netSocket.pause(); // dừng Read socket nếu cần (vd: RAM hết).
+                	
+                	// bắt sự kiện khi Socket write buffer ready to write sau khi full.
+                	netSocket.drainHandler(done -> {
+                		netSocket.resume(); //khởi động lai kiện socket read buffer (lệnh Pause() trc đó đã dừng handler này lại.
+                      });
+//                	netSocket.resume(); // khởi động lại việc bắt sự kiện Read Socket
                 }
                 
                 //==========================close socket ======================
@@ -66,15 +76,7 @@ public class TcpServerVerticle extends AbstractVerticle {
          
 //        server.listen(); //trường hợp đã set tcp port
         server.listen(10000);
-        
-        //use java Lambda syntax here for the third parameter
-/*        server.listen(1234, "localhost", res -> {
-            if (res.succeeded()) {
-              System.out.println("Server is now listening!");
-            } else {
-              System.out.println("Failed to bind!");
-            }
-          });*/
+
         
 //        Thread.currentThread().sleep(5000);//5000ms
         //server.close();
