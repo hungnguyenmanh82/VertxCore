@@ -66,14 +66,14 @@
 							<archive>
 								<manifest>
 									<addClasspath>true</addClasspath>
-									<mainClass>hung.com.tcp.streams.App92_TcpServer_stream</mainClass>
+									<mainClass>hung.com.tcp.server2.App92_TcpServer</mainClass>
 								</manifest>
 							</archive>
 							<!-- get all project dependencies -->
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>App92_TcpServer_stream.jar</finalName>
+							<finalName>App92_TcpServer.jar</finalName>
 						</configuration>
 					</execution>
 					
