@@ -6,6 +6,14 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<dependencies>
+		<!-- vertx 3.7.0 need Netty Lib -->
+		<!-- vertx 3.4.2 ko can Netty -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>4.1.36.Final</version>
+		</dependency>
+
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-core</artifactId>
@@ -17,7 +25,7 @@
 			<artifactId>vertx-jdbc-client</artifactId>
 			<version>3.7.0</version>
 		</dependency>
-		
+
 		<!-- Client -->
 
 		<dependency>
@@ -40,8 +48,8 @@
 			</plugin>
 			<!-- include all lib(*.jar) to output jar file -->
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<groupId>org.apache.maven.plugin</groupId>
 				<version>3.1.1</version>
 
 				<executions>
@@ -54,41 +62,28 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
+							<!-- MainClass in mainfest make a executable jar -->
 							<archive>
 								<manifest>
 									<addClasspath>true</addClasspath>
-									<mainClass>hung.com.http.server.App61_HttpServer</mainClass>
+									<mainClass>hung.com.tcp.server2.App92_TcpServer</mainClass>
 								</manifest>
 							</archive>
+							<!-- get all project dependencies -->
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
 							</descriptorRefs>
-							<finalName>App61_HttpServer.jar</finalName>
+							<finalName>App92_TcpServer.jar</finalName>
 						</configuration>
 					</execution>
+					
 					<!-- create *.jar 2 file here -->
-					<execution>
-						<!-- id phải duy nhất -->
-						<id>build-2</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<archive>
-								<manifest>
-									<addClasspath>true</addClasspath>
-									<mainClass>hung.com.http.server.App62_HttpServerHandler</mainClass>
-								</manifest>
-							</archive>
-							<descriptorRefs>
-								<descriptorRef>jar-with-dependencies</descriptorRef>
-							</descriptorRefs>
-							<finalName>App62_HttpServerHandler.jar</finalName>
-						</configuration>
-					</execution>
-
-
+					<!-- <execution> id phải duy nhất <id>build-2</id> <phase>package</phase> 
+						<goals> <goal>single</goal> </goals> <configuration> <archive> <manifest> 
+						<addClasspath>true</addClasspath> <mainClass>hung.com.http.server.App62_HttpServerHandler</mainClass> 
+						</manifest> </archive> <descriptorRefs> <descriptorRef>jar-with-dependencies</descriptorRef> 
+						</descriptorRefs> <finalName>App62_HttpServerHandler.jar</finalName> </configuration> 
+						</execution> -->
 				</executions>
 			</plugin>
 		</plugins>
