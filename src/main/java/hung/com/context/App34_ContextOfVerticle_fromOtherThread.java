@@ -49,6 +49,9 @@ public class App34_ContextOfVerticle_fromOtherThread {
 		//nếu verticle.start() chưa đc gọi thì Context = NULL
 		Context verticleContext = verticle.getRealContext();
 		
+		//================================== risk ==================================================
+		//lệnh này sẽ add Handler truc tiep vào Vertical context queue mà ko add context của CurrentThread
+		// vertx context queue dùng synchronize(object) để bảo về queue => nên performance ko tốt
 		verticleContext.runOnContext(new Handler<Void>() {
 			
 			@Override

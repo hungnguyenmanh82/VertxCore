@@ -32,8 +32,8 @@ public class ContextVerticle1 extends AbstractVerticle {
 		
 		System.out.println("ContextVerticle1.start(): thread="+Thread.currentThread().getId());
 
-		//vertx.getOrCreateContext() sẽ trả về context gắn với Thread hiện tại:
-		// convert Current Thread => Context và trả về
+		//vertx.getOrCreateContext() sẽ trả về context gắn với Thread hiện tại Thread.currentThread()
+		// convert Current Thread => Context và trả về => hầu hết các thư viện dùng theo cách này
 		// Verticle.start() luôn chạy trên thread của Verticle context hiện tại nên sẽ trả về Verticle context	
 		Context context = vertx.getOrCreateContext();
 		if (context.isEventLoopContext()) {

@@ -37,7 +37,8 @@ public class App21_WaitFutureComplete {
 		// Future<Void> và AsyncResult<Void> cùng kiểu <Void>
 
 		future.setHandler(new Handler<AsyncResult<Void>>() {
-			// code này run trên cùng thread với CreateFile đc cấp phát bởi threadpool của vertx context (đã test)
+			// code này run trên cùng thread với fs.createFile() đc cấp phát bởi threadpool của vertx context (đã test)
+			// nghĩa là fs.createFile() sẽ gọi future.complete() và future.fail() thì 2 hàm này sẽ gọi tới Hander trong hàm future.setHandler()
 			@Override
 			public void handle(AsyncResult<Void> event) {
 				if( event.succeeded()){
