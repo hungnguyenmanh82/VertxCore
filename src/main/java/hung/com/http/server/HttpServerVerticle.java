@@ -30,106 +30,108 @@ public class HttpServerVerticle extends AbstractVerticle{
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
 		System.out.println("MyVerticle started! port=81: thread="+Thread.currentThread().getId());
-		
+
 		HttpServerOptions httpServerOptions = new HttpServerOptions()
-														.setMaxHeaderSize(4000)
-														.setReceiveBufferSize(8000)
-														.setSendBufferSize(8000);
-																	
+				.setMaxHeaderSize(4000)
+				.setReceiveBufferSize(8000)
+				.setSendBufferSize(8000);
+
 		httpServer = vertx.createHttpServer(httpServerOptions);
-		
-		
+
+
 		httpServer.connectionHandler(new Handler<HttpConnection>() {		
 			@Override
 			public void handle(HttpConnection connect) {
 				System.out.println("http connectionHandler: thread="+Thread.currentThread().getId());
 				//reject connect neu Server overload or number of connect > Max connect
-				
+
 				// Deploy Verticle de xu ly http request/response tren Threadpool khac nhu the se toi uu hon
 				// 1 http request/reponse context nen xu ly tren 1 thread (threadpool worker= false) de dam bao Order
 				//truong hop context lay du lieu tu 2 service khac nhau thi phai dam bao tinh thu tu
-				
+
 			}
 		});
-		
+
+		// quá trình parser thực hiện trên EventLoopPool của Vertx, chứ ko phải trên thread của context này.
+		// thread của context này chỉ để trả về event thôi.
 		httpServer.requestHandler(new Handler<HttpServerRequest>() {
-		    @Override
-		    public void handle(HttpServerRequest request) {
-		    	//Request chỉ 1 lần duy nhất, vì thế các Request ko có tính phụ thuộc tuần tự => nên dùng Worker Verticle với Thread Pool
-		    	//tại đây phần header đã ok => the same as Tomcat NIO
-		        System.out.println("http requestHandler: thread="+Thread.currentThread().getId());
-		        
-		        /**
-		         * url = http://localhost:81/atm?id=1&command=ejm
-		         * uri = /atm?id=1&command=ejm
-		         * path = /atm
-		         * id = 1
-		         * command = ejm
-		         */
-		         
-		        System.out.println("path = "+ request.path());
-		        
-		        String id = request.getParam("id");
-		        System.out.println("id = "+ id);
-		        
-		        String command = request.getParam("command");
-		        System.out.println("command = "+ command);
-		        //=========================== body of request ==============
-		        if(request.method() == HttpMethod.POST){
-		        	System.out.println("POST request");
-		        	//asynchronous get body of post request (non-blocking).
-		        	// event is called many times
-		        	// Nên di chuyển phần code này vào Verticle khác (Vertx Context khác) để xử lý tuần tự event
-		        	// (dùng Standard Vertical để đảm bảo tính tuần tự)
-		            request.handler(new Handler<Buffer>() {
-		                @Override
-		                public void handle(Buffer buffer) {
-		                	// đoạn code này chạy trên Thread cấp cho Verticle (trong context của Verticle) => khi gọi lặp lại sẽ vẫn đảm bảo tính tuần tự.
-		                	// (dùng Standard Vertical để đảm bảo tính tuần tự)
-		                	// nếu muốn chạy trên thread khác thì dùng Blocking Code
-		                    //Vertx dùng event (ko phải stream) nên nó biết khi nào kết thúc
-		                	// event will be triggered until body end
-		                	//ở tầng giao thức http sẽ có cách xác định khi nào request kết thúc
-		                }
-		            });
-		        }
-		        
-		        //============================= response ===================
-		        //cách 1: phần này nên dùng Blocking code để run nó trên 1 thread khác
-		        // cách 2: chuyển phần này sang Verticle khác để xử lý
-		        HttpServerResponse response = request.response();
-		        response.setStatusCode(200);
-		        String body = "Verticle HttpServer body";
-		        //header phải gửi trc
-		        response.headers()
-		            .add("Content-Length", String.valueOf(body.length()))
-		            .add("Content-Type", "text/html")
-		        ;
-		        
-		        //this function will return immediately
-		        response.write(body); //asynchronous write by Vertx
-		        //asynchronously check whether socket's write buffer is full or not
-//		        response.writeQueueFull(); 
-		        response.end(); //close socket
-		        //httpServer.close();
-		    }
+			@Override
+			public void handle(HttpServerRequest request) {
+				//Request chỉ 1 lần duy nhất, vì thế các Request ko có tính phụ thuộc tuần tự => nên dùng Worker Verticle với Thread Pool
+				//tại đây phần header đã ok => the same as Tomcat NIO
+				System.out.println("http requestHandler: thread="+Thread.currentThread().getId());
+
+				/**
+				 * url = http://localhost:81/atm?id=1&command=ejm
+				 * uri = /atm?id=1&command=ejm
+				 * path = /atm
+				 * id = 1
+				 * command = ejm
+				 */
+
+				System.out.println("path = "+ request.path());
+
+				String id = request.getParam("id");
+				System.out.println("id = "+ id);
+
+				String command = request.getParam("command");
+				System.out.println("command = "+ command);
+				//=========================== body of request ==============
+				if(request.method() == HttpMethod.POST){
+					System.out.println("POST request");
+					//asynchronous get body of post request (non-blocking).
+					// event is called many times
+					// Nên di chuyển phần code này vào Verticle khác (Vertx Context khác) để xử lý tuần tự event
+					// (dùng Standard Vertical để đảm bảo tính tuần tự)
+					request.handler(new Handler<Buffer>() {
+						@Override
+						public void handle(Buffer buffer) {
+							// đoạn code này chạy trên Thread cấp cho Verticle (trong context của Verticle) => khi gọi lặp lại sẽ vẫn đảm bảo tính tuần tự.
+							// (dùng Standard Vertical để đảm bảo tính tuần tự)
+							// nếu muốn chạy trên thread khác thì dùng Blocking Code
+							//Vertx dùng event (ko phải stream) nên nó biết khi nào kết thúc
+							// event will be triggered until body end
+							//ở tầng giao thức http sẽ có cách xác định khi nào request kết thúc
+						}
+					});
+				}
+
+				//============================= response ===================
+				//cách 1: phần này nên dùng Blocking code để run nó trên 1 thread khác
+				// cách 2: chuyển phần này sang Verticle khác để xử lý
+				HttpServerResponse response = request.response();
+				response.setStatusCode(200);
+				String body = "Verticle HttpServer body";
+				//header phải gửi trc
+				response.headers()
+				.add("Content-Length", String.valueOf(body.length()))
+				.add("Content-Type", "text/html")
+				;
+
+				//this function will return immediately
+				response.write(body); //asynchronous write by Vertx
+				//asynchronously check whether socket's write buffer is full or not
+				//		        response.writeQueueFull(); 
+				response.end(); //close socket
+				//httpServer.close();
+			}
 		});
 
 		httpServer.listen(81, new Handler<AsyncResult<HttpServer> >() {			
 			@Override
 			public void handle(AsyncResult<HttpServer> result) {
 				if (result.succeeded()) {
-					   // thông báo khởi tạo thành công, cho phia vertx.deployVerticle(verticle, handler<AsyncResult<void>>)
-					   // <xem Future concept>
-				       startFuture.complete();  
-				     } else {
-				       startFuture.fail(result.cause());
-				     }
-				
+					// thông báo khởi tạo thành công, cho phia vertx.deployVerticle(verticle, handler<AsyncResult<void>>)
+					// <xem Future concept>
+					startFuture.complete();  
+				} else {
+					startFuture.fail(result.cause());
+				}
+
 			}
 		});//port = 81
 	}
-	
+
 	// run on a worker thread
 	@Override
 	public void stop(Future<Void> stopFuture) throws Exception {

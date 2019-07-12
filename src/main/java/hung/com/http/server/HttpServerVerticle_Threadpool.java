@@ -48,7 +48,7 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 		 * command = ejm
 		 */
 
-		// sự kiện này chạy trên context của Verticle này 
+
 		httpServer.connectionHandler(new Handler<HttpConnection>() {		
 			@Override
 			public void handle(HttpConnection connect) {
@@ -63,15 +63,15 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 			}
 		});
 
-		// vì thế mà tất cả event HttpServer đều xử lý trên 1 thread duy nhất (dù worker hay standard verticle)
-		// đây là vấn đề của http server so với tcp server
+		// quá trình parser thực hiện trên EventLoopPool của Vertx, chứ ko phải trên thread của context này.
+		// thread của context này chỉ để trả về event thôi.
 		httpServer.requestHandler(new Handler<HttpServerRequest>() {
 			@Override
 			public void handle(HttpServerRequest request) {
 				System.out.println(" http requestHandler, *** deploy request Vertical: thread="+Thread.currentThread().getId());
 				//================================ Move http HandlerRequest to other Context =========================== 
 				DeploymentOptions options = new DeploymentOptions()
-						.setWorkerPoolName("ThreadPoolForRequestHandler")
+						.setWorkerPoolName("ThreadPoolForRequestHandler")   //name là duy nhất để share giữa các Verticle
 						.setWorkerPoolSize(3)  //thread for server, not client
 						.setHa(true)
 						.setWorker(true);   //true: thì Threadpool size mới hoạt động.
