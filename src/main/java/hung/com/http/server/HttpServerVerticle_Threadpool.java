@@ -48,7 +48,7 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 		 * command = ejm
 		 */
 
-		// sự kiện này chạy trên context của Verticle này => là worker-threadpool
+		// sự kiện này chạy trên context của Verticle này 
 		httpServer.connectionHandler(new Handler<HttpConnection>() {		
 			@Override
 			public void handle(HttpConnection connect) {
@@ -63,6 +63,8 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 			}
 		});
 
+		// vì thế mà tất cả event HttpServer đều xử lý trên 1 thread duy nhất (dù worker hay standard verticle)
+		// đây là vấn đề của http server so với tcp server
 		httpServer.requestHandler(new Handler<HttpServerRequest>() {
 			@Override
 			public void handle(HttpServerRequest request) {

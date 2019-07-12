@@ -31,6 +31,7 @@ public class App15_VertxThreadPool {
 				.setWorkerPoolName("*TcpServerThreadPool")   //WorkerPoolName là duy nhất, có thể dùng lại để share với các Verticle khác
 				.setWorkerPoolSize(10)  //thread for server, not client
 				.setWorker(true);   //true: mỗi event đc assign 1 thread trong pool (các event độc lập, ko phụ thuộc nhau).
+									//false: Standard-verticle sẽ ko dùng threadpool mà dùng eventloop tức dùng EventLoopPool của Vertx
 		
 		vertx.deployVerticle(new MyVerticle(), options); //asynchronous call MyVerticle1.start() in worker thread
 		

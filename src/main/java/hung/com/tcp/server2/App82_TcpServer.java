@@ -18,6 +18,7 @@ public class App82_TcpServer {
 				.setWorkerPoolName("*TcpServerThreadPool")
 				.setWorkerPoolSize(4)  //thread for server, not client
 				.setWorker(true);   //true: mỗi event đc assign 1 thread trong pool (các event độc lập, ko phụ thuộc nhau).
+									//false: Standard-verticle sẽ ko dùng threadpool mà dùng eventloop tức dùng EventLoopPool của Vertx
 		
 		// event là event Open Socket nên độc lập nhau
 		vertx.deployVerticle(new TcpServerVerticle_workerPool(), options);	
