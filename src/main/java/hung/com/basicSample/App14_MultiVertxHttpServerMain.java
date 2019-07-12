@@ -17,9 +17,10 @@ public class App14_MultiVertxHttpServerMain {
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
 		
 		//========================== 
-		//get an instance of Vertx => tương ứng 1 thread thì đúng hơn.
+		//Ctrl+ T: để tìm implement Class sẽ thấy Vertx.vertx() sẽ new instance (ko phải Singleton)
 		Vertx vertx = Vertx.vertx();
 		vertx.deployVerticle(new HttpServerVerticle()); //asynchronous call MyVerticle1.start() in worker thread
+
 
 		//================== Vertx2==================
 		Vertx vertx1 = Vertx.vertx();
