@@ -31,7 +31,7 @@ public class ContextOfVerticle extends AbstractVerticle {
 	 */
 	public Context getRealContext(){
 		// ko dùng hàm vertx.getOrCreateContext() => vì nó convert CurrentThread về Context
-		return context;  // = protect AbstrctVerticle.context
+		return context;  // = protect AbstractVerticle.context
 	}
 
 	@Override

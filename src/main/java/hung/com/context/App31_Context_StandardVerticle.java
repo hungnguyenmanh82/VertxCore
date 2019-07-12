@@ -26,6 +26,7 @@ public class App31_Context_StandardVerticle {
 		// convert Current Thread => Context và trả về
 		// Verticle.start() luôn chạy trên thread của Verticle context hiện tại nên sẽ trả về Verticle context	
 		Context context = vertx.getOrCreateContext();
+		
 		if (context.isEventLoopContext()) {
 			System.out.println("main: Context attached to Event Loop: "+ context.deploymentID());
 		} else if (context.isWorkerContext()) {

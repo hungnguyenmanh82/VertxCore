@@ -15,7 +15,7 @@ public class App11_DeploySingleVerticle {
 		
 		//create a new instance Vertx => a worker thread sinh ra để quản lý loop Event, vì thế hàm main() kết thúc nhưng App ko stop
 		// gọi vertx.close() để stop thread này
-		// vertx là singleton
+		//Ctrl+ T: để tìm implement Class sẽ thấy Vertx.vertx() sẽ new instance (ko phải Singleton)
 		Vertx vertx = Vertx.vertx();
 		
 		//tạo 1 Verticle context và chạy trên Thread đc chỉ định bởi Vertx

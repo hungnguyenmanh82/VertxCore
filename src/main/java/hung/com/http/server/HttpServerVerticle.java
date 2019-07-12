@@ -6,8 +6,10 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpConnection;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 
@@ -28,14 +30,34 @@ public class HttpServerVerticle extends AbstractVerticle{
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
 		System.out.println("MyVerticle started! port=81: thread="+Thread.currentThread().getId());
-		httpServer = vertx.createHttpServer();
+		
+		HttpServerOptions httpServerOptions = new HttpServerOptions()
+														.setMaxHeaderSize(4000)
+														.setReceiveBufferSize(8000)
+														.setSendBufferSize(8000);
+																	
+		httpServer = vertx.createHttpServer(httpServerOptions);
+		
+		
+		httpServer.connectionHandler(new Handler<HttpConnection>() {		
+			@Override
+			public void handle(HttpConnection connect) {
+				System.out.println("http connectionHandler: thread="+Thread.currentThread().getId());
+				//reject connect neu Server overload or number of connect > Max connect
+				
+				// Deploy Verticle de xu ly http request/response tren Threadpool khac nhu the se toi uu hon
+				// 1 http request/reponse context nen xu ly tren 1 thread (threadpool worker= false) de dam bao Order
+				//truong hop context lay du lieu tu 2 service khac nhau thi phai dam bao tinh thu tu
+				
+			}
+		});
 		
 		httpServer.requestHandler(new Handler<HttpServerRequest>() {
 		    @Override
 		    public void handle(HttpServerRequest request) {
 		    	//Request chỉ 1 lần duy nhất, vì thế các Request ko có tính phụ thuộc tuần tự => nên dùng Worker Verticle với Thread Pool
 		    	//tại đây phần header đã ok => the same as Tomcat NIO
-		        System.out.println("incoming connect request!: thread="+Thread.currentThread().getId());
+		        System.out.println("http requestHandler: thread="+Thread.currentThread().getId());
 		        
 		        /**
 		         * url = http://localhost:81/atm?id=1&command=ejm
