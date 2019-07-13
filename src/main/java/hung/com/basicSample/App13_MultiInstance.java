@@ -15,7 +15,8 @@ public class App13_MultiInstance {
 		
 		//vertx là singleton
 		Vertx vertx = Vertx.vertx();
-
+		
+		//Deploy Option chi hieu quả với Multi Instance
 		DeploymentOptions options = new DeploymentOptions()
 				.setInstances(6)          //create 6 instances of Verticles
 				.setWorkerPoolName("abc")

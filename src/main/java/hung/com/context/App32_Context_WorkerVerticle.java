@@ -37,7 +37,14 @@ public class App32_Context_WorkerVerticle {
 		}
 
 		//register Verticale with Vertex instance to capture event.
-		vertx.deployVerticle(new ContextVerticle1(),new DeploymentOptions().setWorker(true)); //asynchronous call MyVerticle1.start() in worker thread
+		DeploymentOptions deploymentOptions = new DeploymentOptions()
+//				.setInstances(6)          //create 6 instances of Verticles
+				.setWorkerPoolName("WorkerPoolName1")   //ten là duy nhat, dùng chung, dùng lại đc
+				.setWorkerPoolSize(3)
+				.setWorker(true);   //true: mỗi event đc assign 1 thread trong pool (các event độc lập, ko phụ thuộc nhau).
+									//false: Standard-verticle sẽ ko dùng threadpool mà dùng eventloop tức dùng EventLoopPool của Vertx
+		
+		vertx.deployVerticle(new ContextVerticle1(),deploymentOptions); //asynchronous call MyVerticle1.start() in worker thread
 		
 		
 		// app ko stop với Main() stop vì có 1 worker thread quản lý Vertx có loop bắt Event

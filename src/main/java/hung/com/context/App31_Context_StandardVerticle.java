@@ -3,6 +3,7 @@ package hung.com.context;
 import io.vertx.core.Context;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 
 /**
 Context: để chỉ 1 đơn vị quản lý tài nguyên Memory và threadpool luôn. 
@@ -19,14 +20,17 @@ public class App31_Context_StandardVerticle {
 
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("main(): thread="+Thread.currentThread().getId());
-		//create a new instance Vertx => a worker thread
-		Vertx vertx = Vertx.vertx();
 		
+		//create a new instance Vertx => a worker thread
+		//eventloop chỉ dùng cho Standard Verticle thôi	
+		final VertxOptions vertxOptions = new VertxOptions().setEventLoopPoolSize(4);
+		Vertx vertx = Vertx.vertx(vertxOptions);
+
 		//vertx.getOrCreateContext() sẽ trả về context gắn với Thread hiện tại:
 		// convert Current Thread => Context và trả về
 		// Verticle.start() luôn chạy trên thread của Verticle context hiện tại nên sẽ trả về Verticle context	
 		Context context = vertx.getOrCreateContext();
-		
+
 		if (context.isEventLoopContext()) {
 			System.out.println("main: Context attached to Event Loop: "+ context.deploymentID());
 		} else if (context.isWorkerContext()) {
@@ -37,12 +41,12 @@ public class App31_Context_StandardVerticle {
 			System.out.println("main: Context not attached to a thread managed by vert.x: "+ context.deploymentID());
 		}
 
-		//register Verticale with Vertex instance to capture event.
+		//StandardVerticle dung Evenloop của Vertx. Lấy thread trong EventLoopPool
 		vertx.deployVerticle(new ContextVerticle1());  //standard verticle
-		
-		
+
+
 		// app ko stop với Main() stop vì có 1 worker thread quản lý Vertx có loop bắt Event
-	    //vertx.close();
+		//vertx.close();
 	}
 
 }
