@@ -79,10 +79,10 @@ public class HttpServerVerticle extends AbstractVerticle{
 				//=========================== body of request ==============
 				if(request.method() == HttpMethod.POST){
 					System.out.println("POST request");
-					//asynchronous get body of post request (non-blocking).
-					// event is called many times
-					// Nên di chuyển phần code này vào Verticle khác (Vertx Context khác) để xử lý tuần tự event
-					// (dùng Standard Vertical để đảm bảo tính tuần tự)
+					
+					//===================================================== read body Event ===============
+					//Mỗi lần read body Event thì nó trigger handler này
+					// chỉ dùng cách này với body loại là chunk thôi (vd: truyền Video, audio....)
 					request.handler(new Handler<Buffer>() {
 						@Override
 						public void handle(Buffer buffer) {
@@ -91,9 +91,33 @@ public class HttpServerVerticle extends AbstractVerticle{
 							// nếu muốn chạy trên thread khác thì dùng Blocking Code
 							//Vertx dùng event (ko phải stream) nên nó biết khi nào kết thúc
 							// event will be triggered until body end
-							//ở tầng giao thức http sẽ có cách xác định khi nào request kết thúc
+
 						}
 					});
+					
+					//============================================ finish read body ==================
+					// dùng cái này với trường hợp ko phải là chunk request (vd: json, file)
+					// tại đây để lấy toàn bộ nội dung của body
+					request.bodyHandler(new Handler<Buffer>() {
+						
+						@Override
+						public void handle(Buffer buffer) {
+							//buffer chứa toàn bộ nội dung của body request
+							
+						}
+					});
+					
+					//============================================== end of body request ==============
+					// dùng với trường hợp chunk request thôi
+					request.endHandler(new Handler<Void>() {
+						
+						@Override
+						public void handle(Void event) {
+							// tại đây kết thúc body request.
+							
+						}
+					});
+					
 				}
 
 				//============================= response ===================

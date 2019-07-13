@@ -69,7 +69,7 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 			@Override
 			public void handle(HttpServerRequest request) {
 				System.out.println(" http requestHandler, *** deploy request Vertical: thread="+Thread.currentThread().getId());
-				//================================ Move http HandlerRequest to other Context =========================== 
+				//================================ Move http HandlerRequest to other Thread context =========================== 
 				DeploymentOptions options = new DeploymentOptions()
 						.setWorkerPoolName("ThreadPoolForRequestHandler")   //name là duy nhất để share giữa các Verticle
 						.setWorkerPoolSize(3)  //thread for server, not client
