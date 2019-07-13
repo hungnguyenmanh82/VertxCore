@@ -79,7 +79,7 @@ public class HttpServerVerticle extends AbstractVerticle{
 				//=========================== body of request ==============
 				if(request.method() == HttpMethod.POST){
 					System.out.println("POST request");
-					
+
 					//===================================================== read body Event ===============
 					//Mỗi lần read body Event thì nó trigger handler này
 					// chỉ dùng cách này với body loại là chunk thôi (vd: truyền Video, audio....)
@@ -94,30 +94,30 @@ public class HttpServerVerticle extends AbstractVerticle{
 
 						}
 					});
-					
+
 					//============================================ finish read body ==================
 					// dùng cái này với trường hợp ko phải là chunk request (vd: json, file)
 					// tại đây để lấy toàn bộ nội dung của body
 					request.bodyHandler(new Handler<Buffer>() {
-						
+
 						@Override
 						public void handle(Buffer buffer) {
 							//buffer chứa toàn bộ nội dung của body request
-							
+
 						}
 					});
-					
+
 					//============================================== end of body request ==============
 					// dùng với trường hợp chunk request thôi
 					request.endHandler(new Handler<Void>() {
-						
+
 						@Override
 						public void handle(Void event) {
 							// tại đây kết thúc body request.
-							
+
 						}
 					});
-					
+
 				}
 
 				//============================= response ===================
@@ -128,9 +128,8 @@ public class HttpServerVerticle extends AbstractVerticle{
 				String body = "Verticle HttpServer body";
 				//header phải gửi trc
 				response.headers()
-				.add("Content-Length", String.valueOf(body.length()))
-				.add("Content-Type", "text/html")
-				;
+								.add("Content-Length", String.valueOf(body.length()))
+								.add("Content-Type", "text/html");
 
 				//this function will return immediately
 				response.write(body); //asynchronous write by Vertx
