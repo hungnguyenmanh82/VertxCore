@@ -18,7 +18,7 @@ public class App63_HttpServer_Threadpool {
 				.setWorkerPoolSize(2)  //thread for server, not client
 //				.setMultiThreaded(true)  //ko nên dùng cái này, vì multi thread đọc từ Handler Queue sẽ bị synchronize() ko hiệu quả
 //				.setHa(true)         //option for cluster
-				.setWorker(false);   //true: worker-Verticle mỗi event đc assign 1 thread trong worker-pool (các event độc lập, ko phụ thuộc nhau).
+				.setWorker(false);   //true: worker-Verticle các event vẫn tuần tự nhưng có thể đc assign thread khac trong Worker-pool ở trên
                 					//false: Standard-verticle sẽ ko dùng threadpool mà dùng eventloop tức dùng EventLoopPool của Vertx
 
 		

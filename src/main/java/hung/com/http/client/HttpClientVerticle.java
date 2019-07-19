@@ -12,7 +12,8 @@ import io.vertx.core.http.HttpClientResponse;
 
 public class HttpClientVerticle extends AbstractVerticle {
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void start(Future<Void> startFuture) throws Exception {
         io.vertx.core.http.HttpClient httpClient = vertx.createHttpClient(); 
         

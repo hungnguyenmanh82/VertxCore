@@ -44,6 +44,8 @@ public class App16_UndeployVerticle_stopFuture {
 		}
 		
 		//=================== undeploy() to stop Verticle ========================
+		// undeploy() gọi từ thread khác
+		// nếu gọi bên trong Verticl thì dùng hàm verticle.stop()
 		Context verticleContext = verticle.getRealContext();
 		vertx.undeploy(verticleContext.deploymentID());
 		
