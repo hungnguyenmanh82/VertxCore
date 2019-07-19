@@ -70,9 +70,12 @@ public class WebsocketServerVerticle_2ndWay extends AbstractVerticle{
 
 		//================================ WebSocket Handshake via http protocol =======================
 		// Step1:  client gửi http-request theo định dạng Http- request 
+		// Handler này ko dc goi khi WebsocketHandler đc goi
 		httpServer.requestHandler(new Handler<HttpServerRequest>() {
 			@Override
 			public void handle(HttpServerRequest request) {
+				
+				//===================================  Handler này ko dc goi khi WebsocketHandler đc goi
 				System.out.println(" ============ http requestHandler: "  );
 				//show log to console
 				showHttpRequestHeader(request);
@@ -85,7 +88,7 @@ public class WebsocketServerVerticle_2ndWay extends AbstractVerticle{
 			public void handle(ServerWebSocket serverWebSocket) {
 				System.out.println(" websocketHandler path = " + serverWebSocket.path() );
 				
-				
+				//cach lay thong tin tu request header ra => vì can xu ly authentication sau nay
 //				serverWebSocket.headers(); //lấy http request header 
 				
 				if (!serverWebSocket.path().equals("/websocket_path")) {
@@ -103,6 +106,16 @@ public class WebsocketServerVerticle_2ndWay extends AbstractVerticle{
 					@Override
 					public void handle(String textFrame) {
 						System.out.println(" textFrame from client = " + textFrame);
+						
+					}
+				});
+				
+				// Opcode = Binary Frame
+				serverWebSocket.binaryMessageHandler(new Handler<Buffer>() {
+					
+					@Override
+					public void handle(Buffer buffer) {
+						System.out.println(" BinaryFrame from client = " + new String(buffer.getBytes()));
 						
 					}
 				});
@@ -125,7 +138,11 @@ public class WebsocketServerVerticle_2ndWay extends AbstractVerticle{
 				      writeTextMessage(data) Client  => textMessageHandler() Server
 				      writeBinaryMessage(data) Client => binaryMessageHandler(handler) Server
 				 */
-				serverWebSocket.writeTextMessage(" ##### Hello from Server ");
+				String textMessage = "#######  TextMessage from server";
+				serverWebSocket.writeTextMessage(textMessage);
+				
+				String binaryMessage = "#######  binaryMessage from server";
+				serverWebSocket.writeBinaryMessage(Buffer.buffer(binaryMessage.getBytes()));
 				
 				
 				// ==================================== sau khi ket thuc websocketHandler =================

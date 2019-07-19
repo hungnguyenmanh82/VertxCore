@@ -77,6 +77,15 @@ public class WebSocketClientVerticle extends AbstractVerticle {
 
 						}
 					});
+					
+					
+					webSocket.binaryMessageHandler(new Handler<Buffer>() {
+						
+						@Override
+						public void handle(Buffer buffer) {
+							System.out.println(" BinaryFrame from server = " + new String(buffer.getBytes()));
+						}
+					});
 
 					//========================== Close handler =================
 					webSocket.closeHandler(new Handler<Void>() {
@@ -96,9 +105,11 @@ public class WebSocketClientVerticle extends AbstractVerticle {
 				      writeTextMessage(data) Client  => textMessageHandler() Server
 				      writeBinaryMessage(data) Client => binaryMessageHandler(handler) Server
 				 */
-					String message = "#######  hello from client";
-					webSocket.writeTextMessage(message);
-
+					String textMessage = "#######  TextMessage from client";
+					webSocket.writeTextMessage(textMessage);
+					
+					String binaryMessage = "#######  binaryMessage from client";
+					webSocket.writeBinaryMessage(Buffer.buffer(binaryMessage.getBytes()));
 					//========================== Close===========================
 					/*					webSocket.close(new Handler<AsyncResult<Void>>() {
 						@Override

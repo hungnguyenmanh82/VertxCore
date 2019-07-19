@@ -60,27 +60,29 @@ public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 
 		//================================ WebSocket Handshake via http protocol =======================
 		// Step1:  client gửi http-request theo định dạng Http- request => tại đây đã nhận đc http-request 
-		
+		// dùng cách này có thể can thiệp vào response-header để redirect tơi page login
 		httpServer.requestHandler(new Handler<HttpServerRequest>() {
 			@Override
 			public void handle(HttpServerRequest request) {
 				System.out.println(" ============ http requestHandler: "  );
-				//cach lay thong tin tu header ra
+				
+				//cach lay thong tin tu header ra => vì can xu ly authentication sau nay
 				showHttpRequestHeader(request);
 				
 				//request.netSocket() => lay TCP socket neu cần
+				//request.response()  => can thiep vao response-header trc khi accept websocket
 				
 				if (request.path().equals("/websocket_path")) {
 					System.out.println("Upgrade to WebSocket " );
 					
 					// ========================================= upgrade ================================
 					// Step2: server gửi http-response accept Websocket
-					ServerWebSocket websocket = request.upgrade();
+					ServerWebSocket webSocket = request.upgrade();
 					
 					// các handler cần đc khai bao trc khi write
 					//=========================================== Reciever Message =======================
 					// Opcode = Text Frame
-					websocket.textMessageHandler(new Handler<String>() {
+					webSocket.textMessageHandler(new Handler<String>() {
 						
 						@Override
 						public void handle(String textFrame) {
@@ -89,8 +91,18 @@ public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 						}
 					});
 					
+					webSocket.binaryMessageHandler(new Handler<Buffer>() {
+						
+						@Override
+						public void handle(Buffer buffer) {
+							System.out.println(" BinaryFrame from client = " + new String(buffer.getBytes()));
+							
+						}
+					});
+					
+					
 					//======================================== Close Handler ===========================
-					websocket.closeHandler(new Handler<Void>() {
+					webSocket.closeHandler(new Handler<Void>() {
 						
 						@Override
 						public void handle(Void event) {
@@ -107,7 +119,12 @@ public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 				      writeTextMessage(data) Client  => textMessageHandler() Server
 				      writeBinaryMessage(data) Client => binaryMessageHandler(handler) Server
 				 */
-					websocket.writeTextMessage(" ##### Hello from Server ");
+					
+					String textMessage = "#######  TextMessage from server";
+					webSocket.writeTextMessage(textMessage);
+					
+					String binaryMessage = "#######  binaryMessage from server";
+					webSocket.writeBinaryMessage(Buffer.buffer(binaryMessage.getBytes()));
 
 				} else {
 					// send Http-response to reject Websocket

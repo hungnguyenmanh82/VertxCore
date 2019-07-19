@@ -9,6 +9,12 @@ import io.vertx.core.Vertx;
  */
 public class App91_WebSocket_Server {
 	public static void main(String[] args) {
+		
+		String st = "a";
+		System.out.println(st.length());
+		System.out.println(st.getBytes().length);
+		
+		
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
 		//Ví dụ demo websocket nên ko quan tâm tơi LoopEvent or Threadpool.
 		Vertx vertx = Vertx.vertx();
