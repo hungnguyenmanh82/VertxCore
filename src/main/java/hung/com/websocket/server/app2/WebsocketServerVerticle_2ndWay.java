@@ -120,6 +120,23 @@ public class WebsocketServerVerticle_2ndWay extends AbstractVerticle{
 					}
 				});
 				
+				/**
+				 * Sender co the la client or Server (giong nhau)
+				 * Sender: webSocket.writePing(SendData)  => Reciever o Protocol tu dong response Pong(Sendata) ma ko can viet code (ko co PingHandler)
+				 * SendData gui lai cho Sender de xac thuc thong tin da gui di 
+				 *  Sender: websocket.pongHandler(sendData)
+				 *  *  + Ko dung writePong()
+				 */
+				serverWebSocket.pongHandler(new Handler<Buffer>() {
+					
+					@Override
+					public void handle(Buffer buffer) {
+						//buffer chua SendData tu chinh WritePing() gui di tu Client
+						System.out.println("PongHandler:" + buffer.toString());
+						
+					}
+				});
+				
 				//======================================== Close Handler ===========================
 				serverWebSocket.closeHandler(new Handler<Void>() {
 					
@@ -144,7 +161,14 @@ public class WebsocketServerVerticle_2ndWay extends AbstractVerticle{
 				String binaryMessage = "#######  binaryMessage from server";
 				serverWebSocket.writeBinaryMessage(Buffer.buffer(binaryMessage.getBytes()));
 				
-				
+				/**
+				 * Sender co the la client or Server (giong nhau)
+				 * Sender: webSocket.writePing(SendData)  => Reciever o Protocol tu dong response Pong(Sendata) ma ko can viet code (ko co PingHandler)
+				 * SendData gui lai cho Sender de xac thuc thong tin da gui di
+				 *  Sender: websocket.pongHandler(sendData)
+				 *  + Ko dung writePong()
+				 */
+				serverWebSocket.writePing(Buffer.buffer(new String("PingMessage from Server").getBytes()));
 				// ==================================== sau khi ket thuc websocketHandler =================
 				// Step2: server gửi http-response accept Websocket
 				
