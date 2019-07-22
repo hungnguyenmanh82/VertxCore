@@ -77,12 +77,20 @@ public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 					
 					// ========================================= upgrade ================================
 					// Step2: server gửi http-response accept Websocket
-					ServerWebSocket webSocket = request.upgrade();
+					ServerWebSocket serverWebSocket = request.upgrade();
 					
 					// các handler cần đc khai bao trc khi write
 					//=========================================== Reciever Message =======================
-					// Opcode = Text Frame
-					webSocket.textMessageHandler(new Handler<String>() {
+					
+					/**
+				      writeTextMessage(data) Server  => textMessageHandler() Client
+				      writeBinaryMessage(data) Server => binaryMessageHandler(handler) Client
+				 Client và server vai tro nhu nhau:
+				      writeTextMessage(data) Client  => textMessageHandler() Server
+				      writeBinaryMessage(data) Client => binaryMessageHandler(handler) Server
+				 */
+					//reciever textFrame: opcode = textFrame
+					serverWebSocket.textMessageHandler(new Handler<String>() {
 						
 						@Override
 						public void handle(String textFrame) {
@@ -91,7 +99,8 @@ public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 						}
 					});
 					
-					webSocket.binaryMessageHandler(new Handler<Buffer>() {
+					// opcode = binaryFrame
+					serverWebSocket.binaryMessageHandler(new Handler<Buffer>() {
 						
 						@Override
 						public void handle(Buffer buffer) {
@@ -100,9 +109,26 @@ public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 						}
 					});
 					
+					/**
+					 * Sender co the la client or Server (giong nhau)
+					 * Sender: webSocket.writePing(SendData)  => Reciever o Protocol tu dong response Pong(Sendata) ma ko can viet code (ko co PingHandler)
+					 * SendData gui lai cho Sender de xac thuc thong tin da gui di 
+					 *  Sender: websocket.pongHandler(sendData)
+					 *  *  + Ko dung writePong()
+					 */
+					serverWebSocket.pongHandler(new Handler<Buffer>() {
+						
+						@Override
+						public void handle(Buffer buffer) {
+							//buffer chua SendData tu chinh WritePing() gui di tu Client
+							System.out.println("PongHandler:" + buffer.toString());
+							
+						}
+					});
 					
 					//======================================== Close Handler ===========================
-					webSocket.closeHandler(new Handler<Void>() {
+					// reciever close frame
+					serverWebSocket.closeHandler(new Handler<Void>() {
 						
 						@Override
 						public void handle(Void event) {
@@ -112,19 +138,21 @@ public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 					});
 					
 					//========================================= Send Message ============================
-					/**
-				      writeTextMessage(data) Server  => textMessageHandler() Client
-				      writeBinaryMessage(data) Server => binaryMessageHandler(handler) Client
-				 Client và server vai tro nhu nhau:
-				      writeTextMessage(data) Client  => textMessageHandler() Server
-				      writeBinaryMessage(data) Client => binaryMessageHandler(handler) Server
-				 */
 					
 					String textMessage = "#######  TextMessage from server";
-					webSocket.writeTextMessage(textMessage);
+					serverWebSocket.writeTextMessage(textMessage);
 					
 					String binaryMessage = "#######  binaryMessage from server";
-					webSocket.writeBinaryMessage(Buffer.buffer(binaryMessage.getBytes()));
+					serverWebSocket.writeBinaryMessage(Buffer.buffer(binaryMessage.getBytes()));
+					
+					/**
+					 * Sender co the la client or Server (giong nhau)
+					 * Sender: webSocket.writePing(SendData)  => Reciever o Protocol tu dong response Pong(Sendata) ma ko can viet code (ko co PingHandler)
+					 * SendData gui lai cho Sender de xac thuc thong tin da gui di
+					 *  Sender: websocket.pongHandler(sendData)
+					 *  + Ko dung writePong()
+					 */
+					serverWebSocket.writePing(Buffer.buffer(new String("PingMessage from Server").getBytes()));
 
 				} else {
 					// send Http-response to reject Websocket

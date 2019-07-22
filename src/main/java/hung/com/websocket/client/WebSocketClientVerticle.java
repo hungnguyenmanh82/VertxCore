@@ -86,6 +86,23 @@ public class WebSocketClientVerticle extends AbstractVerticle {
 							System.out.println(" BinaryFrame from server = " + new String(buffer.getBytes()));
 						}
 					});
+					
+					/**
+					 * Sender co the la client or Server (giong nhau)
+					 * Sender: webSocket.writePing(SendData)  => Reciever o Protocol tu dong response Pong(Sendata) ma ko can viet code (ko co PingHandler)
+					 * SendData gui lai cho Sender de xac thuc thong tin da gui di 
+					 *  Sender: websocket.pongHandler(sendData)
+					 *  *  + Ko dung writePong()
+					 */
+					webSocket.pongHandler(new Handler<Buffer>() {
+						
+						@Override
+						public void handle(Buffer buffer) {
+							//buffer chua SendData tu chinh WritePing() gui di tu Client
+							System.out.println("PongHandler:" + buffer.toString());
+							
+						}
+					});
 
 					//========================== Close handler =================
 					webSocket.closeHandler(new Handler<Void>() {
@@ -110,6 +127,17 @@ public class WebSocketClientVerticle extends AbstractVerticle {
 					
 					String binaryMessage = "#######  binaryMessage from client";
 					webSocket.writeBinaryMessage(Buffer.buffer(binaryMessage.getBytes()));
+					
+					
+					/**
+					 * Sender co the la client or Server (giong nhau)
+					 * Sender: webSocket.writePing(SendData)  => Reciever o Protocol tu dong response Pong(Sendata) ma ko can viet code (ko co PingHandler)
+					 * SendData gui lai cho Sender de xac thuc thong tin da gui di
+					 *  Sender: websocket.pongHandler(sendData)
+					 *  *  + Ko dung writePong()
+					 */
+					webSocket.writePing(Buffer.buffer(new String("PingMessage from client").getBytes()));
+					
 					//========================== Close===========================
 					/*					webSocket.close(new Handler<AsyncResult<Void>>() {
 						@Override
