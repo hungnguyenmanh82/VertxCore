@@ -94,6 +94,8 @@ public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 						
 						@Override
 						public void handle(String textFrame) {
+							// textFrame: là dữ liệu mã hóa UTF8 khi truyền nhận => ở đây Vertx đã hỗ trợ chuyển đổi UTF8 ở rồi
+							// String => UTF8 => send => reciever => UTF8 => String
 							System.out.println(" textFrame from client = " + textFrame);
 							
 						}
@@ -104,6 +106,8 @@ public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 						
 						@Override
 						public void handle(Buffer buffer) {
+							//BinaryFrame: dữ liệu truyền đi là binary
+							// bytes =>send => reciever => bytes
 							System.out.println(" BinaryFrame from client = " + new String(buffer.getBytes()));
 							
 						}
@@ -139,6 +143,8 @@ public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 					
 					//========================================= Send Message ============================
 					
+					// textFrame: là dữ liệu mã hóa UTF8 khi truyền nhận => ở đây Vertx đã hỗ trợ chuyển đổi UTF8 ở rồi
+					// String => UTF8 => send => reciever => UTF8 => String
 					String textMessage = "#######  TextMessage from server";
 					serverWebSocket.writeTextMessage(textMessage);
 					
