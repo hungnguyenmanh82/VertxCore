@@ -83,6 +83,7 @@ public class WebsocketServerVerticle_2ndWay extends AbstractVerticle{
 			}
 		});
 
+		// tại đây đã nhận đc request-header và nó phải tuân thủ Websocket.
 		httpServer.websocketHandler(new Handler<ServerWebSocket>() {
 			@Override
 			public void handle(ServerWebSocket serverWebSocket) {
