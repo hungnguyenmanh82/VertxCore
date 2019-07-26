@@ -47,7 +47,6 @@ public class EventBusReceiverVerticle extends AbstractVerticle {
 		MessageConsumer<String> consumer = eb.consumer(address);  //register Address với EventBus
 		
 		// register nhận Message có address tại Eventbus
-		// bản chất là duy trì 1
 		consumer.handler(new Handler<Message<String>>() { //có thể thay String bằng kiểu khác: object, int,float...
 			@Override
 			public void handle(Message<String> message) {

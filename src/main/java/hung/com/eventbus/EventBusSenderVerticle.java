@@ -30,6 +30,6 @@ public class EventBusSenderVerticle extends AbstractVerticle {
         
         //The send() method sends the message to just one of the listening verticles.
         //Which verticle receives the message is decided by Vert.x 
-        vertx.eventBus().send   ("anAddress", "=>Message only one Receiver");
+        vertx.eventBus().send("anAddress", "=>Message only one Receiver");
     }
 }

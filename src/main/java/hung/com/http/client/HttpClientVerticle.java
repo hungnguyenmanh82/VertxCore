@@ -8,6 +8,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientResponse;
 
 public class HttpClientVerticle extends AbstractVerticle {
@@ -15,12 +16,14 @@ public class HttpClientVerticle extends AbstractVerticle {
     @SuppressWarnings("deprecation")
 	@Override
     public void start(Future<Void> startFuture) throws Exception {
-        io.vertx.core.http.HttpClient httpClient = vertx.createHttpClient(); 
+        
+    	HttpClient httpClient = vertx.createHttpClient(); 
         
 //        httpClient.options(options);
         
+        // connect va gửi GET request-header tới server  (GET ko co body)
         httpClient.getNow(81, "localhost", "/vertx/client.html", new Handler<HttpClientResponse>() {
-        	//asynchronous callback function only 1 time when receive header of response
+        	//asynchronous callback function only 1 time when receive response-header
         	@Override
             public void handle(HttpClientResponse httpClientResponse) {
         		
@@ -48,6 +51,8 @@ public class HttpClientVerticle extends AbstractVerticle {
                 });
             }
         });
+        
+        
         
     }
 }

@@ -62,7 +62,7 @@ public class HttpServerVerticle extends AbstractVerticle{
 			@Override
 			public void handle(HttpServerRequest request) {
 				//Request chỉ 1 lần duy nhất, vì thế các Request ko có tính phụ thuộc tuần tự => nên dùng Worker Verticle với Thread Pool
-				//tại đây phần header đã ok => the same as Tomcat NIO
+				//tại đây phần header đã nhân dc het=> the same as Tomcat NIO
 				System.out.println("http requestHandler: thread="+Thread.currentThread().getId());
 
 				// cach lay thong tin tu Header ra
@@ -113,6 +113,7 @@ public class HttpServerVerticle extends AbstractVerticle{
 				}
 
 				//============================= response ===================
+				//Luu ý 2 chieu Request và Response là độc lập nên tien hanh song song tren thread khác dc (buffer khac nhau)
 				//cách 1: phần này nên dùng Blocking code để run nó trên 1 thread khác
 				// cách 2: chuyển phần này sang Verticle khác để xử lý
 				HttpServerResponse response = request.response();

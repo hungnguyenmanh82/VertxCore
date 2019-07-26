@@ -2,7 +2,7 @@ package hung.com.config;
 
 import java.util.Set;
 
-import hung.com.basicSample.MyVerticle;
+import hung.com.app1_basicSample.MyVerticle;
 import io.vertx.config.ConfigRetriever;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
