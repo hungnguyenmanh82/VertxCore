@@ -71,7 +71,7 @@ public class App82_Proxy extends AbstractVerticle {
 							}
 						});
 						
-						// neu goi endHandler thi sẽ ko goi BodyHandler (đã test)
+						// neu goi endHandler thi se ko goi BodyHandler (đã test)
 						// chi dung ham nay voi Chunk request
 /*						clientResponse.endHandler(new Handler<Void>() {
 							
