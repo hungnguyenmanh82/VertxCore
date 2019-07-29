@@ -115,7 +115,8 @@ public class HttpServerVerticle extends AbstractVerticle{
 				//============================= response ===================
 				//Luu ý 2 chieu Request và Response là độc lập nên tien hanh song song tren thread khác dc (buffer khac nhau)
 				//cách 1: phần này nên dùng Blocking code để run nó trên 1 thread khác
-				// cách 2: chuyển phần này sang Verticle khác để xử lý
+				// cách 2: chuyển phần này sang Verticle khác để xử lý => vì còn xử lý call database và other Micro Service
+				// xem vd ở mục server.pool.*
 				HttpServerResponse response = request.response();
 				response.setStatusCode(200);
 				String body = "Verticle HttpServer body";
