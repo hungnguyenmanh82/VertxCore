@@ -39,7 +39,7 @@ public class App82_Proxy extends AbstractVerticle {
 		// HttpClient tu Proxy connect toi Server de forward thong tin tu Client toi
 		HttpClient client = vertx.createHttpClient(new HttpClientOptions());
 
-		// tại đây đã nhận đc client request-header  (chưa nhận đc request-body)
+		//(1) ServerRequest: tại đây đã nhận đc client request-header  (chưa nhận đc request-body)
 		vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {
 			@Override
 			public void handle(HttpServerRequest serverRequest) {
@@ -52,7 +52,7 @@ public class App82_Proxy extends AbstractVerticle {
 				HttpClientRequest clientRequest = client.request(serverRequest.method(), 8282, "localhost", serverRequest.uri(), new Handler<HttpClientResponse>() {
 					@Override
 					public void handle(HttpClientResponse clientResponse) {
-						// Tại day da nhan dc http-request roi
+						//(3) Client-Response: Tại day da nhan dc http-response header roi (nhưng chưa nhận đc http-response header)
 						// request/response 2 chieu độc lập (nghĩa là tại đây có thể gửi response mà ko quan tâm tới body-request)
 						System.out.println("Proxy: clientResponse connect Handler " + clientResponse.statusCode());
 						
@@ -64,8 +64,9 @@ public class App82_Proxy extends AbstractVerticle {
 						clientResponse.bodyHandler(new Handler<Buffer>() {
 							@Override
 							public void handle(Buffer body) {
+								//(3) Client-Response: tại đây nhận đc toàn bộ body của http-response
 								System.out.println("Proxy: clientResponse.bodyHandler(): ");
-								// chi write data vào buffer request (chưa send đi)
+								//(4) serverResponse: gửi cả response-header và response-body cho Client
 								serverRequest.response().end(body);
 								
 							}
@@ -89,6 +90,7 @@ public class App82_Proxy extends AbstractVerticle {
 				});
 
 				// ===================================== request forward ===================================================
+				// (2): ClientRequest
 				// chunk cung thuoc header
 				// chuyen toan bo header cua Client-request sang sang cho Server
 				// cho nay chi ghi vào MultiMap chua gui đi
