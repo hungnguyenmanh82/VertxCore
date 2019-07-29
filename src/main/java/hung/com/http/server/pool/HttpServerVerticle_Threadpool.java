@@ -99,6 +99,10 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 	// run on a worker thread
 	@Override
 	public void stop(Future<Void> stopFuture) throws Exception {
-		System.out.println("MyVerticle stopped!");
+		//function này cần đc gọi để xác nhận undeploy() thành công (sẽ xóa DeploymentId)
+		// hoặc phải gọi hàm stopFuture.complete()
+		super.stop(stopFuture);
+//		stopFuture.complete();
+		System.out.println("Verticle_startFuture.stop(): thread=" + Thread.currentThread().getId());
 	}
 }

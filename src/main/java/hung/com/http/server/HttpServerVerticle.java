@@ -33,6 +33,10 @@ public class HttpServerVerticle extends AbstractVerticle{
 	//run on a worker thread
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
+		//hàm này phải đc gọi để xác định quá trình Deploy thành công (thì vertx.deploymentIDs() cập nhật giá trị)
+		// hoặc phải gọi hàm startFuture.complete()
+		//super.start(startFuture);  
+		
 		System.out.println("MyVerticle started! port=81: thread="+Thread.currentThread().getId());
 
 		HttpServerOptions httpServerOptions = new HttpServerOptions()

@@ -1,5 +1,7 @@
 package hung.com.http.sendfile;
 
+import java.net.URL;
+
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -45,11 +47,19 @@ public class App5_Server_downloadFile extends AbstractVerticle {
 					req.response().setStatusCode(404).end();
 				}
 				
+				/**
+				 App81_https_Server.class.getResource("/") = root = main/resources/ = main/java/
+				 App81_https_Server.class.getResource("/abc") = main/resource/abc
+				 //
+				 App81_https_Server.class.getResource("abc") = root/pakage_name/abc
+				 */
+				URL filenameURL =  App5_Server_downloadFile.class.getResource(filename);
+				System.out.println("filenameURL = " + filenameURL.getPath());
+				
 				// vertx sử dụng file cache khi đọc static file
 				// quá trình readfile là asynchronous
-				// bug: request lần đầu tiên ko tìm thấy file  (cần nâng version vertx >3.7.0)
 				if (filename != null) {
-					req.response().sendFile(filename);
+					req.response().sendFile(filenameURL.getPath());
 				}
 				
 			}

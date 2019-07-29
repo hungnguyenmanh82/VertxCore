@@ -7,11 +7,11 @@ import io.vertx.core.http.HttpClientOptions;
 /*
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
-public class Client extends AbstractVerticle {
+public class App83_Client_https extends AbstractVerticle {
 
 	public static void main(String[] args) {
 		Vertx vertx = Vertx.vertx();
-		vertx.deployVerticle(new Client()); 	
+		vertx.deployVerticle(new App83_Client_https()); 	
 	}
   @Override
   public void start() throws Exception {
@@ -19,7 +19,7 @@ public class Client extends AbstractVerticle {
     // Note! in real-life you wouldn't often set trust all to true as it could leave you open to man in the middle attacks.
 
     vertx.createHttpClient(new HttpClientOptions()
-    					.setSsl(true)
+    					.setSsl(true)				// https protocol
     					.setTrustAll(true))
 					    .getNow(4443, "localhost", "/", resp -> {
 						      System.out.println("Got response " + resp.statusCode());
