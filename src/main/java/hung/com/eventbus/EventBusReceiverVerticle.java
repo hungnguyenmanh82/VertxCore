@@ -31,8 +31,9 @@ public class EventBusReceiverVerticle extends AbstractVerticle {
 		this.name = name;
 	}
 
-
-	public void start(Future<Void> startFuture) {
+	@Override
+	public void start(Future<Void> startFuture) throws Exception {
+		super.start(startFuture);
 		System.out.println("=> EventBusReceiverVerticle.start():"+ "name="+ name +
 				", thread="+Thread.currentThread().getId());
 

@@ -14,7 +14,8 @@ public class EventBusSenderVerticle extends AbstractVerticle {
 	}
 
 
-	public void start(Future<Void> startFuture) {
+	public void start(Future<Void> startFuture) throws Exception {
+		super.start(startFuture);
     	System.out.println("<= EventBusSenderVerticle.start():"+ "name="+ name +
     								",thread="+Thread.currentThread().getId());
     	

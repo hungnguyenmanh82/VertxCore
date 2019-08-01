@@ -45,8 +45,12 @@ public class App91_CircuitBreaker {
 				.setFailuresRollingWindow(10000) // count failures trong 10ms gần nhất (cho phép tỷ lệ drop trong hạn mức).
 				);
 
-		// circuitBreaker sẽ gọi handler của future khi future.fail() và future.complete()
-		// tai handler của future nó sẽ xử lý các logic của circuitBreaker như: count failed
+		/**
+		 * cần hiểu tính chất của Future và AsyncResult trc đã thì đọc phần này sẽ hiểu.
+		 */
+		// circuitBreaker run handlerFutureRequest
+		// khi future.fail() hoặc future.complete() => nó sẽ gọi Handler của handlerFutureRequest
+		// tai handler của future nó sẽ xử lý các logic của circuitBreaker dựa vào AsyncResult của fail(), complete(): vd count failure
 		// vì run trên nhiều thread nên bắt buộc phải synchronize(object) khi read/write count faile or state => performance sẽ ko tốt
 		Handler<Future<String>> handlerFutureRequest = new Handler<Future<String>>() {
 
@@ -72,6 +76,7 @@ public class App91_CircuitBreaker {
 
 		//handlerAsyncResultResponse run tren thread của hàm future.complete() và future.fail()
 		// circuitBreaker sẽ gọi tơi future.handler() trc de change State sau do moi gọi tiep tơi handlerAsyncResultResponse
+		// Handler này ko cần cũng ko sao, vì ta bắt event ở circuitBreaker rồi
 		Handler<AsyncResult<String>> handlerAsyncResultResponse = new Handler<AsyncResult<String>>() {
 
 			@Override
@@ -92,7 +97,6 @@ public class App91_CircuitBreaker {
 		//=============================  Event State change Handler ============================
 		// API gateway có thể dựa vào các event này để biết đc state hiện tại của API gateway là gì dể loadbalancing or routing
 		circuitBreaker.closeHandler(new Handler<Void>() {
-
 			@Override
 			public void handle(Void event) {
 				//Loadbalancer cho phép circuitBreaker.execute()
@@ -103,7 +107,6 @@ public class App91_CircuitBreaker {
 		});
 
 		circuitBreaker.openHandler(new Handler<Void>() {
-
 			@Override
 			public void handle(Void event) {
 				//Loadbalancer pending circuitBreaker.execute()
@@ -115,7 +118,6 @@ public class App91_CircuitBreaker {
 
 		// state = Closed sau thơi gian ResetTimeout sẽ chuyen ve state = HalfOpen
 		circuitBreaker.halfOpenHandler(new Handler<Void>() {
-
 			@Override
 			public void handle(Void event) {
 				System.out.println("circuitBreaker.halfOpen()"+ formatter.format(new Date()));  
