@@ -51,7 +51,7 @@ public class App71_BoneCP_connectPool {
 							if (res2.succeeded()) {
 								ResultSet rs = res2.result();  //result save in Ram
 								// Do something with results
-								// Vertx hỗ trợ chuyển đổi Resultset về JsonObject => chuyển về Object rất dễ dàng nhờ Gson hoặc Jackson
+								// Vertx hỗ trợ chuyển đổi Resultset về JsonObject => chuyển JsonObject về Class Object dùng thư viện của Vertx tiện hơn GSON và JackSon
 								/**
 								      private List<String> columnNames;  // 1 row nhiều colume
 									  private List<JsonArray> results;   // 1 row tương ứng 1 JsonArray

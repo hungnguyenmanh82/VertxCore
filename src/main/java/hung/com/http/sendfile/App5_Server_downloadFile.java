@@ -48,14 +48,16 @@ public class App5_Server_downloadFile extends AbstractVerticle {
 				}
 				
 				/**
+				 * lúc compile sẽ gộp "main/resources/" và "main/java/" vào 1 folder chung
 				 App81_https_Server.class.getResource("/") = root = main/resources/ = main/java/
-				 App81_https_Server.class.getResource("/abc") = main/resource/abc
+				 App81_https_Server.class.getResource("/abc") = main/resource/abc  = main/java/abc  
 				 //
-				 App81_https_Server.class.getResource("..") = root/pakage_name
+				 App81_https_Server.class.getResource("..") = root/pakage_name       => package_name của class này
 				 App81_https_Server.class.getResource(".") = root/pakage_name/ 
 				 App81_https_Server.class.getResource("abc") = root/pakage_name/abc
 				 */
-				URL filenameURL =  App5_Server_downloadFile.class.getResource(filename);
+				
+				URL filenameURL =  App5_Server_downloadFile.class.getResource(filename);   // = "root/pakage_name/filename"
 				System.out.println("filenameURL = " + filenameURL.getPath());
 				
 				// vertx sử dụng file cache khi đọc static file
