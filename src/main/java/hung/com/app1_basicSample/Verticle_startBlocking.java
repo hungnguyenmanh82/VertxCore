@@ -11,7 +11,7 @@ import io.vertx.core.net.NetSocket;
  start() blocking tức ko dùng Future để callback
 
  */
-public class StartBlockingVerticle extends AbstractVerticle {
+public class Verticle_startBlocking extends AbstractVerticle {
 
 
 	@Override

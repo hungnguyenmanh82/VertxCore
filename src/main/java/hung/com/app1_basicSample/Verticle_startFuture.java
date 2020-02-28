@@ -24,7 +24,7 @@ public class Verticle_startFuture extends AbstractVerticle {
 	public void start(Future<Void> startFuture) throws Exception {	
 		//hàm này phải đc gọi để xác định quá trình Deploy thành công (thì vertx.deploymentIDs() cập nhật giá trị)
 		// hoặc phải gọi hàm startFuture.complete()
-		//super.start(startFuture);   
+		//super.start(startFuture);   // function startFuture.complete() dc goi o day
 		
 		System.out.println("Verticle_startFuture.start(): thread="+Thread.currentThread().getId());
 		

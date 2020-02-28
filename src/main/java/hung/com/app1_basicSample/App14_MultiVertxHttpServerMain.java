@@ -16,7 +16,7 @@ public class App14_MultiVertxHttpServerMain {
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
 		
-		//========================== 
+		//========================== vertx 1 ===========================
 		//Ctrl+ T: để tìm implement Class sẽ thấy Vertx.vertx() sẽ new instance (ko phải Singleton)
 		Vertx vertx = Vertx.vertx();
 		vertx.deployVerticle(new HttpServerVerticle()); //asynchronous call MyVerticle1.start() in worker thread

@@ -24,7 +24,7 @@ public class App13_MultiInstance {
 				.setWorker(true);
 		
 		//register Verticale with Vertex instance to capture event.
-		vertx.deployVerticle("hung.com.basicSample.MyVerticle",options);//asynchronous call MyVerticle1.start() in worker thread
+		vertx.deployVerticle("hung.com.basicSample.MyVerticle",options);//asynchronous call MyVerticle.start() in worker thread
 
 		Thread.currentThread().sleep(3000);
 

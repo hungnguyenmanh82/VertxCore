@@ -29,7 +29,7 @@ public class App17_deployStartBlockingVerticle {
 
 
 		//register Verticale with Vertex instance to capture event.
-		StartBlockingVerticle verticle = new StartBlockingVerticle();
+		Verticle_startBlocking verticle = new Verticle_startBlocking();
 
 		vertx.deployVerticle(verticle);
 
