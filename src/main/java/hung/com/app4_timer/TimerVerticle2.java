@@ -24,26 +24,23 @@ public class TimerVerticle2 extends AbstractVerticle {
 	    //trường hợp Stardard verticle vẫn chạy tuần tự (đã test)
 	    //trường hợp working thread thì vẫn phải chạy tuần tự (đã test)
 
-		long timerID = vertx.setTimer(3000,new  Handler<Long>() {
+		long timerID = vertx.setTimer(200,new  Handler<Long>() {
 			//run on thread of Verticle
 		    @Override
 		    public void handle(Long aLong) {
-		    	System.out.println("timer2.1 : thread="+Thread.currentThread().getId());
+		    	System.out.println("timer2.1 : thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		    }
 		});
 		
-		timerID = vertx.setTimer(5000,new  Handler<Long>() {
+		timerID = vertx.setTimer(500,new  Handler<Long>() {
 			//run on thread of Verticle
 		    @Override
 		    public void handle(Long aLong) {
-		    	System.out.println("timer2.2: thread="+Thread.currentThread().getId());
+		    	System.out.println("timer2.2: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		    }
 		});
 		
-		//check timer có cùng context với Verticle ko?
-		//nếu cùng context thì cac timer này phải xử lý sau 6s (đúng là như vậy)
-		Thread.sleep(6000);
-		System.out.println("verticle sleep 6s thread="+Thread.currentThread().getId());
+
 //		vertx.cancelTimer(timerID);
 	}
 

@@ -16,7 +16,7 @@ public class TimerVerticle extends AbstractVerticle {
 
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {	
-		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId());
+		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 //		vertx.setTimer(delay, handler)
 //		vertx.setPeriodic(delay, handler)
@@ -24,19 +24,19 @@ public class TimerVerticle extends AbstractVerticle {
 	    //trường hợp Stardard verticle vẫn chạy tuần tự (đã test)
 	    //trường hợp working thread thì vẫn phải chạy tuần tự (đã test)
 
-		long timerID = vertx.setTimer(3000,new  Handler<Long>() {
+		long timerID = vertx.setTimer(300,new  Handler<Long>() {
 			//run on thread of Verticle
 		    @Override
 		    public void handle(Long aLong) {
-		    	System.out.println("timer1.1: thread="+Thread.currentThread().getId());
+		    	System.out.println("timer1.1: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		    }
 		});
 		
-		timerID = vertx.setTimer(5000,new  Handler<Long>() {
+		timerID = vertx.setTimer(500,new  Handler<Long>() {
 			//run on thread of Verticle
 		    @Override
 		    public void handle(Long aLong) {
-		    	System.out.println("timer1.2: thread="+Thread.currentThread().getId());
+		    	System.out.println("timer1.2: thread="+Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName());
 		    }
 		});
 		

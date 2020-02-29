@@ -10,7 +10,7 @@ import io.vertx.core.Vertx;
  */
 public class App11_Timer {
 	public static void main(String[] args) {
-		System.out.println("start main(): thread="+Thread.currentThread().getId());
+		System.out.println("start main(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		//default vertX là Standard Verticle
 		Vertx vertx = Vertx.vertx();
@@ -20,11 +20,11 @@ public class App11_Timer {
 		vertx.deployVerticle(new TimerVerticle2());	 //default = standard verticle
 		
 		//==============================case2: timer ở ngoài ========================
-		long timerID = vertx.setTimer(4000,new  Handler<Long>() {
+		long timerID = vertx.setTimer(400,new  Handler<Long>() {
 			//run on thread of Verticle
 		    @Override
 		    public void handle(Long aLong) {
-		    	System.out.println("timer3: thread="+Thread.currentThread().getId());
+		    	System.out.println("timer3: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		    }
 		});
 	}

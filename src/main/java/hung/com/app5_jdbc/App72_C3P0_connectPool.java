@@ -1,8 +1,11 @@
 package hung.com.app5_jdbc;
 
+import java.util.List;
+
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.sql.ResultSet;
@@ -53,14 +56,12 @@ public class App72_C3P0_connectPool {
 						public void handle(AsyncResult<ResultSet> res2) {
 							if (res2.succeeded()) {
 								ResultSet rs = res2.result();  //result save in Ram
-								// Do something with results
+
 								// Vertx hỗ trợ chuyển đổi Resultset về JsonObject => chuyển JsonObject về Class Object dùng thư viện của Vertx tiện hơn GSON và JackSon
-								/**
-								      private List<String> columnNames;  // 1 row nhiều colume
-									  private List<JsonArray> results;   // 1 row tương ứng 1 JsonArray
-									  private List<JsonObject> rows;
-									  private JsonArray output;
-								 */
+								// xem các ví dụ ở phần Json
+								List<String> columnNames = rs.getColumnNames();  // list columnName
+								List<JsonArray> results = rs.getResults();       // 1 row tương ứng 1 JsonArray => performance tốt hơn là JsonObject
+								List<JsonObject> rows = rs.getRows();          // 1 row tương ứng 1 jsonObject
 							}
 
 						}
