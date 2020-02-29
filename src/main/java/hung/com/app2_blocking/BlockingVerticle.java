@@ -50,7 +50,7 @@ public class BlockingVerticle extends AbstractVerticle {
 		// BlockingHandler vẫn thuộc context của Verticle, nhưng chạy trên thread khác (xem DeploymentId ở log sẽ thấy).
 		// => BlockingHandler vẫn lưu trong 1 task queue order của Verticle context
 		// Verticle context có 2 task
-		Handler blockingHandler = new Handler<Future<String>>() {
+		Handler<Future<String>> blockingHandler = new Handler<Future<String>>() {
 			public String test = "abc";
 			@Override
 			public void handle(Future<String> future) {
@@ -67,7 +67,7 @@ public class BlockingVerticle extends AbstractVerticle {
 
 		//returnHandler run trên Verticle Thread
 		// Type trong Future<Type> và AsyncResult<Type> phải giống nhau =>nếu ko để kiểu Object và check type
-		Handler returnHandler =  new Handler<AsyncResult<String>>() {
+		Handler<AsyncResult<String>> returnHandler =  new Handler<AsyncResult<String>>() {
 			public void handle(AsyncResult<String> event) {
 
 				if( event.succeeded()){

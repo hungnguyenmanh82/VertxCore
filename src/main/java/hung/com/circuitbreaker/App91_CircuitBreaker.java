@@ -27,7 +27,6 @@ public class App91_CircuitBreaker {
 
 		//create a new instance Vertx => a worker thread sinh ra để quản lý loop Event, vì thế hàm main() kết thúc nhưng App ko stop
 		// gọi vertx.close() để stop thread này
-		// vertx là singleton
 		Vertx vertx = Vertx.vertx();
 
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS");  
@@ -38,7 +37,7 @@ public class App91_CircuitBreaker {
 		// Loadbalancer sẽ phải quản lý nhiều circuitBreaker
 		CircuitBreaker circuitBreaker = CircuitBreaker.create("my-circuit-breaker", vertx,
 				new CircuitBreakerOptions()
-				.setMaxFailures(2) // number of failure before opening the circuit
+				.setMaxFailures(2) // number of failure before opening the circuit  (Open State)
 				.setTimeout(1000) // consider a failure if the operation does not succeed in time
 				.setFallbackOnFailure(true) // do we call the fallback on failure
 				.setResetTimeout(5000) // time spent in open state before attempting to re-try
@@ -73,10 +72,11 @@ public class App91_CircuitBreaker {
 			}
 
 		};
-
-		//handlerAsyncResultResponse run tren thread của hàm future.complete() và future.fail()
+		
+		
+		//handlerAsyncResultResponse run tren thread của hàm future.complete() or future.fail() của handlerFutureRequest
 		// circuitBreaker sẽ gọi tơi future.handler() trc de change State sau do moi gọi tiep tơi handlerAsyncResultResponse
-		// Handler này ko cần cũng ko sao, vì ta bắt event ở circuitBreaker rồi
+		// Handler này ko cần cũng ko sao => nó ko liên quan tới biến đổi State của Circuit Breaker
 		Handler<AsyncResult<String>> handlerAsyncResultResponse = new Handler<AsyncResult<String>>() {
 
 			@Override
@@ -96,6 +96,8 @@ public class App91_CircuitBreaker {
 
 		//=============================  Event State change Handler ============================
 		// API gateway có thể dựa vào các event này để biết đc state hiện tại của API gateway là gì dể loadbalancing or routing
+		// cần xem State diagram mới hiểu các concept và cách vận hành.
+		// Close State: là trạng thái cho phép gửi request
 		circuitBreaker.closeHandler(new Handler<Void>() {
 			@Override
 			public void handle(Void event) {
@@ -105,7 +107,10 @@ public class App91_CircuitBreaker {
 				
 			}
 		});
-
+		
+		// Open State: là trạng thái ko cho phép gửi request (vì các request trc đó gửi Server bị lỗi vượt Threadhold)
+		// các request đi qua CircuitBreaker
+		// sau khi TimeOut ở OpenState, nó sẽ chuyển sang HalfOpen state để cho phép các request tiếp tục.
 		circuitBreaker.openHandler(new Handler<Void>() {
 			@Override
 			public void handle(Void event) {
@@ -116,7 +121,8 @@ public class App91_CircuitBreaker {
 			}
 		});
 
-		// state = Closed sau thơi gian ResetTimeout sẽ chuyen ve state = HalfOpen
+		// halfOpen state: nếu gửi lệnh thành công thì sẽ chuyển sang Closed State
+		// nếu gửi lệnh thất bại sẽ quay lại Open State và đợi Timeout để chuyển trạng thái HalfOpen state.
 		circuitBreaker.halfOpenHandler(new Handler<Void>() {
 			@Override
 			public void handle(Void event) {

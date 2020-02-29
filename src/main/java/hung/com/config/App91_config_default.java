@@ -2,7 +2,10 @@ package hung.com.config;
 
 
 import io.vertx.config.ConfigRetriever;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 /**
  * 
 https://vertx.io/docs/vertx-config/java/
@@ -19,10 +22,32 @@ public class App91_config_default {
 
 		Vertx vertx = Vertx.vertx();
 		
-		// dùng defaut config để lấy System properties và Enviroment variables
+		// dùng defaut config để lấy System properties và Enviroment variables of Window or linux
 		ConfigRetriever retriever = ConfigRetriever.create(vertx);
 		
-		
+		// Asynchronous get Json restful Environment (
+		retriever.getConfig(new Handler<AsyncResult<JsonObject>>() {
+			@Override
+			public void handle(AsyncResult<JsonObject> event) {
+				if (event.failed()) {
+					// Failed to retrieve the configuration
+					System.out.println("fail: get config from Enviroment Variable");
+				} else { //event.succeeded()
+					//===========================================================================
+					// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
+					// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
+					JsonObject config = event.result();
+					
+					System.out.println(config.toString());
+					
+					System.out.println("Path:"+ config.getString("Path"));
+					System.out.println("JAVA_HOME:"+ config.getString("JAVA_HOME"));
+				}
+
+			}
+		});
+
+		//vertx.close();   //get config asynchronous => ko đc gọi hàm này
 
 	}
 }

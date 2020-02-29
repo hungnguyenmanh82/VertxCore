@@ -26,11 +26,12 @@ public class EventBusSenderVerticle extends AbstractVerticle {
     	EventBus evenbus = vertx.eventBus();
     	String address = "anAddress";
     	
-    	//bên Pulish ko cần phải register gì cả, vì nó ko phải trigger handler để bắt sự kiện
+    	//Pulish(): 
+    	// tất cả Verticle đăng ký nhận dùng 1 address, đều nhận đc nó.
     	evenbus.publish(address, "=>Message publicly");  //có thể Message Content String bằng kiểu khác: object, int,float...
         
-        //The send() method sends the message to just one of the listening verticles.
-        //Which verticle receives the message is decided by Vert.x 
+        //send(): 
+    	// Nhiều Verticle đăng ký nhận dùng 1 address, nhưng chỉ có 1 verticle nhận đc
         vertx.eventBus().send("anAddress", "=>Message only one Receiver");
     }
 }

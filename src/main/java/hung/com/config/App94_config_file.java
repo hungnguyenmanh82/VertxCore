@@ -58,6 +58,6 @@ public class App94_config_file {
 			}
 		});
 
-		vertx.close();
+		//vertx.close();   //get config asynchronous => ko đc gọi hàm này
 	}
 }

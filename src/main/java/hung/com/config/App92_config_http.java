@@ -25,7 +25,7 @@ public class App92_config_http {
 				.setType("http")
 				.setConfig(new JsonObject().put("host", "localhost")
 						                   .put("port", 8080)
-						                   .put("path", "/conf") );
+						                   .put("path", "/conf") );  // url để lấy config file trên server
 
 
 		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(httpStore);
@@ -43,12 +43,14 @@ public class App92_config_http {
 					// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
 					// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
 					JsonObject config = event.result();
+					
 				}
 
 			}
 		});
 		
 
+		// dùng Lambda syntax
 /*		retriever.getConfig(ar -> {
 			if (ar.failed()) {
 				// Failed to retrieve the configuration
@@ -57,5 +59,6 @@ public class App92_config_http {
 			}
 		});*/
 
+		//vertx.close();
 	}
 }

@@ -30,7 +30,7 @@ public class BlockingVerticle_WorkerExecutor extends AbstractVerticle {
 		//bất key Event, hay task nào tạo ra trong Blocking code đều thuộc quản lý của Context hiện tại => đều run trên thread của Verticle
 		//Trong khi Event, task sinh ra ở Blocking-code lại thuộc context của Verticle tạo ra “blocking-code” => 
 		//event hay task này sẽ chạy trên thread (or threadpool) của Verticle (ko chạy trên vertx context).
-		Handler blockingHandler = new Handler<Future<String>>() {
+		Handler<Future<String>> blockingHandler = new Handler<Future<String>>() {
 			public String test = "abc";
 			//Future này quản lý bởi Vertx, ko phải Verticle
 			@Override
@@ -46,7 +46,7 @@ public class BlockingVerticle_WorkerExecutor extends AbstractVerticle {
 		};
 		
 		//run on thread of this Verticle
-		Handler returnHandler =  new Handler<AsyncResult<String>>() {
+		Handler<AsyncResult<String>> returnHandler =  new Handler<AsyncResult<String>>() {
 			public void handle(AsyncResult<String> event) {
 				System.out.println("returnHandler: thread=" + Thread.currentThread().getId()+
 							 ", result=" + event.result());

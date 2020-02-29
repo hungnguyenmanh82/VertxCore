@@ -25,20 +25,21 @@ public class App93_config_env {
 		Vertx vertx = Vertx.vertx();
 		
 		ConfigStoreOptions  optionStore = new ConfigStoreOptions()
-										  .setType("env")
+										  .setType("env")          //Environment variable of window or linux
 										  .setConfig(new JsonObject().put("raw-data", true));
 		
 		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(optionStore);
 		
 		ConfigRetriever retriever = ConfigRetriever.create(vertx,options);
 		
-		// Asynchronous get Json restful from http server
+		// Asynchronous get Json restful Environment (
 		retriever.getConfig(new Handler<AsyncResult<JsonObject>>() {
 			@Override
 			public void handle(AsyncResult<JsonObject> event) {
 				if (event.failed()) {
 					// Failed to retrieve the configuration
-				} else {
+					System.out.println("fail: get config from Enviroment Variable");
+				} else { //event.succeeded()
 					//===========================================================================
 					// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
 					// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
@@ -46,13 +47,13 @@ public class App93_config_env {
 					
 					System.out.println(config.toString());
 					
-					System.out.println("PATH:"+ config.getString("PATH"));
+					System.out.println("Path:"+ config.getString("Path"));
 					System.out.println("JAVA_HOME:"+ config.getString("JAVA_HOME"));
 				}
 
 			}
 		});
 
-		vertx.close();
+		//vertx.close();   //get config asynchronous => ko đc gọi hàm này
 	}
 }

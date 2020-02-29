@@ -45,18 +45,19 @@ public class EventBusReceiverVerticle extends AbstractVerticle {
 		// body kiểu String
 		EventBus eb = vertx.eventBus();
 		String address = "anAddress";
-		MessageConsumer<String> consumer = eb.consumer(address);  //register Address với EventBus
+		MessageConsumer<String> consumer = eb.consumer(address);  //register Address với EventBus to reciever message
 		
 		// register nhận Message có address tại Eventbus
 		consumer.handler(new Handler<Message<String>>() { //có thể thay String bằng kiểu khác: object, int,float...
 			@Override
 			public void handle(Message<String> message) {
+				// chạy trên Thread của Verticle
 				System.out.println("***Handle(): EventBusReceiverVerticle:Consumer():"+
 						"name="+ name +
 						", thread="+Thread.currentThread().getId());
 				System.out.println("receive Message: name="+ name +  
 						", address="+ message.address()+ 
-						", body=" +message.body());  //body kiểu string
+						", body=" +message.body());  //body kiểu <string>
 				
 				// message tổ chức giống như Http protocol vậy
 				// bên publish có thể gửi headers, bên nhận có thê nhận header
@@ -65,7 +66,9 @@ public class EventBusReceiverVerticle extends AbstractVerticle {
 
 		} );
 		
+		//register to receive Message ok
 		consumer.completionHandler(res -> {
+			  // chạy trên Thread của Verticle
 			  if (res.succeeded()) {
 			    System.out.println("The handler registration has reached all nodes");
 			  } else {
