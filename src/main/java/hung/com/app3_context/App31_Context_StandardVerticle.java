@@ -23,7 +23,8 @@ public class App31_Context_StandardVerticle {
 		
 		//create a new instance Vertx => a worker thread
 		//eventloop chỉ dùng cho Standard Verticle thôi	
-		final VertxOptions vertxOptions = new VertxOptions().setEventLoopPoolSize(4);
+		VertxOptions vertxOptions = new VertxOptions().setWorkerPoolSize(4)  // threadPool của blocking code 
+				 									.setEventLoopPoolSize(4);  //threadpool của EventLoop cho standard Verticle
 		Vertx vertx = Vertx.vertx(vertxOptions);
 
 		//vertx.getOrCreateContext() sẽ trả về context gắn với Thread hiện tại:
