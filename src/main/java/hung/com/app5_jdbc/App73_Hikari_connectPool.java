@@ -59,8 +59,6 @@ public class App73_Hikari_connectPool {
 								
 								// Vertx hỗ trợ chuyển đổi Resultset về JsonObject => chuyển JsonObject về Class Object dùng thư viện của Vertx tiện hơn GSON và JackSon
 								// xem các ví dụ ở phần Json
-			
-								
 								List<String> columnNames = rs.getColumnNames();  // list columnName
 								List<JsonArray> results = rs.getResults();       // 1 row tương ứng 1 JsonArray => performance tốt hơn là JsonObject
 								List<JsonObject> rows = rs.getRows();          // 1 row tương ứng 1 jsonObject

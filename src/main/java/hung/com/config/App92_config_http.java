@@ -59,6 +59,6 @@ public class App92_config_http {
 			}
 		});*/
 
-		//vertx.close();
+		//vertx.close();   //get config asynchronous => ko đc gọi hàm này
 	}
 }
