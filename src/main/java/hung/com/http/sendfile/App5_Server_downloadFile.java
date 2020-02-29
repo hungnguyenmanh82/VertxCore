@@ -26,8 +26,10 @@ public class App5_Server_downloadFile extends AbstractVerticle {
 	@Override
 	public void start() throws Exception {
 
-		System.out.println("try with: http://localhost:8080/");
-
+		System.out.println("***  try Browser with url: http://localhost:8080/");
+		System.out.println("*** try Browser with url: http://localhost:8080/page1.html");
+		System.out.println("*** try Browser with url: http://localhost:8080/page2.html");
+		System.out.println("*** try Browser with url: http://localhost:8080/abc");
 		
 		vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {
 			@Override

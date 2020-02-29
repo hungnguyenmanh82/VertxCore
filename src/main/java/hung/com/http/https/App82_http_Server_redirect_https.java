@@ -31,6 +31,14 @@ public class App82_http_Server_redirect_https extends AbstractVerticle {
 
 		HttpServer httpServer = vertx.createHttpServer();
 		
+		
+		// =========================== Guide =======================================
+		System.out.println("*** step1: run App82_http_Server_redirect_https ");
+		System.out.println("*** step2: run App81_https_Server");	
+		System.out.println("*** step3: please test Browsers with url:" + " http://localhost:8080/");
+		System.out.println("*** step3: please test Browsers with url:" + " http://localhost:8080/test");
+
+		
 		// Lưu ý: uri = /favicon.ico  là Browser request để lấy Icon của website
 		httpServer.requestHandler(new Handler<HttpServerRequest>() {
 			

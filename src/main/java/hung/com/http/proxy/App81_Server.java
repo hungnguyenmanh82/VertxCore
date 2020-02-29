@@ -24,6 +24,9 @@ public class App81_Server extends AbstractVerticle {
 	public void start() throws Exception {
 		
 		System.out.println("Server: http Server start at port = 8282");
+		System.out.println("*** step1: please test Browsers with url:" + " http://localhost:8282/");
+		System.out.println("*** step2: please test Browsers with url:" + " http://localhost:8282/test");
+
 		//Luu ý 2 chieu Request và Response là độc lập, ko liên quan tơi nhau
 		// Trigger khi nhận đầy đủ header
 		vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {

@@ -14,10 +14,11 @@ public class App61_HttpServer {
 		Vertx vertx = Vertx.vertx();
 		
 		DeploymentOptions options = new DeploymentOptions()
-				.setWorkerPoolName("*TcpServerThreadPool")
+				.setWorkerPoolName("WorkerPoolName1")
 				.setWorkerPoolSize(2)  //thread for server, not client
-				.setWorker(false);   //true: worker-Verticle mỗi event đc assign 1 thread trong worker-pool (các event độc lập, ko phụ thuộc nhau).
-								//false: Standard-verticle sẽ ko dùng threadpool mà dùng eventloop tức dùng EventLoopPool của Vertx
+				.setWorker(false);   //true: worker-vertical dùng WorkerPoolName1  (các event vẫn tuần tự, nhưng trên thread khác nhau)
+									//false: Standard-verticle dùng vert.x-eventloop-thread (fix thread to verticle)
+									//blockingCode luôn dùng WorkerPoolName1
 
 		
 		vertx.deployVerticle(new HttpServerVerticle(),options); 		

@@ -16,7 +16,7 @@ public class App53_VertxHttpClient_MultiInstance {
 		
 		DeploymentOptions options = new DeploymentOptions()
 				.setInstances(6)          //create 6 instances of Verticals
-				.setWorkerPoolName("abc")
+				.setWorkerPoolName("WorkerPoolName")
 				.setWorkerPoolSize(3)
 				.setWorker(true);
 		

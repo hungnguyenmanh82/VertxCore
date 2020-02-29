@@ -73,8 +73,10 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 				DeploymentOptions options = new DeploymentOptions()
 						.setWorkerPoolName("ThreadPoolForRequestHandler")   //name là duy nhất để share giữa các Verticle
 						.setWorkerPoolSize(3)  //thread for server, not client
-						.setHa(true)
-						.setWorker(true);   //true: thì Threadpool size mới hoạt động.
+						.setHa(true)         //HA: high Availability
+						.setWorker(true);    //true: worker-vertical dùng ThreadPoolForRequestHandler  (các event vẫn tuần tự, nhưng trên thread khác nhau)
+											//false: Standard-verticle dùng vert.x-eventloop-thread (fix thread to verticle)
+											//blockingCode luôn dùng ThreadPoolForRequestHandler
 
 				vertx.deployVerticle(new HttpRequestHandlerVerticle(request),options);
 			}

@@ -27,13 +27,14 @@ public class App81_https_Server extends AbstractVerticle {
 	public void start() throws Exception {
 		//hàm này phải đc gọi để xác định quá trình Deploy thành công (thì vertx.deploymentIDs() cập nhật giá trị)
 		// hoặc phải gọi hàm startFuture.complete()
-		super.start();  
+		super.start();  // super đã gọi ham startFuture.complete()
 		
 		
 		// đọc tài liệu Security để hiểu về SSL
 		// Từ file server-keystore.jks Https server sẽ lấy Public key để gửi tới Client ở SSL handshake. còn Private key giữ lại
 		// key-pair này dùng để lấy Shared-key là symmetric key để mà hóa dữ liệu truyền nhận giữa Client và server.
-		// shared-key: là do SSL client quyết định.
+		// shared-key: là do SSL client quyết định (là symmetric key)
+		// dùng OpenSSL để tạo file server-keystore.jks
 		URL keyStoreURL = App81_https_Server.class.getResource("server-keystore.jks");  // file này chưa Key-pair.key thường gọi là private key
 		
 		/**
@@ -45,12 +46,17 @@ public class App81_https_Server extends AbstractVerticle {
 		
 		HttpServer server =	vertx.createHttpServer(new HttpServerOptions()
 									.setSsl(true)					// https protocol
-//									.setKeyCertOptions(options)   //
+//									.setKeyCertOptions(options)   // keyCertificate để check với Certificate Authen Server (phải trả tiền để mua) => ko cần
 									.setKeyStoreOptions(
 											new JksOptions().setPath(path).setPassword("wibble")   //password để truy cập file key-pair chứa private/public key
 											//luc tạo key-pair tốt nhất là ko dùng password
 											//OpenSSL generate key-pair random
 										));
+		
+		// =================================== Guide =================================
+		System.out.println("*** step1: please test Browsers with url:" + " https://localhost:4443/");
+		System.out.println("*** step2: please test Browsers with url:" + " https://localhost:4443/test");
+		System.out.println("*** step3: run App83_Client_https");
 		
 		// Lưu ý: uri = /favicon.ico  là Browser request để lấy Icon của website
 		server.requestHandler(new Handler<HttpServerRequest>() {

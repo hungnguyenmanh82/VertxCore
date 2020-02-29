@@ -20,12 +20,17 @@ public class App82_Proxy extends AbstractVerticle {
 	public static void main(String[] args) {
 		Vertx vertx = Vertx.vertx();
 		vertx.deployVerticle(new App82_Proxy()); 	
+		
+		
 	}
 
 	@Override
 	public void start() throws Exception {
 		
 		System.out.println("Proxy: http Proxy start at port = 8080");
+		System.out.println("*** step1: please test Browsers with url:" + " http://localhost:8080/");
+		System.out.println("*** step2: please test Browsers with url:" + " http://localhost:8080/test");
+		
 		/**
 		 *  Lay Proxy lam he qui chieu:
 		 *   (1) serverRequest => (2) clientRequest => (3) clientReponse => (4) serverResponse
@@ -39,7 +44,7 @@ public class App82_Proxy extends AbstractVerticle {
 		// HttpClient tu Proxy connect toi Server de forward thong tin tu Client toi
 		HttpClient client = vertx.createHttpClient(new HttpClientOptions());
 
-		//(1) ServerRequest: tại đây đã nhận đc client request-header  (chưa nhận đc request-body)
+		//(1) ServerRequest: tại đây đã nhận đc full client request-header  (chưa nhận đc request-body)
 		vertx.createHttpServer().requestHandler(new Handler<HttpServerRequest>() {
 			@Override
 			public void handle(HttpServerRequest serverRequest) {
@@ -52,14 +57,15 @@ public class App82_Proxy extends AbstractVerticle {
 				HttpClientRequest clientRequest = client.request(serverRequest.method(), 8282, "localhost", serverRequest.uri(), new Handler<HttpClientResponse>() {
 					@Override
 					public void handle(HttpClientResponse clientResponse) {
-						//(3) Client-Response: Tại day da nhan dc http-response header roi (nhưng chưa nhận đc http-response header)
+						//(3) Client-Response: Tại day da nhan dc full http-response header roi (nhưng chưa nhận đc http-response body)
 						// request/response 2 chieu độc lập (nghĩa là tại đây có thể gửi response mà ko quan tâm tới body-request)
 						System.out.println("Proxy: clientResponse connect Handler " + clientResponse.statusCode());
 						
 						// ===================================== response forward ===================================================
-						// chi write vào buffer của Response (chưa send đi)
+						//(3) chi write vào buffer của Response (chưa send đi)
 						serverRequest.response().setStatusCode(clientResponse.statusCode());
 						serverRequest.response().headers().setAll(clientResponse.headers());
+						
 						
 						clientResponse.bodyHandler(new Handler<Buffer>() {
 							@Override

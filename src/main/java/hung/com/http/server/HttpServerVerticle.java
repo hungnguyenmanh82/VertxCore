@@ -37,12 +37,12 @@ public class HttpServerVerticle extends AbstractVerticle{
 		// hoặc phải gọi hàm startFuture.complete()
 		//super.start(startFuture);  
 		
-		System.out.println("MyVerticle started! port=81: thread="+Thread.currentThread().getId());
+		System.out.println("MyVerticle started! server port=81: thread="+Thread.currentThread().getId());
 
 		HttpServerOptions httpServerOptions = new HttpServerOptions()
 				.setMaxHeaderSize(4000)
-				.setReceiveBufferSize(8000)
-				.setSendBufferSize(8000);
+				.setReceiveBufferSize(8000)   //of socket
+				.setSendBufferSize(8000);    // of socket
 
 		httpServer = vertx.createHttpServer(httpServerOptions);
 
