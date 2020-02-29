@@ -23,7 +23,7 @@ public class BlockingVerticle_WorkerExecutor extends AbstractVerticle {
 //		this.context;  //quản lý tất cả tài nguyên của Verticle
 //		this.context.isWorkerContext()
 //		this.context.isMultiThreadedWorkerContext()
-		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId());
+		System.out.println("BlockingVerticle_WorkerExecutor.start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		
 		//BlockingHanderler: thuộc Vertx context => chạy trên threadpool của Vertx context
@@ -35,6 +35,8 @@ public class BlockingVerticle_WorkerExecutor extends AbstractVerticle {
 			//Future này quản lý bởi Vertx, ko phải Verticle
 			@Override
 			public void handle(Future<String> future) {
+				System.out.println("******blockingHandler: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
+				
 				String result = "blockingHandler: thread="+Thread.currentThread().getId();
 				//future đc dùng cho asynchronous function ở trong hàm handle này.	
 				future.complete(result);   //sẽ gửi event tới context của Verticle
@@ -57,6 +59,7 @@ public class BlockingVerticle_WorkerExecutor extends AbstractVerticle {
 		int poolSize = 2;
 		long maxExecuteTime = 1000; //mini second
 		String threadPoolName = "my-worker-pool"; //tên là id duy nhất. 2 tham số còn lại chỉ dùng lần đầu tạo threadpool
+												  // có thể dùng tên lại ở 1 verticle khác vẫn ok.	
 		
 		// nếu đã tồn tại threadpoolName này rồi, thì nó lấy luôn threadpool đó (ko tạo mới)
 		WorkerExecutor executor = vertx.createSharedWorkerExecutor(threadPoolName,poolSize, maxExecuteTime);

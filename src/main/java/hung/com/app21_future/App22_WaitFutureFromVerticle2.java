@@ -37,6 +37,7 @@ public class App22_WaitFutureFromVerticle2 {
 		futureTest.setHandler(new Handler<AsyncResult<String>>() {
 			// code này run trên cùng thread gọi hàm futureTest.complete(result) or futureTest.fail(result)
 			// ở vd này là cùng thread với FutureInplementAtVerticle
+			// 2 function này đc ta gọi ở Verticle (ko phải ở Lib của Vertx)
 			@Override
 			public void handle(AsyncResult<String> event) {
 				if( event.succeeded()){

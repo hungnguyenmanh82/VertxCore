@@ -29,7 +29,7 @@ public class App25_SequentialFutures {
 		Future<Void> startFuture = Future.future();
 
 		Future<Void> fut1 = Future.future();
-		fs.createFile("foo.txt", fut1.completer());
+		fs.createFile("foo.txt", fut1);
 		
 		// Future và Handler cùng xử lý kiểu <void>
 

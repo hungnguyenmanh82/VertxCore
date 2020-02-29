@@ -21,7 +21,7 @@ event hay task này sẽ chạy trên thread (or threadpool) của Verticle (ko 
 public class App32_ContextHandlerQueue {
 
 	public static void main(String[] args) throws InterruptedException{
-		System.out.println("main(): thread="+Thread.currentThread().getId());
+		System.out.println("main(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		//create a new instance Vertx => a worker thread
 		Vertx vertx = Vertx.vertx();
 		
@@ -54,35 +54,46 @@ public class App32_ContextHandlerQueue {
 			
 			@Override
 			public void handle(Void event) {
-				System.out.println("case1: run Handler on Context of Vertx: thread="+Thread.currentThread().getId());
+				// nếu ko khởi tạo Vertx eventloop pool thì sẽ tạo thread mới để run Handler này
+				System.out.println("case11: run Handler on Context of Vertx: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 				
 			}
 		});
 		
-		//================================= case2: context từ verticle
+		// lặp lại case 1
+		vertx.runOnContext(new Handler<Void>() {
+			 
+			@Override
+			public void handle(Void event) {
+				// nếu ko khởi tạo Vertx eventloop pool thì sẽ tạo thread mới để run Handler này
+				System.out.println("case12: run Handler on Context of Vertx: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
+				
+			}
+		});
+		
+		//================================= case2: context từ Vertx
 		//Handler đc add trên Thread của Context nào thì sẽ chạy trên Threadpool của context ấy
 		// trường hợp Thread ko thuộc Verticle nào thì sẽ do Vertx chỉ định từ Threadpool của nó
-		// code này ko run trên thread của verticle, mà của Vertx
+		// code này ko run trên thread của verticle, mà của Vertx quản lý verticle này
 		verticle.getVertx().getOrCreateContext().runOnContext(new Handler<Void>() {
 			
 			@Override
 			public void handle(Void event) {
-				System.out.println("case21: run Handler on Context of Verticle: thread="+Thread.currentThread().getId());
+				System.out.println("case21: run Handler on Context of Vertx: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 				
 			}
 		});
 		
-		//============================
+		//===lặp lại case 2
 		verticle.getVertx().getOrCreateContext().runOnContext(new Handler<Void>() {
 			
 			@Override
 			public void handle(Void event) {
-				System.out.println("case22: run Handler on Context of Verticle: thread="+Thread.currentThread().getId());
+				System.out.println("case22: run Handler on Context of Vertx: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 			}
 		});
 		
-		
-		
+	
 		// app ko stop với Main() stop vì có 1 worker thread quản lý Vertx có loop bắt Event
 	    //vertx.close();
 	}

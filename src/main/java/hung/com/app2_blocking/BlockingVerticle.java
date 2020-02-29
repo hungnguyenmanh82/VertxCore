@@ -43,7 +43,7 @@ public class BlockingVerticle extends AbstractVerticle {
 		//		this.context;  //quản lý tất cả tài nguyên của Verticle
 		//		this.context.isWorkerContext()
 		//		this.context.isMultiThreadedWorkerContext()
-		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId());
+		System.out.println("BlockingVerticle.start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 
 
 		//mấu chốt là khái niệm Future
@@ -54,6 +54,8 @@ public class BlockingVerticle extends AbstractVerticle {
 			public String test = "abc";
 			@Override
 			public void handle(Future<String> future) {
+				System.out.println("******blockingHandler: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
+				
 				String result = "blockingHandler: thread="+Thread.currentThread().getId();
 				future.complete(result);   //sẽ gọi future.handle(AsyncResult<resultType>) ngay trên Thread này
 

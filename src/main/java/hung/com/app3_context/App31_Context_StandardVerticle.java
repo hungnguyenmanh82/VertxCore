@@ -19,7 +19,7 @@ event hay task này sẽ chạy trên thread (or threadpool) của Verticle (ko 
 public class App31_Context_StandardVerticle {
 
 	public static void main(String[] args) throws InterruptedException{
-		System.out.println("main(): thread="+Thread.currentThread().getId());
+		System.out.println("main(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		//create a new instance Vertx => a worker thread
 		//eventloop chỉ dùng cho Standard Verticle thôi	

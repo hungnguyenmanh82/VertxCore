@@ -19,9 +19,11 @@ public class App13_MultiInstance {
 		//Deploy Option chi hieu quả với Multi Instance
 		DeploymentOptions options = new DeploymentOptions()
 				.setInstances(6)          //create 6 instances of Verticles
-				.setWorkerPoolName("abc")
+				.setWorkerPoolName("WorkerPoolName")
 				.setWorkerPoolSize(3)
-				.setWorker(true);
+				.setWorker(true); 	//true: worker-vertical dùng WorkerPoolName1  (các event vẫn tuần tự, nhưng trên thread khác nhau)
+									//false: Standard-verticle dùng vert.x-eventloop-thread (fix thread to verticle)
+									//blockingCode luôn dùng WorkerPoolName1
 		
 		//register Verticale with Vertex instance to capture event.
 		vertx.deployVerticle("hung.com.basicSample.MyVerticle",options);//asynchronous call MyVerticle.start() in worker thread

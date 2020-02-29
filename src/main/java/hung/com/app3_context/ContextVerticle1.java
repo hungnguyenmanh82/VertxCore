@@ -30,20 +30,20 @@ public class ContextVerticle1 extends AbstractVerticle {
 		// nếu ko phải gọi hàm startFuture.complete()
 		super.start(startFuture);   
 		
-		System.out.println("ContextVerticle1.start(): thread="+Thread.currentThread().getId());
+		System.out.println("ContextVerticle1.start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 
 		//vertx.getOrCreateContext() sẽ trả về context gắn với Thread hiện tại Thread.currentThread()
 		// convert Current Thread => Context và trả về => hầu hết các thư viện dùng theo cách này
 		// Verticle.start() luôn chạy trên thread của Verticle context hiện tại nên sẽ trả về Verticle context	
 		Context context = vertx.getOrCreateContext();
 		if (context.isEventLoopContext()) {
-			System.out.println("ContextVerticle1: Context attached to Event Loop: "+ context.deploymentID());
+			System.out.println("ContextVerticle1: Context attached to Event Loop: deploymentId= "+ context.deploymentID());
 		} else if (context.isWorkerContext()) {
-			System.out.println("ContextVerticle1: Context attached to Worker Thread: "+ context.deploymentID());
+			System.out.println("ContextVerticle1: Context attached to Worker Thread: deploymentId= "+ context.deploymentID());
 		} else if (context.isMultiThreadedWorkerContext()) {
-			System.out.println("ContextVerticle1: Context attached to Worker Thread - multi threaded worker: "+ context.deploymentID());
+			System.out.println("ContextVerticle1: Context attached to Worker Thread - multi threaded worker: deploymentId= "+ context.deploymentID());
 		} else if (! Context.isOnVertxThread()) {
-			System.out.println("ContextVerticle1: Context not attached to a thread managed by vert.x: "+ context.deploymentID());
+			System.out.println("ContextVerticle1: Context not attached to a thread managed by vert.x: deploymentId= "+ context.deploymentID());
 		}
 
 		//Future<String>  => String là giá trị trả về của Future 
@@ -56,14 +56,14 @@ public class ContextVerticle1 extends AbstractVerticle {
 			//Future này quản lý bởi Vertx, ko phải Verticle
 			@Override
 			public void handle(Future<String> future) {
-				System.out.println("***blockingHandler1: thread="+Thread.currentThread().getId());
+				System.out.println("*************blockingHandler1: thread="+Thread.currentThread().getId() + ",ThreadName="+Thread.currentThread().getName());
 				Context context1 = vertx.getOrCreateContext();  //vẫn cùng context với Verticle 
 				if (context1.isEventLoopContext()) {
-					System.out.println("blockingHandler1: Context attached to Event Loop: "+ context1.deploymentID());
+					System.out.println("blockingHandler1: Context attached to Event Loop: deploymentId= "+ context1.deploymentID());
 				} else if (context1.isWorkerContext()) {
-					System.out.println("blockingHandler1: Context attached to Worker Thread: "+ context1.deploymentID());
+					System.out.println("blockingHandler1: Context attached to Worker Thread: deploymentId= "+ context1.deploymentID());
 				} else if (context1.isMultiThreadedWorkerContext()) {
-					System.out.println("blockingHandler1: Context attached to Worker Thread - multi threaded worker: "+ context1.deploymentID());
+					System.out.println("blockingHandler1: Context attached to Worker Thread - multi threaded worker: deploymentId= "+ context1.deploymentID());
 				} else if (! Context.isOnVertxThread()) {
 					System.out.println("blockingHandler1: Context not attached to a thread managed by vert.x: "+ context1.deploymentID());
 				}
@@ -78,8 +78,10 @@ public class ContextVerticle1 extends AbstractVerticle {
 		//run on thread of this Verticle
 		Handler returnHandler =  new Handler<AsyncResult<String>>() {
 			public void handle(AsyncResult<String> event) {
-				System.out.println("returnHandler1: thread=" + Thread.currentThread().getId()+
+				System.out.println("returnHandler1: thread=" + Thread.currentThread().getId()+ 
 						", result=" + event.result());
+				
+				System.out.println("ThreadName="+Thread.currentThread().getName());
 			};
 		};
 

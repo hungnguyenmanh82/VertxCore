@@ -40,17 +40,16 @@ public class ContextOfVerticle extends AbstractVerticle {
 		// nếu ko phải gọi hàm startFuture.complete()
 		super.start(startFuture);  
 
-		System.out.println("ContextOfVerticle.start(): thread="+Thread.currentThread().getId());
-
+		System.out.println("ContextOfVerticle.start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		if (context.isEventLoopContext()) {
-			System.out.println("ContextOfVerticle: Context attached to Event Loop: "+ context.deploymentID());
+			System.out.println("ContextOfVerticle: Context attached to Event Loop: deploymentId= "+ context.deploymentID());
 		} else if (context.isWorkerContext()) {
-			System.out.println("ContextOfVerticle: Context attached to Worker Thread: "+ context.deploymentID());
+			System.out.println("ContextOfVerticle: Context attached to Worker Thread: deploymentId= "+ context.deploymentID());
 		} else if (context.isMultiThreadedWorkerContext()) {
-			System.out.println("ContextOfVerticle: Context attached to Worker Thread - multi threaded worker: "+ context.deploymentID());
+			System.out.println("ContextOfVerticle: Context attached to Worker Thread - multi threaded worker: deploymentId= "+ context.deploymentID());
 		} else if (! Context.isOnVertxThread()) {
-			System.out.println("ContextOfVerticle: Context not attached to a thread managed by vert.x: "+ context.deploymentID());
+			System.out.println("ContextOfVerticle: Context not attached to a thread managed by vert.x: deploymentId= "+ context.deploymentID());
 		}
 		
 		

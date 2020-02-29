@@ -22,7 +22,7 @@ event hay task này sẽ chạy trên thread (or threadpool) của Verticle (ko 
 public class App34_ContextOfVerticle_fromOtherThread {
 
 	public static void main(String[] args) throws InterruptedException{
-		System.out.println("main(): thread="+Thread.currentThread().getId());
+		System.out.println("main(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		//create a new instance Vertx => a worker thread
 		Vertx vertx = Vertx.vertx();
 
@@ -56,7 +56,7 @@ public class App34_ContextOfVerticle_fromOtherThread {
 			
 			@Override
 			public void handle(Void event) {
-				System.out.println("****Handler run on Context of verticleContext : thread="+Thread.currentThread().getId());
+				System.out.println("****Handler run on Context of ContextOfVerticle : thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 				System.out.println(" deploymentId="+vertx.getOrCreateContext().deploymentID());
 				
 			}

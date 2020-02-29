@@ -41,8 +41,9 @@ public class App32_Context_WorkerVerticle {
 //				.setInstances(6)          //create 6 instances of Verticles
 				.setWorkerPoolName("WorkerPoolName1")   //ten là duy nhat, dùng chung, dùng lại đc
 				.setWorkerPoolSize(3)
-				.setWorker(true);   //true: mỗi event đc assign 1 thread trong pool (các event độc lập, ko phụ thuộc nhau).
-									//false: Standard-verticle sẽ ko dùng threadpool mà dùng eventloop tức dùng EventLoopPool của Vertx
+				.setWorker(true);   //true: worker-vertical dùng WorkerPoolName1  (các event vẫn tuần tự, nhưng trên thread khác nhau)
+									//false: Standard-verticle dùng vert.x-eventloop-thread (fix thread to verticle)
+									//blockingCode luôn dùng WorkerPoolName1
 		
 		vertx.deployVerticle(new ContextVerticle1(),deploymentOptions); //asynchronous call MyVerticle1.start() in worker thread
 		
