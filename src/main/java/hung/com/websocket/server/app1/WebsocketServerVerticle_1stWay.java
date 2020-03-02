@@ -34,6 +34,8 @@ Chú ý: websocket protocol là chuẩn riêng Khác hẳn http protocol (tất 
 
 public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 	private HttpServer httpServer = null;
+	
+	
 
 	private Buffer totalBuffer = Buffer.buffer(4000); //4k byte
 	//run on a worker thread

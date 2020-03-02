@@ -8,6 +8,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.MultiMap;
+import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpClientResponse;
 import io.vertx.core.http.HttpServerRequest;
@@ -26,7 +27,19 @@ Chú ý: websocket protocol là chuẩn riêng Khác hẳn http protocol (tất 
 Sau khi thiết lập handshake qua http protocol, nó hoàn toàn tuân thủ websocket protocol về gửi nhận dữ liệu (khác với tcp protocol). 
 
  */
-public class WebSocketClientVerticle extends AbstractVerticle {
+public class App92_WebSocketClientVerticle extends AbstractVerticle {
+	
+	public static void main(String[] args) {
+		System.out.println("start main(): thread="+Thread.currentThread().getId());
+		//get a new instance of Vertx => tương ứng 1 thread thì đúng hơn.
+		Vertx vertx = Vertx.vertx();
+		//tạo 5 connect tới server
+		vertx.deployVerticle(new App92_WebSocketClientVerticle()); 
+/*		vertx.deployVerticle(new HttpClientVerticle());
+		vertx.deployVerticle(new HttpClientVerticle()); 
+		vertx.deployVerticle(new HttpClientVerticle()); 
+		vertx.deployVerticle(new HttpClientVerticle()); */
+	}
 
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
