@@ -5,6 +5,7 @@
 	<artifactId>VertxTest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+
 	<dependencies>
 		<!-- vertx 3.7.0 need Netty Lib -->
 		<!-- vertx 3.4.2 ko can Netty -->
