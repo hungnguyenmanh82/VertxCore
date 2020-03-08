@@ -42,7 +42,7 @@ public class HttpRequestHandlerVerticle extends AbstractVerticle{
 
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
-		System.out.println("HttpRequestHandlerVerticle : thread="+Thread.currentThread().getId());
+		System.out.println(this.getClass().getName()+ ".start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 
 		/**
 		 * url = http://localhost:81/atm?id=1&command=ejm
@@ -54,7 +54,7 @@ public class HttpRequestHandlerVerticle extends AbstractVerticle{
 
 		// path() = /favicon.icon  là request hỏi Icon của website do Browser gửi tới vertx
 		// cach lay thong tin tu Header ra
-		showHttpRequestHeader(request);
+//		showHttpRequestHeader(request);
 		
 		//=========================== body of request ==============
 		if(request.method() == HttpMethod.POST){
@@ -66,6 +66,7 @@ public class HttpRequestHandlerVerticle extends AbstractVerticle{
 			request.handler(new Handler<Buffer>() {
 				@Override
 				public void handle(Buffer buffer) {
+					System.out.println("http requestHandler: thread="+Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName());
 					// đoạn code này chạy trên Thread cấp cho Verticle (trong context của Verticle) => khi gọi lặp lại sẽ vẫn đảm bảo tính tuần tự.
 					// (dùng Standard Vertical để đảm bảo tính tuần tự)
 					// nếu muốn chạy trên thread khác thì dùng Blocking Code

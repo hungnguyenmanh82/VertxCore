@@ -30,8 +30,10 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 	//run on a worker thread
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {
-		System.out.println("MyVerticle started! port=81: thread="+Thread.currentThread().getId());
-
+		System.out.println(this.getClass().getName()+ ".start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
+		System.out.println("try browser with url: http://localhost:81/atm?id=1&command=ejm");
+		System.out.println("try browser with url: http://localhost:81/");
+		
 		HttpServerOptions httpServerOptions = new HttpServerOptions()
 				.setMaxHeaderSize(4000)
 				.setReceiveBufferSize(8000)
@@ -52,7 +54,7 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 		httpServer.connectionHandler(new Handler<HttpConnection>() {		
 			@Override
 			public void handle(HttpConnection connect) {
-				System.out.println("************ http connectionHandler: thread="+Thread.currentThread().getId());
+				System.out.println("ConnectHandler:"+ "thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 				//reject connect neu Server overload or number of connect > Max connect
 
 				// Deploy Verticle de xu ly http request/response tren Threadpool khac nhu the se toi uu hon
@@ -68,7 +70,7 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 		httpServer.requestHandler(new Handler<HttpServerRequest>() {
 			@Override
 			public void handle(HttpServerRequest request) {
-				System.out.println(" http requestHandler, *** deploy request Vertical: thread="+Thread.currentThread().getId());
+				System.out.println("http requestHandler: thread="+Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName());
 				//================================ Move http HandlerRequest to other Thread context =========================== 
 				DeploymentOptions options = new DeploymentOptions()
 						.setWorkerPoolName("ThreadPoolForRequestHandler")   //name là duy nhất để share giữa các Verticle

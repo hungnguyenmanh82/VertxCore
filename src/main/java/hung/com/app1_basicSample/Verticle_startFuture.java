@@ -26,7 +26,7 @@ public class Verticle_startFuture extends AbstractVerticle {
 		// hoặc phải gọi hàm startFuture.complete()
 		//super.start(startFuture);   // function startFuture.complete() dc goi o day
 		
-		System.out.println("Verticle_startFuture.start(): thread="+Thread.currentThread().getId());
+		System.out.println(this.getClass().getName()+ ": thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		// chìa khóa là khái niệm Future
 		// hàm này sẽ call Handler<AsyncResult<String>> của vertx.deploy(Verticle, Handler)

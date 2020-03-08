@@ -11,7 +11,7 @@ import io.vertx.core.Vertx;
 public class App13_MultiInstance {
 
 	public static void main(String[] args) throws InterruptedException{
-		System.out.println("start main(): thread="+Thread.currentThread().getId());
+		System.out.println("main(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		//vertx là singleton
 		Vertx vertx = Vertx.vertx();

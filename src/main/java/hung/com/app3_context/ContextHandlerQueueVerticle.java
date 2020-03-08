@@ -30,7 +30,7 @@ public class ContextHandlerQueueVerticle extends AbstractVerticle {
 		// nếu ko phải gọi hàm startFuture.complete()
 		super.start(startFuture); 
 		
-		System.out.println("ContextHandlerQueueVerticle.start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
+		System.out.println(this.getClass().getName()+ ".start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		//vertx.getOrCreateContext() sẽ trả về context gắn với Thread hiện tại:
 		// convert Current Thread => Context và trả về

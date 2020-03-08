@@ -6,6 +6,7 @@ import java.util.Set;
 
 import io.vertx.circuitbreaker.CircuitBreaker;
 import io.vertx.circuitbreaker.CircuitBreakerOptions;
+import io.vertx.circuitbreaker.CircuitBreakerState;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -138,7 +139,11 @@ public class App91_CircuitBreaker {
 		//state = Closed: circuitBreaker sẽ thực hiện lệnh luôn
 		// circuitBreaker.execute() sẽ chạy trên context của current Thread gọi nó
 		// lệnh circuitBreaker.execute() đầu tiên chạy rất chậm vì nó phải chờ Java compile runtime (mất 500ms) các lệnh tiếp theo rất nhanh (1ms)
-		circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
+		if(circuitBreaker.state() == CircuitBreakerState.CLOSED 
+				|| circuitBreaker.state() == CircuitBreakerState.HALF_OPEN){
+			circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
+		}
+		
 		circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
 		circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
 //		circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);

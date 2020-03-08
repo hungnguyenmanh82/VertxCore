@@ -18,7 +18,7 @@ public class Verticle_startBlocking extends AbstractVerticle {
 	public void start() throws Exception {
 		super.start();  //phải gọi hàm này thì vertx.deploymentIDs() mới cập nhật giá trị.
 		
-		System.out.println("StartBlockingVerticle.start(): thread="+Thread.currentThread().getId());
+		System.out.println(this.getClass().getName()+ ": thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 	}
 
 

@@ -40,7 +40,7 @@ public class ContextOfVerticle extends AbstractVerticle {
 		// nếu ko phải gọi hàm startFuture.complete()
 		super.start(startFuture);  
 
-		System.out.println("ContextOfVerticle.start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
+		System.out.println(this.getClass().getName()+ ".start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		if (context.isEventLoopContext()) {
 			System.out.println("ContextOfVerticle: Context attached to Event Loop: deploymentId= "+ context.deploymentID());

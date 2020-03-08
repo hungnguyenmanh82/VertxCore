@@ -11,7 +11,7 @@ import io.vertx.core.Vertx;
 public class App11_DeploySingleVerticle {
 
 	public static void main(String[] args) throws InterruptedException{
-		System.out.println("start main(): thread="+Thread.currentThread().getId());
+		System.out.println("main(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		//create a new instance Vertx => a worker thread sinh ra để quản lý loop Event, vì thế hàm main() kết thúc nhưng App ko stop
 		// gọi vertx.close() để stop thread này

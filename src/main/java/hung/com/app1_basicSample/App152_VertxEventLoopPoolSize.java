@@ -11,7 +11,7 @@ import io.vertx.core.VertxOptions;
 public class App152_VertxEventLoopPoolSize {
 
 	public static void main(String[] args) throws InterruptedException{
-		System.out.println("start main(): thread="+Thread.currentThread().getId());
+		System.out.println("main(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		//eventloop chỉ dùng cho Standard Verticle thôi
 		final VertxOptions vertxOptions = new VertxOptions().setEventLoopPoolSize(4);

@@ -35,9 +35,18 @@ public class HttpServerVerticle extends AbstractVerticle{
 	public void start(Future<Void> startFuture) throws Exception {
 		//hàm này phải đc gọi để xác định quá trình Deploy thành công (thì vertx.deploymentIDs() cập nhật giá trị)
 		// hoặc phải gọi hàm startFuture.complete()
-		//super.start(startFuture);  
+//		super.start(startFuture);  // đã gọi startFuture.complete()
 		
-		System.out.println("MyVerticle started! server port=81: thread="+Thread.currentThread().getId());
+		/**
+		 * url = http://localhost:81/atm?id=1&command=ejm
+		 * uri = /atm?id=1&command=ejm
+		 * path = /atm         => lay path tu Uri trong http request header
+		 * param id = 1
+		 * param command = ejm
+		 */
+		System.out.println(this.getClass().getName()+ ".start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
+		System.out.println("test1: http://localhost:81/atm?id=1&command=ejm");
+		System.out.println("test2: http://localhost:81/abcdef?command=abc&id=888");
 
 		HttpServerOptions httpServerOptions = new HttpServerOptions()
 				.setMaxHeaderSize(4000)
@@ -50,13 +59,16 @@ public class HttpServerVerticle extends AbstractVerticle{
 		httpServer.connectionHandler(new Handler<HttpConnection>() {		
 			@Override
 			public void handle(HttpConnection connect) {
-				System.out.println("http connectionHandler: thread="+Thread.currentThread().getId());
+				System.out.println("ConnectHandler:"+ "thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 				//reject connect neu Server overload or number of connect > Max connect
 
 				// Deploy Verticle de xu ly http request/response tren Threadpool khac nhu the se toi uu hon
 				// 1 http request/reponse context nen xu ly tren 1 thread (threadpool worker= false) de dam bao Order
 				//truong hop context lay du lieu tu 2 service khac nhau thi phai dam bao tinh thu tu
-
+				
+				/**
+				 * http 1.1 dùng keep alive connect, nên nhiều request chung 1 socket connect (đã test với Chrome và Wireshark)
+				 */
 			}
 		});
 
@@ -67,7 +79,7 @@ public class HttpServerVerticle extends AbstractVerticle{
 			public void handle(HttpServerRequest request) {
 				//Request chỉ 1 lần duy nhất, vì thế các Request ko có tính phụ thuộc tuần tự => nên dùng Worker Verticle với Thread Pool
 				//tại đây phần header đã nhân dc het=> the same as Tomcat NIO
-				System.out.println("http requestHandler: thread="+Thread.currentThread().getId());
+				System.out.println("http requestHandler: thread="+Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName());
 
 				// cach lay thong tin tu Header ra
 				showHttpRequestHeader(request);
@@ -169,6 +181,9 @@ public class HttpServerVerticle extends AbstractVerticle{
 		 */
 		
 		// ================================= show request header =============================
+		System.out.println("\n");
+		System.out.println("=========================================  a request header");
+		System.out.println(" url: " + request.absoluteURI());
 		// 3 tham số sau là parsing từ:  là dòng đàu tiên của Request Header
 		System.out.println(" http method: " + request.method());  // request.method() = Enum {GET,POST,...}
 		System.out.println(" uri: " + request.uri());

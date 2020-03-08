@@ -216,6 +216,9 @@ public class WebsocketServerVerticle_2ndWay extends AbstractVerticle{
 		 */
 		
 		// ================================= show request header =============================
+		System.out.println("\n");
+		System.out.println("=========================================  a request header");
+		System.out.println(" url: " + request.absoluteURI());
 		// 3 tham số sau là parsing từ:  là dòng đàu tiên của Request Header
 		System.out.println(" http method: " + request.method());  // request.method() = Enum {GET,POST,...}
 		System.out.println(" uri: " + request.uri());

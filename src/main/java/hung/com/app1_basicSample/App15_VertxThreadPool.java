@@ -11,7 +11,7 @@ import io.vertx.core.VertxOptions;
 public class App15_VertxThreadPool {
 
 	public static void main(String[] args) throws InterruptedException{
-		System.out.println("start main(): thread="+Thread.currentThread().getId());
+		System.out.println("main(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		//lưu ý threadpool của vertx có thể dùng chung khi deploy nhiều Verticle
 		// hoặc dùng rieng cho từng Verticle đc (add vào lúc deploy Verticle).

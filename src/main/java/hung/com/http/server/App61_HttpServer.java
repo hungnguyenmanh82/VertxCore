@@ -2,6 +2,7 @@ package hung.com.http.server;
 
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 
 /**
  * step1: create a new Vertx => a thread
@@ -10,8 +11,9 @@ import io.vertx.core.Vertx;
 public class App61_HttpServer {
 	public static void main(String[] args) {
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
-		//get a new instance of Vertx => tương ứng 1 thread thì đúng hơn.
-		Vertx vertx = Vertx.vertx();
+	
+		final VertxOptions vertxOptions = new VertxOptions().setEventLoopPoolSize(4);
+		Vertx vertx = Vertx.vertx(vertxOptions);
 		
 		DeploymentOptions options = new DeploymentOptions()
 				.setWorkerPoolName("WorkerPoolName1")

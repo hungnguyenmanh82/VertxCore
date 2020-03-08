@@ -202,10 +202,14 @@ public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 		 */
 		
 		// ================================= show request header =============================
+		System.out.println("\n");
+		System.out.println("=========================================  a request header");
+		System.out.println(" url: " + request.absoluteURI());
 		// 3 tham số sau là parsing từ:  là dòng đàu tiên của Request Header
 		System.out.println(" http method: " + request.method());  // request.method() = Enum {GET,POST,...}
 		System.out.println(" uri: " + request.uri());
 		System.out.println(" http version: " + request.version());  //http version
+
 		
 		// System.out.println(" host " + request.host()); // thuoc Header map{key:value}
 		// các tham số còn lại trong header đều có cấu trúc {key, value} kể cả cookies và các field do user add vào
