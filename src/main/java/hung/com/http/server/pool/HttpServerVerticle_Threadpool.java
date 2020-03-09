@@ -74,6 +74,7 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 				//================================ Move http HandlerRequest to other Thread context =========================== 
 				DeploymentOptions options = new DeploymentOptions()
 						.setWorkerPoolName("ThreadPoolForRequestHandler")   //name là duy nhất để share giữa các Verticle
+						.setMaxWorkerExecuteTime(2000)			//nếu chạy quá 2s sẽ stop đoạn code đó lại để thu hồi thread
 						.setWorkerPoolSize(3)  //thread for server, not client
 						.setHa(true)         //HA: high Availability
 						.setWorker(true);    //true: worker-vertical dùng ThreadPoolForRequestHandler  (các event vẫn tuần tự, nhưng trên thread khác nhau)

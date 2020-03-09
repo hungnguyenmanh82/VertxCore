@@ -25,8 +25,8 @@ public class App95_config_system {
 		Vertx vertx = Vertx.vertx();
 		
 		ConfigStoreOptions  optionStore = new ConfigStoreOptions()
-													  .setType("sys")
-													  .setConfig(new JsonObject().put("cache", true)); // ko system properties từ cache (ko lấy từ file)
+													  .setType("sys")  //lấy từ system
+													  .setConfig(new JsonObject().put("cache", true)); // ko lấy system properties từ cache (ko lấy từ file)
 		
 		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(optionStore);
 		

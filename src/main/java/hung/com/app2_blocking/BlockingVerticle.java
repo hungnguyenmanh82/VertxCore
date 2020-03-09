@@ -4,6 +4,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 
 /**
@@ -43,17 +44,17 @@ public class BlockingVerticle extends AbstractVerticle {
 		//		this.context;  //quản lý tất cả tài nguyên của Verticle
 		//		this.context.isWorkerContext()
 		//		this.context.isMultiThreadedWorkerContext()
-		System.out.println("BlockingVerticle.start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
+		System.out.println(this.getClass().getName()+ ".start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 
 
 		//mấu chốt là khái niệm Future
 		// BlockingHandler vẫn thuộc context của Verticle, nhưng chạy trên thread khác (xem DeploymentId ở log sẽ thấy).
 		// => BlockingHandler vẫn lưu trong 1 task queue order của Verticle context
 		// Verticle context có 2 task
-		Handler<Future<String>> blockingHandler = new Handler<Future<String>>() {
+		Handler<Promise<String>> blockingHandler = new Handler<Promise<String>>() {
 			public String test = "abc";
 			@Override
-			public void handle(Future<String> future) {
+			public void handle(Promise<String> future) {
 				System.out.println("******blockingHandler: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 				
 				String result = "blockingHandler: thread="+Thread.currentThread().getId();

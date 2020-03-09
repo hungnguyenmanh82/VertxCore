@@ -10,6 +10,7 @@ import io.vertx.circuitbreaker.CircuitBreakerState;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 
 /**
@@ -52,10 +53,10 @@ public class App91_CircuitBreaker {
 		// khi future.fail() hoặc future.complete() => nó sẽ gọi Handler của handlerFutureRequest
 		// tai handler của future nó sẽ xử lý các logic của circuitBreaker dựa vào AsyncResult của fail(), complete(): vd count failure
 		// vì run trên nhiều thread nên bắt buộc phải synchronize(object) khi read/write count faile or state => performance sẽ ko tốt
-		Handler<Future<String>> handlerFutureRequest = new Handler<Future<String>>() {
+		Handler<Promise<String>> handlerFutureRequest = new Handler<Promise<String>>() {
 
 			@Override
-			public void handle(Future<String> future) {
+			public void handle(Promise<String> future) {
 				System.out.println("run circuitBreaker.execute()"+ formatter.format(new Date()));
 				System.out.println("handlerFutureRequest: thread=" + Thread.currentThread().getId());
 

@@ -4,6 +4,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.WorkerExecutor;
 
@@ -23,18 +24,18 @@ public class BlockingVerticle_WorkerExecutor extends AbstractVerticle {
 //		this.context;  //quản lý tất cả tài nguyên của Verticle
 //		this.context.isWorkerContext()
 //		this.context.isMultiThreadedWorkerContext()
-		System.out.println("BlockingVerticle_WorkerExecutor.start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
+		System.out.println(this.getClass().getName()+ ".start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		
 		//BlockingHanderler: thuộc Vertx context => chạy trên threadpool của Vertx context
 		//bất key Event, hay task nào tạo ra trong Blocking code đều thuộc quản lý của Context hiện tại => đều run trên thread của Verticle
 		//Trong khi Event, task sinh ra ở Blocking-code lại thuộc context của Verticle tạo ra “blocking-code” => 
 		//event hay task này sẽ chạy trên thread (or threadpool) của Verticle (ko chạy trên vertx context).
-		Handler<Future<String>> blockingHandler = new Handler<Future<String>>() {
+		Handler<Promise<String>> blockingHandler = new Handler<Promise<String>>() {
 			public String test = "abc";
 			//Future này quản lý bởi Vertx, ko phải Verticle
 			@Override
-			public void handle(Future<String> future) {
+			public void handle(Promise<String> future) {
 				System.out.println("******blockingHandler: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 				
 				String result = "blockingHandler: thread="+Thread.currentThread().getId();
