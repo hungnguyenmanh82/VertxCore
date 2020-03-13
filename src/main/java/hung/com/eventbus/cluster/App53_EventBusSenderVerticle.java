@@ -12,10 +12,22 @@ import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 
+/**
+ * <đọc tài liệu Hazelcast>
+ * 
+ * Hazelcast: là distributed Storage.
+ * Hazelcast Nodes chính là các Vertx instance sẽ tạo ra 1 cluster.
+ * Cluster chứa Queue Message truyền nhận giữa Publisher và subscriber
+ * 
+ */
+
 public class App53_EventBusSenderVerticle extends AbstractVerticle {
 	
 	public static void main(String[] args) throws Exception {
 		System.out.println("main(): thread="+Thread.currentThread().getId());
+		System.out.println("step1: run App52_EventBusReceiverVerticle to create Node1 of Hazelcast cluster");
+		System.out.println("step2: run App53_EventBusReceiverVerticle to create Node1 of Hazelcast cluster");
+		
 		// sẽ lấy file config ở resources/cluster.xml
 		Config hazelcastConfig = new Config();
 

@@ -16,23 +16,21 @@ import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 
 /**
+ * <đọc tài liệu Hazelcast>
  * 
- * nhiều  Verticle đăng ký với  1 Vertx (Vertx là 1 instance sẽ khởi tạo queue và threads để xử lý event)
- * 1 Verticle instance chỉ attach duy nhất 1 Vertx instance.
- * các Verticle sẽ chạy trên Thread do Vertx chỉ định. Là 1 thread.
- * Nhiều Verticle sẽ chỉ chạy trên 1 thread.
+ * Hazelcast: là distributed Storage.
+ * Hazelcast Nodes chính là các Vertx instance sẽ tạo ra 1 cluster.
+ * Cluster chứa Queue Message truyền nhận giữa Publisher và subscriber
  * 
- * Verticle thực chất giữ function callback để khi có event thì Vertx gọi. 
- * Verticle chứa Event Queue của nó. Nhưng Vertx sẽ truy cập queue này và call Verticle run
  * 
- * Tuy nhiên Vertx sinh ra nhiều thread để quản lý event:
- *  + 1 thread để run callback function khi có event
- *  + 1 thread để run handler của Vertx
+ * 
  */
 
 public class App52_EventBusReceiverVerticle extends AbstractVerticle {
 	public static void main(String[] args) throws Exception {
 		System.out.println("main(): thread="+Thread.currentThread().getId());
+		System.out.println("step1: run App52_EventBusReceiverVerticle to create Node1 of Hazelcast cluster");
+		System.out.println("step2: run App53_EventBusReceiverVerticle to create Node1 of Hazelcast cluster");
 
 		// sẽ lấy file config ở resources/cluster.xml
 		Config hazelcastConfig = new Config();
@@ -41,6 +39,7 @@ public class App52_EventBusReceiverVerticle extends AbstractVerticle {
 
 		VertxOptions options = new VertxOptions().setClusterManager(mgr);
 
+		//Tạo Hazelcast cluster
 		Vertx.clusteredVertx(options, res -> {
 			if (res.succeeded()) {
 				Vertx vertx = res.result();
