@@ -1,33 +1,30 @@
 package hung.com.config;
 
 import io.vertx.config.ConfigRetriever;
+import io.vertx.core.AbstractVerticle;
 import io.vertx.core.AsyncResult;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.DeliveryOptions;
+import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;
-/**
- * 
-https://vertx.io/docs/vertx-config/java/
 
-By default, the Config Retriever is configured with the following stores (in this order):
-The Vert.x verticle config()
-The system properties
-The environment variables
-A conf/config.json file. This path can be overridden using the vertx-config-path system property or VERTX_CONFIG_PATH environment variable.
- *
- */
-public class App91_config_default {
-	public static void main(String[] args) throws InterruptedException{
+public class testVerticle extends AbstractVerticle {
 
-		/**
-		 * config đc lưu trong Vertx context.
-		 * Verticle khác nhau có context khác nhau => config khác nhau.
-		 */
+	public static void main(String[] args) {
+		//get config in Verticle
 		Vertx vertx = Vertx.vertx();
-		
+		vertx.deployVerticle(new testVerticle());
+	}
+
+	public void start(Future<Void> startFuture) throws Exception {
+		super.start(startFuture);
+		System.out.println("\n\n<= testVerticle.start():"+ ",thread="+Thread.currentThread().getId());
+
 		// dùng defaut config để lấy System properties và Enviroment variables of Window or linux
 		ConfigRetriever retriever = ConfigRetriever.create(vertx);
-		
+
 		// Asynchronous get Json restful Environment (
 		retriever.getConfig(new Handler<AsyncResult<JsonObject>>() {
 			@Override
@@ -40,19 +37,14 @@ public class App91_config_default {
 					// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
 					// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
 					JsonObject config = ar.result();
-					
+
 					System.out.println(config.toString());
-					
+
 					System.out.println("Path:"+ config.getString("Path"));
 					System.out.println("JAVA_HOME:"+ config.getString("JAVA_HOME"));
 				}
 
 			}
 		});
-
-		
-		
-		//vertx.close();   //get config asynchronous => ko đc gọi hàm này
-
 	}
 }

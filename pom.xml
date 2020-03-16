@@ -52,7 +52,7 @@
 			<artifactId>vertx-hazelcast</artifactId>
 			<version>${vertx.version}</version>
 		</dependency>
-		
+
 		<!-- only use for http Client -->
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
@@ -64,7 +64,7 @@
 	</dependencies>
 
 	<build>
-		<!-- -->
+		<!-- tạo file *.jar ko include lib vào -->
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -82,6 +82,7 @@
 				<version>2.4.1</version>
 				<executions>
 					<execution>
+						<!-- id phải duy nhất ko trùng lặp -->
 						<id>build-first</id>
 						<phase>package</phase>
 						<goals>

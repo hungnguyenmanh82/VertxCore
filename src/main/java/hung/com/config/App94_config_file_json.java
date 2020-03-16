@@ -19,19 +19,35 @@ The environment variables
 A conf/config.json file. This path can be overridden using the vertx-config-path system property or VERTX_CONFIG_PATH environment variable.
  *
  */
-public class App95_config_system {
+public class App94_config_file_json {
 	public static void main(String[] args) throws InterruptedException{
+		
 		/**
 		 * config đc lưu trong Vertx context.
 		 * Verticle khác nhau có context khác nhau => config khác nhau.
 		 */
 		Vertx vertx = Vertx.vertx();
 		
-		ConfigStoreOptions  optionStore = new ConfigStoreOptions()
-													  .setType("event-bus")  //lấy từ system
-													  .setConfig(new JsonObject().put("cache", true)); // ko lấy system properties từ cache (ko lấy từ file)
+		/**
+		 * lúc compile sẽ gộp "main/resources/" và "main/java/" vào 1 folder chung
+		 App81_https_Server.class.getResource("/") = root = main/resources/ = main/java/
+		 App81_https_Server.class.getResource("/abc") = main/resource/abc  = main/java/abc  
+		 //
+		 App81_https_Server.class.getResource("..") = root/pakage_name       => package_name của class này
+		 App81_https_Server.class.getResource(".") = root/pakage_name/ 
+		 App81_https_Server.class.getResource("abc") = root/pakage_name/abc
+		 */
 		
-		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(optionStore);
+		/**
+		 * "./" = là folder chưa *.jar file
+		 * config file thường đặt ở ngoài *.jar file
+		 */
+		ConfigStoreOptions fileOptions = new ConfigStoreOptions()
+											  .setType("file")          // lay option tu Json file
+//											  .setFormat("properties")  //format của file default = json
+											  .setConfig(new JsonObject().put("path", "./src/config/local.json"));
+		
+		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(fileOptions);
 		
 		ConfigRetriever retriever = ConfigRetriever.create(vertx,options);
 		
@@ -49,13 +65,19 @@ public class App95_config_system {
 					
 					System.out.println(config.toString());
 					
-					System.out.println("java.runtime.name:"+ config.getString("java.runtime.name"));
-					System.out.println("os.name:"+ config.getString("os.name"));
+					System.out.println("api.gateway.http.port:"+ config.getInteger("api.gateway.http.port"));
+					System.out.println("api.gateway.http.address:"+ config.getString("api.gateway.http.address"));
+					
+					// child JsonObject
+					JsonObject circuitBreakerConfig = config.getJsonObject("circuit-breaker");
+					System.out.println("name:"+ circuitBreakerConfig.getString("name"));
+					System.out.println("timeout:"+ circuitBreakerConfig.getInteger("timeout"));
 				}
 
 			}
 		});
 		
+
 		//vertx.close();   //get config asynchronous => ko đc gọi hàm này
 	}
 }

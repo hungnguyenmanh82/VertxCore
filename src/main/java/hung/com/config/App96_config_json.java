@@ -19,39 +19,41 @@ The environment variables
 A conf/config.json file. This path can be overridden using the vertx-config-path system property or VERTX_CONFIG_PATH environment variable.
  *
  */
-public class App93_config_env {
+public class App96_config_json {
 	public static void main(String[] args) throws InterruptedException{
 		/**
 		 * config đc lưu trong Vertx context.
 		 * Verticle khác nhau có context khác nhau => config khác nhau.
 		 */
 		Vertx vertx = Vertx.vertx();
+
+		ConfigStoreOptions configStoreOptions = new ConfigStoreOptions()
+											  .setType("json")          // lay option tu Json file
+											  .setConfig(new JsonObject().put("api.gateway.http.port", 8081)         //lấy từ JsonObject
+													  					 .put("api.gateway.http.address","127.0.0.1"));
 		
-		ConfigStoreOptions  optionStore = new ConfigStoreOptions()
-										  .setType("env")          //Environment variable of window or linux
-										  .setConfig(new JsonObject().put("raw-data", true)); //true nghĩa là để tất cả Eviroment ở dạng String ko convert sang kiểu khác
-		
-		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(optionStore);
+		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(configStoreOptions);
 		
 		ConfigRetriever retriever = ConfigRetriever.create(vertx,options);
 		
-		// Asynchronous get Json restful Environment (
+		// Asynchronous get Json from config
 		retriever.getConfig(new Handler<AsyncResult<JsonObject>>() {
 			@Override
-			public void handle(AsyncResult<JsonObject> ar) {
-				if (ar.failed()) {
+			public void handle(AsyncResult<JsonObject> event) {
+				if (event.failed()) {
 					// Failed to retrieve the configuration
-					System.out.println("fail: get config from Enviroment Variable");
-				} else { //event.succeeded()
+				} else {
 					//===========================================================================
 					// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
 					// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
-					JsonObject config = ar.result();
+					JsonObject config = event.result();
 					
 					System.out.println(config.toString());
 					
-					System.out.println("Path:"+ config.getString("Path"));
-					System.out.println("JAVA_HOME:"+ config.getString("JAVA_HOME"));
+					System.out.println("api.gateway.http.port:"+ config.getInteger("api.gateway.http.port"));
+					System.out.println("api.gateway.http.address:"+ config.getString("api.gateway.http.address"));
+				
+
 				}
 
 			}

@@ -15,17 +15,19 @@ public class App92_config_http {
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
 
-		//create a new instance Vertx => a worker thread sinh ra để quản lý loop Event, vì thế hàm main() kết thúc nhưng App ko stop
-		// gọi vertx.close() để stop thread này
-		// vertx là singleton
+		/**
+		 * config đc lưu trong Vertx context.
+		 * Verticle khác nhau có context khác nhau => config khác nhau.
+		 */
 		Vertx vertx = Vertx.vertx();
 
 		//==================== xac dinh nơi lay file Json la http server ===========
 		ConfigStoreOptions httpStore = new ConfigStoreOptions()
 				.setType("http")
+//				.setFormat("properties") //default = "json"
 				.setConfig(new JsonObject().put("host", "localhost")
 						                   .put("port", 8080)
-						                   .put("path", "/conf") );  // url để lấy config file trên server
+						                   .put("path", "/conf") );  // url = http://localhost/conf để lấy config file trên server
 
 
 		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(httpStore);
@@ -35,14 +37,14 @@ public class App92_config_http {
 		// Asynchronous get Json restful from http server
 		retriever.getConfig(new Handler<AsyncResult<JsonObject>>() {
 			@Override
-			public void handle(AsyncResult<JsonObject> event) {
-				if (event.failed()) {
+			public void handle(AsyncResult<JsonObject> ar) {
+				if (ar.failed()) {
 					// Failed to retrieve the configuration
 				} else {
 					//===========================================================================
 					// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
 					// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
-					JsonObject config = event.result();
+					JsonObject config = ar.result();
 					
 				}
 

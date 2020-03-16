@@ -7,6 +7,7 @@ import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 /**
  * 
@@ -19,20 +20,42 @@ The environment variables
 A conf/config.json file. This path can be overridden using the vertx-config-path system property or VERTX_CONFIG_PATH environment variable.
  *
  */
-public class App94_config_file {
+public class App942_config_file_properties {
 	public static void main(String[] args) throws InterruptedException{
 
+		/**
+		 * config đc lưu trong Vertx context.
+		 * Verticle khác nhau có context khác nhau => config khác nhau.
+		 */
 		Vertx vertx = Vertx.vertx();
-		
-		ConfigStoreOptions fileOptions = new ConfigStoreOptions()
-											  .setType("file")          // lay option tu Json file
-											  .setConfig(new JsonObject().put("path", "./src/config/local.json"));
-		
-		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(fileOptions);
-		
+
+		/**
+		 * lúc compile sẽ gộp "main/resources/" và "main/java/" vào 1 folder chung
+		 App81_https_Server.class.getResource("/") = root = main/resources/ = main/java/
+		 App81_https_Server.class.getResource("/abc") = main/resource/abc  = main/java/abc  
+		 //
+		 App81_https_Server.class.getResource("..") = root/pakage_name       => package_name của class này
+		 App81_https_Server.class.getResource(".") = root/pakage_name/ 
+		 App81_https_Server.class.getResource("abc") = root/pakage_name/abc
+		 */
+
+		/**
+		 * "./" = là folder chưa *.jar file
+		 * config file thường đặt ở ngoài *.jar file
+		 */
+		ConfigStoreOptions configStoreOptions = new ConfigStoreOptions()
+									.setType("file")          // lay option tu Json file
+									.setFormat("properties")  //format của file default = json
+									.setConfig(new JsonObject()
+													.put("path", "./src/config/config.properties")
+													.put("hierarchical", false)    //true or false
+												);
+
+		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(configStoreOptions);
+
 		ConfigRetriever retriever = ConfigRetriever.create(vertx,options);
 		
-		// Asynchronous get Json restful from http server
+		
 		retriever.getConfig(new Handler<AsyncResult<JsonObject>>() {
 			@Override
 			public void handle(AsyncResult<JsonObject> event) {
@@ -45,18 +68,14 @@ public class App94_config_file {
 					JsonObject config = event.result();
 					
 					System.out.println(config.toString());
-					
-					System.out.println("api.gateway.http.port:"+ config.getInteger("api.gateway.http.port"));
-					System.out.println("api.gateway.http.address:"+ config.getString("api.gateway.http.address"));
-					
-					// child JsonObject
-					JsonObject circuitBreakerConfig = config.getJsonObject("circuit-breaker");
-					System.out.println("name:"+ circuitBreakerConfig.getString("name"));
-					System.out.println("timeout:"+ circuitBreakerConfig.getInteger("timeout"));
+					System.out.println("server.host:"+ config.getString("server.host"));
+
 				}
 
 			}
 		});
+
+
 
 		//vertx.close();   //get config asynchronous => ko đc gọi hàm này
 	}

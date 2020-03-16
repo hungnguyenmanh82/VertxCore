@@ -2,6 +2,7 @@ package hung.com.eventbus;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 
 public class EventBusSenderVerticle extends AbstractVerticle {
@@ -32,6 +33,9 @@ public class EventBusSenderVerticle extends AbstractVerticle {
         
         //send(): 
     	// Nhiều Verticle đăng ký nhận dùng 1 address, nhưng chỉ có 1 verticle nhận đc
+    	DeliveryOptions deliveryOptions = new DeliveryOptions().addHeader("header1", "value1")
+    															.addHeader("header2", "value2");
+    	
         vertx.eventBus().send("anAddress", "=>Message only one Receiver");
     }
 }
