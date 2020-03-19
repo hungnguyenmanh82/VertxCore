@@ -44,7 +44,8 @@ public class WebsocketServerVerticle_2ndWay extends AbstractVerticle{
 		HttpServerOptions httpServerOptions = new HttpServerOptions()
 				.setMaxHeaderSize(4000)
 				.setReceiveBufferSize(8000)
-				.setSendBufferSize(8000);
+				.setSendBufferSize(8000)
+				.setMaxWebSocketFrameSize(1000000);	
 
 		httpServer = vertx.createHttpServer(httpServerOptions);
 

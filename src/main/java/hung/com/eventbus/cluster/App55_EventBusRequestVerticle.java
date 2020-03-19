@@ -5,13 +5,16 @@ import com.hazelcast.config.Config;
 import hung.com.eventbus.EventBusReceiverVerticle;
 import hung.com.eventbus.EventBusSenderVerticle;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 
@@ -26,14 +29,17 @@ import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
  * 
  */
 
-public class App52_EventBusReceiverVerticle extends AbstractVerticle {
+public class App55_EventBusRequestVerticle extends AbstractVerticle {
 	
 	public static void main(String[] args) throws Exception {
 		System.out.println("main(): thread="+Thread.currentThread().getId());
 		System.out.println("step1: run App52_EventBusReceiverVerticle to create Node1 of Hazelcast cluster");
 		System.out.println("step2: run App53_EventBusReceiverVerticle to create Node1 of Hazelcast cluster");
 
-		// sẽ lấy file config ở resources/cluster.xml
+		/**
+		 * sẽ lấy file config ở resources/cluster.xml
+		 * nếu ko có sẽ lấy config default của Hazelcast
+		 */
 		ClusterManager mgr = new HazelcastClusterManager();
 
 		VertxOptions options = new VertxOptions().setClusterManager(mgr);
@@ -42,7 +48,7 @@ public class App52_EventBusReceiverVerticle extends AbstractVerticle {
 		Vertx.clusteredVertx(options, res -> {
 			if (res.succeeded()) {
 				Vertx vertx = res.result();
-				vertx.deployVerticle(new App52_EventBusReceiverVerticle());  //receive on a thread of Thread pool
+				vertx.deployVerticle(new App55_EventBusRequestVerticle());  //receive on a thread of Thread pool
 			} else {
 				// failed!
 			}
@@ -64,46 +70,26 @@ public class App52_EventBusReceiverVerticle extends AbstractVerticle {
 		// Message<String> = address + header + body
 		// body kiểu String
 		EventBus eb = vertx.eventBus();
-		String address = "anAddress";
-		MessageConsumer<String> consumer = eb.consumer(address);  //register Address với EventBus to reciever message
-
-		// register nhận Message có address tại Eventbus
-		consumer.handler(new Handler<Message<String>>() { //có thể thay String bằng kiểu khác: object, int,float...
-			@Override
-			public void handle(Message<String> message) {
-				// chạy trên Thread của Verticle
-				System.out.println( "consumer.handler: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
-				System.out.println("receive Message: " +  
-						", address="+ message.address()+ 
-						", body=" +message.body());  //body kiểu <string>
-
-				// message tổ chức giống như Http protocol vậy
-				// bên publish có thể gửi headers, bên nhận có thê nhận header
-				//message.headers();
-
-			}
-
-		} );
-
-		//register to receive Message ok
-		consumer.completionHandler(res -> {
-			// chạy trên Thread của Verticle
-			if (res.succeeded()) {
-				System.out.println("The handler registration has reached all nodes");
-			} else {
-				System.out.println("Registration failed!");
-			}
+		String address = "requestAddress";
+		
+		JsonObject message = new JsonObject()
+									.put("collection", "mycollection")
+									.put("document", new JsonObject().put("name", "tim"));
+		
+		DeliveryOptions options = new DeliveryOptions().addHeader("action", "save");
+		
+		vertx.eventBus().request(address, message, options, new Handler<AsyncResult<Message<JsonObject>>>() {
+			public void handle(AsyncResult<Message<JsonObject>> event) {
+				if(event.succeeded()){
+					Message message = event.result();
+					
+					JsonObject body = (JsonObject) message.body();
+					
+					System.out.println("response = " + body.toString() );
+				}else{ // event.failed() = true
+					System.out.println("failed");
+				}
+			};
 		});
-
-		// để unregister Message đã đăng ký với lệnh consumer()
-		// phải gọi hàm này trên cùng Thread => vì ThreadId đc qui đổi ra Context
-		/*consumer.unregister(res -> {
-			if (res.succeeded()) {
-				System.out.println("The handler un-registration has reached all nodes");
-			} else {
-				System.out.println("Un-registration failed!");
-			}
-		});*/
-
 	}
 }

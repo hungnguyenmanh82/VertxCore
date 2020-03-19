@@ -28,10 +28,11 @@ public class App53_EventBusSenderVerticle extends AbstractVerticle {
 		System.out.println("step1: run App52_EventBusReceiverVerticle to create Node1 of Hazelcast cluster");
 		System.out.println("step2: run App53_EventBusReceiverVerticle to create Node1 of Hazelcast cluster");
 		
-		// sẽ lấy file config ở resources/cluster.xml
-		Config hazelcastConfig = new Config();
-
-		ClusterManager mgr = new HazelcastClusterManager(hazelcastConfig);
+		/**
+		 * sẽ lấy file config ở resources/cluster.xml
+		 * nếu ko có sẽ lấy config default của Hazelcast
+		 */
+		ClusterManager mgr = new HazelcastClusterManager();
 
 		VertxOptions options = new VertxOptions().setClusterManager(mgr);
 

@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
+import io.netty.util.concurrent.FailedFuture;
 import io.vertx.circuitbreaker.CircuitBreaker;
 import io.vertx.circuitbreaker.CircuitBreakerOptions;
 import io.vertx.circuitbreaker.CircuitBreakerState;
@@ -74,7 +75,6 @@ public class App91_CircuitBreaker {
 			}
 
 		};
-		
 		
 		//handlerAsyncResultResponse run tren thread của hàm future.complete() or future.fail() của handlerFutureRequest
 		// circuitBreaker sẽ gọi tơi future.handler() trc de change State sau do moi gọi tiep tơi handlerAsyncResultResponse
