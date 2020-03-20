@@ -21,7 +21,7 @@ import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
  * 
  */
 
-public class App53_EventBusSenderVerticle extends AbstractVerticle {
+public class App52_EventBusSenderVerticle extends AbstractVerticle {
 	
 	public static void main(String[] args) throws Exception {
 		System.out.println("main(): thread="+Thread.currentThread().getId());
@@ -39,7 +39,7 @@ public class App53_EventBusSenderVerticle extends AbstractVerticle {
 		Vertx.clusteredVertx(options, res -> {
 			if (res.succeeded()) {
 				Vertx vertx = res.result();
-				vertx.deployVerticle(new App53_EventBusSenderVerticle());  //receive on a thread of Thread pool
+				vertx.deployVerticle(new App52_EventBusSenderVerticle());  //receive on a thread of Thread pool
 			} else {
 				// failed!
 			}

@@ -26,14 +26,17 @@ import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
  * 
  */
 
-public class App52_EventBusReceiverVerticle extends AbstractVerticle {
+public class App51_EventBusReceiverVerticle extends AbstractVerticle {
 	
 	public static void main(String[] args) throws Exception {
 		System.out.println("main(): thread="+Thread.currentThread().getId());
-		System.out.println("step1: run App52_EventBusReceiverVerticle to create Node1 of Hazelcast cluster");
-		System.out.println("step2: run App53_EventBusReceiverVerticle to create Node1 of Hazelcast cluster");
+		System.out.println("step1: run App51_EventBusReceiverVerticle to create Node1 of Hazelcast cluster");
+		System.out.println("step2: run App52_EventBusReceiverVerticle to create Node1 of Hazelcast cluster");
 
-		// sẽ lấy file config ở resources/cluster.xml
+		/**
+		 * sẽ lấy file config ở resources/cluster.xml
+		 * nếu ko có sẽ lấy config default của Hazelcast
+		 */
 		ClusterManager mgr = new HazelcastClusterManager();
 
 		VertxOptions options = new VertxOptions().setClusterManager(mgr);
@@ -42,7 +45,7 @@ public class App52_EventBusReceiverVerticle extends AbstractVerticle {
 		Vertx.clusteredVertx(options, res -> {
 			if (res.succeeded()) {
 				Vertx vertx = res.result();
-				vertx.deployVerticle(new App52_EventBusReceiverVerticle());  //receive on a thread of Thread pool
+				vertx.deployVerticle(new App51_EventBusReceiverVerticle());  //receive on a thread of Thread pool
 			} else {
 				// failed!
 			}
