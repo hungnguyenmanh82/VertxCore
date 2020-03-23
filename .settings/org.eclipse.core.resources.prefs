@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
 encoding//src/main/java/hung/com/app1_basicSample/App11_DeploySingleVerticle.java=UTF-8
 encoding//src/main/java/hung/com/app1_basicSample/App12_DeployVerticle_startFuture.java=UTF-8
 encoding//src/main/java/hung/com/app1_basicSample/App13_MultiInstance.java=UTF-8
@@ -64,3 +65,5 @@ encoding//src/main/java/hung/com/websocket/server/app1/App91_WebSocket_Server.ja
 encoding//src/main/java/hung/com/websocket/server/app1/WebsocketServerVerticle_1stWay.java=UTF-8
 encoding//src/main/java/hung/com/websocket/server/app2/App92_WebSocket_Server.java=UTF-8
 encoding//src/main/java/hung/com/websocket/server/app2/WebsocketServerVerticle_2ndWay.java=UTF-8
+encoding//src/main/resources=UTF-8
+encoding/<project>=UTF-8

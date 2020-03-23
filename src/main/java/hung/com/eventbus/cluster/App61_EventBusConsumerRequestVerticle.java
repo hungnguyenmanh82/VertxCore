@@ -90,6 +90,8 @@ public class App61_EventBusConsumerRequestVerticle extends AbstractVerticle {
 											.put("response-key2", "value2")
 											.put("response-key3", "value3")
 											.put("response-key4", "value4");
+				
+				//========================== response message ==================
 				message.reply(response);
 
 			}
