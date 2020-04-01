@@ -134,6 +134,7 @@ public class App91_CircuitBreaker {
 			}
 		});
 
+		
 		//==================================== run request ========================================
 
 		//state= Open:  circuitBreaker sẽ pending thread ko execute  => 
@@ -145,6 +146,8 @@ public class App91_CircuitBreaker {
 			circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
 		}
 		
+		
+		// Ko nên chạy liên tiếp các lệnh liên tiếp => nên check State trc khi chạy
 		circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
 		circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
 //		circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);

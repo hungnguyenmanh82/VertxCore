@@ -13,7 +13,22 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
-
+	
+	<!-- các dependencies version ở đây sẽ đc ưu tiên dùng-->
+	<dependencyManagement>
+		<dependencies>
+			<!-- all vertx dependencies will use ${vertx.version} -->
+			<!-- nếu vertx depedencies khai báo version cũng ko sao  -->
+			<dependency>
+				<groupId>io.vertx</groupId>
+				<artifactId>vertx-dependencies</artifactId>
+				<version>${vertx.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
 	<dependencies>
 		<!-- vertx 3.7.0 need Netty Lib -->
 		<!-- vertx 3.4.2 ko can Netty -->
@@ -26,34 +41,35 @@
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-core</artifactId>
-			<version>${vertx.version}</version>
+			<!-- dùng version ở dependencyManagement -->
+			<!-- <version>${vertx.version}</version> -->
 		</dependency>
 
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-jdbc-client</artifactId>
-			<version>${vertx.version}</version>
+			<!-- dùng version ở dependencyManagement -->
 		</dependency>
 
 		<!-- only use for circuitBreaker example -->
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-circuit-breaker</artifactId>
-			<version>${vertx.version}</version>
+			<!-- dùng version ở dependencyManagement -->
 		</dependency>
 
 		<!-- only use for vertx config example -->
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-config</artifactId>
-			<version>${vertx.version}</version>
+			<!-- dùng version ở dependencyManagement -->
 		</dependency>
 
 		<!-- only use for vertx Cluster example -->
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-hazelcast</artifactId>
-			<version>${vertx.version}</version>
+			<!-- dùng version ở dependencyManagement -->
 		</dependency>
 
 		<!-- only use for http Client -->
@@ -75,6 +91,7 @@
 				<configuration>
 					<source>${project.java.version}</source>
                     <target>${project.java.version}</target>
+                    <!-- Eclipse use it-->
                     <encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
