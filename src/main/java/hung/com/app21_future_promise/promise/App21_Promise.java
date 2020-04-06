@@ -31,17 +31,18 @@ public class App21_Promise {
 		// toàn bộ quá trình tạo file đc thực hiện trên threadpool của Vertx context
 		FileSystem fs = vertx.fileSystem();
 
-		Promise<Void> promise = Promise.<Void>promise();
+		//tạo promise đồng thời sẽ tạo 1 Future luôn và ngược lại
+		Promise<String> promise = Promise.<String>promise();
 
-		promise.future().setHandler(new Handler<AsyncResult<Void>>() {
+		promise.future().setHandler(new Handler<AsyncResult<String>>() {
 			// code này run trên cùng thread với fs.createFile() đc cấp phát bởi threadpool của vertx context (đã test)
 			// nghĩa là fs.createFile() sẽ gọi future.complete() và future.fail() thì 2 hàm này sẽ gọi tới Hander trong hàm future.setHandler()
 			@Override
-			public void handle(AsyncResult<Void> event) {
+			public void handle(AsyncResult<String> event) {
 				if( event.succeeded()){
-					System.out.println("succeeded");	
+					System.out.println("succeeded: result=" + event.result());	
 				}else if(event.failed()){
-					System.out.println("failed");
+					System.out.println("failed: cause=" + event.cause());
 				}
 
 				System.out.println("returnHandler: thread=" + Thread.currentThread().getId());
@@ -50,7 +51,7 @@ public class App21_Promise {
 		});
 
 		// Handler callback: asyncResult.succeeded() = true
-		promise.complete();
+		promise.complete("ko co viec gi kho");
 		
 		// Handler callback: asynResult.failed() = true
 		//promise.fail("test fail");

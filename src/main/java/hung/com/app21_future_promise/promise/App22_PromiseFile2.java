@@ -32,6 +32,7 @@ public class App22_PromiseFile2 {
 		
 		// "foo.txt" đc tạo ra ở project folder khi Debug Run
 		// nếu "foo.txt" exit thì fut1 trả về fail
+		//tạo promise đồng thời sẽ tạo 1 Future luôn và ngược lại
 		Future<Void> future = Future.future(promise -> fs.createFile("foo.txt", promise));
 
 		future.setHandler(new Handler<AsyncResult<Void>>() {

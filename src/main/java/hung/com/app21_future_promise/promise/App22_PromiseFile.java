@@ -29,11 +29,12 @@ public class App22_PromiseFile {
 		// toàn bộ quá trình tạo file đc thực hiện trên threadpool của Vertx context
 		FileSystem fs = vertx.fileSystem();
 
+		//tạo promise đồng thời sẽ tạo 1 Future luôn và ngược lại
 		Promise<Void> promise = Promise.<Void>promise();
 
 		promise.future().setHandler(new Handler<AsyncResult<Void>>() {
 			// code này run trên cùng thread với fs.createFile() đc cấp phát bởi threadpool của vertx context (đã test)
-			// nghĩa là fs.createFile() sẽ gọi future.complete() và future.fail() thì 2 hàm này sẽ gọi tới Hander trong hàm future.setHandler()
+			// nghĩa là fs.createFile() sẽ gọi promise.complete() và promise.fail() thì 2 hàm này sẽ gọi tới Hander trong hàm future.setHandler(Handler)
 			@Override
 			public void handle(AsyncResult<Void> event) {
 				if( event.succeeded()){
@@ -56,6 +57,7 @@ public class App22_PromiseFile {
 		 File("./abc/test.json"):   
 		 File("/abc"): root folder on linux (not window)
 		 */
+		// promise.complete()/fail() sẽ đc gọi khi create file
 		fs.createFile("foo.txt", promise);
 
 		System.out.println("main(): end of main()");
