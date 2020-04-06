@@ -37,7 +37,7 @@ public class Verticle_stopFuture extends AbstractVerticle {
 		// hoặc phải gọi hàm startFuture.complete()
 //		super.start(startFuture);   
 		
-		System.out.println("Verticle_stopFuture.start(): thread="+Thread.currentThread().getId());
+		System.out.println(this.getClass().getName()+ ".start()"+ ": thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		// chìa khóa là khái niệm Future
 		// hàm này sẽ call Handler<AsyncResult<String>> của vertx.deploy(Verticle, Handler)
@@ -55,7 +55,7 @@ public class Verticle_stopFuture extends AbstractVerticle {
 		//function này cần đc gọi để xác nhận undeploy() thành công (sẽ xóa DeploymentId)
 		// hoặc phải gọi hàm stopFuture.complete()
 		super.stop(stopFuture);
-		System.out.println("Verticle_stopFuture.stop(): thread=" + Thread.currentThread().getId());
+		System.out.println(this.getClass().getName()+ ".stop()"+ ": thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 //		stopFuture.complete();
 	}
 

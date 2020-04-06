@@ -1,4 +1,4 @@
-package hung.com.app21_future;
+package hung.com.app21_future_promise.future;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.CompositeFuture;
@@ -18,7 +18,7 @@ Future<Type>:  extends Handler<type> và AsyncResult<type> => là kết hợp 2 
 Future là function point => thread nào gọi nó thì nó chạy trên thread đó (đã test).
 
  */
-public class App24_CompositeFuture_any {
+public class App23_CompositeFuture_all {
 
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("main(): thread=" + Thread.currentThread().getId());
@@ -71,24 +71,29 @@ public class App24_CompositeFuture_any {
 		//chờ cho 2 Server đc khởi tạo thành công (listening) or fail
 		//CompositeFuture: nếu 1 trong 2 fail thì tất cả fail
 		// đăng ký nhận future ở context hiện tại
-		//Trường hợp đặc biệt là 1 Future event, vd dưới là 2 event (có thể có N event)
-		CompositeFuture.any(httpServerFuture, futureTest).setHandler(new Handler<AsyncResult<CompositeFuture>>() {
-			
+		CompositeFuture.all(httpServerFuture, netServerFuture, futureTest)
+					 .setHandler(new Handler<AsyncResult<CompositeFuture>>() {
+			// code này sẽ run tren thread của Future hoàn thành cuối cùng futureTest
+			// hàm này bản chất là kết hợp của các hàm sau để chờ Event. Khi có Event nó sẽ check các Future còn lại đã finish suceeded hay chưa
+			// httpServerFuture.setHandler(), netServerFuture.setHandler(), futureTest.setHandler()
 			@Override
 			public void handle(AsyncResult<CompositeFuture> event) {
-				if (event.succeeded()) {		    
-					// At least one is succeeded
-					  System.out.println("At least one is succeeded");  
-				  } else {
-					// All failed
-					  System.out.println("All failed"); 
-				  }
-				
+				if (event.succeeded()) {
+					// All servers started
+					System.out.println("all server started successfully");  
+				} else {
+					// At least one server failed
+					System.out.println("At least one server failed"); 
+				}
+
+				System.out.println("CompositeFuture: thread=" + Thread.currentThread().getId());
 			}
 		});
 
 		// app ko stop với Main() stop vì có 1 worker thread quản lý Vertx có loop bắt Event
 		//vertx.close();
+		
+		Thread.currentThread().sleep(3000);
 	}
 
 }

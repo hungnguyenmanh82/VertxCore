@@ -25,7 +25,7 @@ public class MyVerticle extends AbstractVerticle {
 		//hàm này phải đc gọi để xác định quá trình Deploy thành công (thì hàm vertx.deployIDs() mới trả về đúng giá trị).
 		//hoặc phải gọi hàm startFuture.complete()
 		super.start(startFuture);   // hàm này đã gọi startFuture.complete()
-		System.out.println("MyVerticle.start(): thread="+Thread.currentThread().getId()  + ", ThreadName="+Thread.currentThread().getName());
+		System.out.println(this.getClass().getName()+ ".start()"+ ": thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		
 	}
@@ -36,7 +36,7 @@ public class MyVerticle extends AbstractVerticle {
 		// hoặc phải gọi hàm stopFuture.complete()
 		super.stop(stopFuture);  //this function will call stopFuture.complete()
 //		stopFuture.complete();
-		System.out.println("MyVerticle.stop(): thread=" + Thread.currentThread().getId());
+		System.out.println(this.getClass().getName()+ ".stop()"+ ": thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 	}
 
 }
