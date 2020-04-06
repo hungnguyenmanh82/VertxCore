@@ -19,7 +19,7 @@ Future<Type>:  extends Handler<type> và AsyncResult<type> => là kết hợp 2 
 Future là function point => thread nào gọi nó thì nó chạy trên thread đó (đã test).
 
  */
-public class App21_WaitPromiseComplete {
+public class App22_PromiseFile {
 
 	public static void main(String[] args) throws InterruptedException{
 
@@ -47,8 +47,15 @@ public class App21_WaitPromiseComplete {
 			}
 		});
 
-		// "foo.txt" đc tạo ra ở project folder khi Debug Run
-		// nếu "foo.txt" exit thì fut1 trả về fail
+		/**
+		  //===========================
+		  + Run or Debug mode trên Eclipse lấy ./ = project folder 	  
+		  + run thực tế:  ./ = folder run "java -jar *.jar"
+		 //========= 
+		 File("loginTest.json"):   file ở ./ folder    (tùy run thực tế hay trên eclipse)
+		 File("./abc/test.json"):   
+		 File("/abc"): root folder on linux (not window)
+		 */
 		fs.createFile("foo.txt", promise);
 
 		System.out.println("main(): end of main()");

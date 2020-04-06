@@ -17,10 +17,12 @@ encoding//src/main/java/hung/com/app21_future_promise/future/App22_WaitFutureFro
 encoding//src/main/java/hung/com/app21_future_promise/future/App22_WaitFutureFromVerticle2.java=UTF-8
 encoding//src/main/java/hung/com/app21_future_promise/future/App23_CompositeFuture_all.java=UTF-8
 encoding//src/main/java/hung/com/app21_future_promise/future/App24_CompositeFuture_any.java=UTF-8
-encoding//src/main/java/hung/com/app21_future_promise/future/App25_SequentialFutures.java=UTF-8
 encoding//src/main/java/hung/com/app21_future_promise/future/FutureCreateFileVerticle.java=UTF-8
 encoding//src/main/java/hung/com/app21_future_promise/future/FutureInplementAtVerticle.java=UTF-8
-encoding//src/main/java/hung/com/app21_future_promise/promise/App21_WaitPromiseComplete.java=UTF-8
+encoding//src/main/java/hung/com/app21_future_promise/promise/App21_Promise.java=UTF-8
+encoding//src/main/java/hung/com/app21_future_promise/promise/App22_PromiseFile.java=UTF-8
+encoding//src/main/java/hung/com/app21_future_promise/promise/App22_PromiseFile2.java=UTF-8
+encoding//src/main/java/hung/com/app21_future_promise/promise/App25_SequentialFutures.java=UTF-8
 encoding//src/main/java/hung/com/app2_blocking/App21_BlockingCode.java=UTF-8
 encoding//src/main/java/hung/com/app2_blocking/App22_BlockingCode_WorkerExecutor.java=UTF-8
 encoding//src/main/java/hung/com/app2_blocking/BlockingVerticle.java=UTF-8

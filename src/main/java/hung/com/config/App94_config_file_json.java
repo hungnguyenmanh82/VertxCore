@@ -36,16 +36,20 @@ public class App94_config_file_json {
 		 App81_https_Server.class.getResource("..") = root/pakage_name       => package_name của class này
 		 App81_https_Server.class.getResource(".") = root/pakage_name/ 
 		 App81_https_Server.class.getResource("abc") = root/pakage_name/abc
-		 */
-		
-		/**
-		 * "./" = là folder chưa *.jar file
-		 * config file thường đặt ở ngoài *.jar file
+		 
+		 App81_https_Server.class.getResource("abc").getPath()
+		  //===========================
+		  + Run or Debug mode trên Eclipse lấy Root = project folder 
+		  
+		  + run thực tế:  root = folder run "java -jar *.jar"
+		 //========= 
+		 File("loginTest.json"):   file ở root folder    (tùy run thực tế hay trên eclipse)
+		 File("/abc/test.json"):   path theo root folder
 		 */
 		ConfigStoreOptions fileOptions = new ConfigStoreOptions()
 											  .setType("file")          // lay option tu Json file
 //											  .setFormat("properties")  //format của file default = json
-											  .setConfig(new JsonObject().put("path", "./src/config/local.json"));
+											  .setConfig(new JsonObject().put("path", "./src/config/local.json")); //run or debug mode lấy Root = project folder
 		
 		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(fileOptions);
 		
