@@ -41,9 +41,10 @@ public class App23_CompositeFuture_all {
 		// future extends Handler<AsynResultc<Object>> vì thế dùng future như Handler đc
 		// Handler của future khi đc handle() sẽ gửi Event tới Context gắn với nó cung AsyncResult
 		// Handler bản chất là runable thôi
-		Future<HttpServer> httpServerFuture = Future.future();
 		int httpPort = 8080;
-		httpServer.listen(httpPort,httpServerFuture); //= httpServerFuture.completer() = Handler
+		Future<HttpServer> httpServerFuture = Future.future(promise-> httpServer.listen(httpPort,promise));
+		
+		; //= httpServerFuture.completer() = Handler
 		
 		
 		//===================================== TCP server ================================================
@@ -58,9 +59,8 @@ public class App23_CompositeFuture_all {
 		});
 		
 		// future để quản lý event => thông báo TCP server listen thành công trên port
-		Future<NetServer> netServerFuture = Future.future();
 		int tcpPort = 8081;
-		netServer.listen(tcpPort,netServerFuture); //= netServerFuture.completer()
+		Future<NetServer> netServerFuture = Future.future(promise-> netServer.listen(tcpPort,promise));
 
 		//==================================== future 3 ===========================================
 		Future<String> futureTest = Future.future(); //fut1: gắn với context của Vertx
