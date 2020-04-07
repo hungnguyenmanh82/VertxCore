@@ -29,7 +29,7 @@ import io.vertx.core.net.NetServer;
  File("./abc/test.json"):   
  File("/abc"): root folder on linux (not window)
  */
-public class App21_write_file {
+public class App23_read_file_syn {
 
 	public static void main(String[] args) throws InterruptedException{
 
@@ -39,48 +39,20 @@ public class App21_write_file {
 		/**
 		 * Run or Debug mode trên Eclipse lấy ./ = project folder 
 		 */
-		//khi create 1 future đồng thời sẽ tạo 1 promise tương ứng
+		//khi create 1 future đồng thời sẽ tạo 1 promise tương ứng và ngược lại cùng kiểu AsyncResult<T>
 		// promise extends handler
-		Future<Void> future1 = Future.future(promise ->{ 
-											fs.createFile("./foo1.txt", promise);
-										});
-
-		/**
-		 * compose(): cũng lấy tên từ reactive programing của javascript => Builder Pattern
-		 * future.compose(function) thi function đc gọi khi promise.complete()/fail() đc gọi => giống future.setHandler(handler)
-		 * compose() đc gọi trc Handler() => giống như interceptor 
-		 * khác biệt duy nhất là future.compose(Function<T,Future<U>>) return 1 Future
-		 * Function<T>: lấy theo tên javascript là 1 method có return. 
-		 *  Handler<AsyncResult<T>>: là 1 method return void
-		 */
-		Future<Void> startFuture = future1
-				.compose(v -> {   //chi dc goi khi sucess
-					System.out.println("compose 1st: future1 finish");	  
-					// When the file is created (fut1), execute this:
-					return Future.<Void>future(promise -> fs.writeFile("./foo1.txt", Buffer.buffer("ko co viec gi kho"), promise));
-				})
-				.compose(v -> {
-					System.out.println("compose 2rd: future 2 finish");
-					// When the file is written (fut2), execute this:
-					return Future.future(promise -> fs.move("./foo1.txt", "./bar.txt", promise));
-				});
+		Future<Buffer> future1 = Future.<Buffer>future(promise -> fs.readFile("./foo1.txt", promise));
 
 		future1.setHandler(ar->{
 			if(ar.succeeded()){
-				System.out.println("end future1: succeeded");	
+				System.out.println(ar.result());	
 			}else{ //ar.failed()
 				System.out.println("end future1: failed");	
 			}
 			
 		});
 		
-		startFuture.setHandler(ar->{
-			if(ar.succeeded()){
-				System.out.println("end of all futures: succeeded");	
-			}else{ //ar.failed()
-				System.out.println("end of all futures: failed");	
-			}
-		});
+
 	}
 
 }

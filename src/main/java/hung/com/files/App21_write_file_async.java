@@ -29,7 +29,7 @@ import io.vertx.core.net.NetServer;
  File("./abc/test.json"):   
  File("/abc"): root folder on linux (not window)
  */
-public class App22_read_file {
+public class App21_write_file_async {
 
 	public static void main(String[] args) throws InterruptedException{
 
@@ -39,20 +39,20 @@ public class App22_read_file {
 		/**
 		 * Run or Debug mode trên Eclipse lấy ./ = project folder 
 		 */
-		//khi create 1 future đồng thời sẽ tạo 1 promise tương ứng và ngược lại cùng kiểu AsyncResult<T>
+		//khi create 1 future đồng thời sẽ tạo 1 promise tương ứng
 		// promise extends handler
-		Future<Buffer> future1 = Future.<Buffer>future(promise -> fs.readFile("./foo1.txt", promise));
+		Future<Void> future1 = Future.future(promise ->	fs.createFile("./foo1.txt", promise));
 
 		/**
 		 * compose(): cũng lấy tên từ reactive programing của javascript => Builder Pattern
-		 * future.compose(function) đc gọi khi promise.complete()/fail() đc gọi => giống future.setHandler(handler)
+		 * future.compose(function) thi function đc gọi khi promise.complete()/fail() đc gọi => giống future.setHandler(handler)
 		 * compose() đc gọi trc Handler() => giống như interceptor 
 		 * khác biệt duy nhất là future.compose(Function<T,Future<U>>) return 1 Future
-		 * Function: lấy theo tên javascript là 1 method có giá trị trả về
-		 *  Handler: là 1 method trả về void
+		 * Function<T>: lấy theo tên javascript là 1 method có return. 
+		 *  Handler<AsyncResult<T>>: là 1 method return void
 		 */
 		Future<Void> startFuture = future1
-				.compose(v -> {
+				.compose(v -> {   //chi dc goi khi sucess
 					System.out.println("compose 1st: future1 finish");	  
 					// When the file is created (fut1), execute this:
 					return Future.<Void>future(promise -> fs.writeFile("./foo1.txt", Buffer.buffer("ko co viec gi kho"), promise));

@@ -44,8 +44,6 @@ public class App23_CompositeFuture_all {
 		int httpPort = 8080;
 		Future<HttpServer> httpServerFuture = Future.future(promise-> httpServer.listen(httpPort,promise));
 		
-		; //= httpServerFuture.completer() = Handler
-		
 		
 		//===================================== TCP server ================================================
 		NetServer netServer = vertx.createNetServer(); //tcp server đc tạo trên Vertx Context => threadpool của Vertx context
