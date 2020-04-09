@@ -1,4 +1,4 @@
-package hung.com.json;
+package hung.com.json.model;
 
 public class User {
 	private String name;

@@ -29,14 +29,29 @@ import io.vertx.core.net.NetServer;
  File("./abc/test.json"):   
  File("/abc"): root folder on linux (not window)
  */
-public class App22_read_file_async {
+public class App23_read_file_async {
 
 	public static void main(String[] args) throws InterruptedException{
 
 		Vertx vertx = Vertx.vertx();
-		Buffer buffer = vertx.fileSystem().readFileBlocking(App22_read_file_async.class.getResource("local.json").getPath());
+		FileSystem fs = vertx.fileSystem();
 
-		System.out.println(buffer.toString());
+		/**
+		 * Run or Debug mode trên Eclipse lấy ./ = project folder 
+		 */
+		//khi create 1 future đồng thời sẽ tạo 1 promise tương ứng và ngược lại cùng kiểu AsyncResult<T>
+		// promise extends handler
+		Future<Buffer> future1 = Future.<Buffer>future(promise -> fs.readFile("./foo1.txt", promise));
+
+		future1.setHandler(ar->{
+			if(ar.succeeded()){
+				System.out.println(ar.result());	
+			}else{ //ar.failed()
+				System.out.println("end future1: failed");	
+			}
+			
+		});
+		
 
 	}
 
