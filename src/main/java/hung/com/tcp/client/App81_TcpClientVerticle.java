@@ -35,9 +35,9 @@ public class App81_TcpClientVerticle extends AbstractVerticle {
 				//====================== write data to socket =================
 				// có thể dùng Blocking code để write data trên 1 thread khác 
 				Buffer outBuffer = Buffer.buffer(1000); //size of buffer
-				outBuffer.appendString("<= client send(write) data to server asynchronously");
+				outBuffer.appendString("content from tcp Client");
 
-				//Vertx don't have event for write like NIO selector =>much check it
+				//Vertx don't have event for write like NIO selector =>must check it
 				if(netSocket.writeQueueFull() == false) {//asynchronous function check
 					//asynchronous by Vertx, it finish when writeQueueFull() = false
 					netSocket.write(outBuffer); 
@@ -49,8 +49,9 @@ public class App81_TcpClientVerticle extends AbstractVerticle {
 					@Override
 					public void handle(Buffer buffer) {
 						//it run on context of Socket, not run on context of This vertical
-						System.out.println("=> incoming data: length = "+buffer.length());
-						System.out.println(buffer.getString(0, buffer.length()));
+						System.out.println("=> read: thread="+Thread.currentThread().getId());
+                        System.out.println("bufferSize = "+buffer.length());
+                        System.out.println("content = "+ buffer.getString(0, buffer.length()));
 					}
 				});
 

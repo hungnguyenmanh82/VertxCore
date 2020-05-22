@@ -26,26 +26,26 @@ public class TcpServerVerticle extends AbstractVerticle {
             // current thread => TcpServerVerticle context
             @Override
             public void handle(NetSocket netSocket) {
-            	System.out.println("incoming connect request!: thread="+Thread.currentThread().getId());
+            	System.out.println("******** new socket connected : thread="+Thread.currentThread().getId());
                  
             	
                 //=============== read data from socket ====================== 
                 netSocket.handler(new Handler<Buffer>() {
                 	//asynchronous event 'read' called many times => streaming data
                 	//NetSocket đã đc gắn với context của Server rồi. 
-                	//code này chạy trên threadPoold của server
+                	//code này chạy trên thread của Verticle context
                 	//kể cả khi chuyển sang Vertical thì cũng chạy trên thread khác
                     @Override
                     public void handle(Buffer buffer) {
                     	System.out.println("=> read: thread="+Thread.currentThread().getId());
-                        System.out.println("buffer size = "+buffer.length());
-                        System.out.println(buffer.getString(0, buffer.length()));
+                        System.out.println("bufferSize = "+buffer.length());
+                        System.out.println("content = "+ buffer.getString(0, buffer.length()));
                     }
                 });
                 
                 //====================== write data to socket =================
                 Buffer outBuffer = Buffer.buffer(1000); //size of buffer
-                outBuffer.appendString("<= (send) response from server asynchronous");
+                outBuffer.appendString("Content from server1,");
                 
                 //Vertx don't have event khi write socket finish
                 //writeQueue => chỉ số buffer đc lưu vào Queue để ghi vào socket

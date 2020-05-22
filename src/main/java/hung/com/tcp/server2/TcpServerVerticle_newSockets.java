@@ -10,7 +10,7 @@ import io.vertx.core.net.NetServerOptions;
 import io.vertx.core.net.NetSocket;
 
 
-public class TcpServerVerticle_workerPool extends AbstractVerticle {
+public class TcpServerVerticle_newSockets extends AbstractVerticle {
 
 	@Override
 	public void start() throws Exception {
@@ -30,7 +30,8 @@ public class TcpServerVerticle_workerPool extends AbstractVerticle {
 				DeploymentOptions options = new DeploymentOptions()
 						.setWorkerPoolName("*TcpServletThreadPool")
 						.setWorkerPoolSize(10)  //thread for server, not client
-						.setWorker(false);  //standard Verticle  => vì yêu cầu Handler theo thứ tự
+						.setWorker(false);  //true: mỗi event đc assign 1 thread trong pool (các event độc lập, ko phụ thuộc nhau).
+											//false: Standard-verticle sẽ ko dùng threadpool mà dùng eventloop tức dùng EventLoopPool của Vertx
 
 				vertx.deployVerticle(new TcpServletVerticle(netSocket),options); //change netSocket to other Context and Stardard Verticle Threadpool
 

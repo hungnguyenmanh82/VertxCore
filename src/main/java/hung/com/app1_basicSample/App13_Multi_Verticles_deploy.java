@@ -8,7 +8,7 @@ import io.vertx.core.Vertx;
  * Verticle: đc xem là các task. Nhiều Vertical có thể asign cho 1 thread trong thread pool.
  *
  */
-public class App13_MultiInstance {
+public class App13_Multi_Verticles_deploy {
 
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("main(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());

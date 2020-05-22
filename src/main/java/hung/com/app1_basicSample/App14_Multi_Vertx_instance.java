@@ -12,7 +12,7 @@ import io.vertx.core.Vertx;
  *  //=====
  *  Xem thêm mục http protocol
  */
-public class App14_MultiVertxHttpServerMain {
+public class App14_Multi_Vertx_instance {
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("main(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
@@ -26,9 +26,11 @@ public class App14_MultiVertxHttpServerMain {
 				System.out.println(" vertx1=> vertx.deployVerticle(): thread="+Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName());
 			}
 		});
+		
 
-
-		//================== Vertx2==================
+		//================== Vertx2 ============================================
+		// có event-loop threadpool riêng  (tuy nhiên trùng tên với Vertx1)
+		//Java: mỗi Thread có Id duy nhất. Cho phép các thread trùng tên (mục đích cho debug thôi)
 		Vertx vertx2 = Vertx.vertx();
 		vertx2.deployVerticle(new MyVerticle(), new Handler<AsyncResult<String>>(){
 			//hàm này trigger khi VertxHttpServerVerticle.start(future) hoàn thành asynchronous
@@ -37,5 +39,9 @@ public class App14_MultiVertxHttpServerMain {
 				System.out.println(" vertx2 => vertx.deployVerticle(): thread="+Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName());
 			}
 		});
+		
+		//Java: mỗi Thread có Id duy nhất. Cho phép các thread trùng tên (mục đích cho debug thôi)
+		System.out.println("vertx1:"+ vertx1);
+		System.out.println("vertx2:"+ vertx2);
 	}
 }

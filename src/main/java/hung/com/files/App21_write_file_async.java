@@ -16,7 +16,6 @@ import io.vertx.core.net.NetServer;
  App81_https_Server.class.getResource("/") = root = main/resources/ = main/java/
  App81_https_Server.class.getResource("/abc") = main/resource/abc  = main/java/abc  
  //
- App81_https_Server.class.getResource("..") = root/pakage_name       => package_name của class này
  App81_https_Server.class.getResource(".") = root/pakage_name/     => package_name của class này
  App81_https_Server.class.getResource("abc") = root/pakage_name/abc
  App81_https_Server.class.getResource("abc").getPath()
