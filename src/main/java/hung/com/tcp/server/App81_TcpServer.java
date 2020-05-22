@@ -2,6 +2,7 @@ package hung.com.tcp.server;
 
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 
 /**
  * step1: create a new Vertx => a thread
@@ -10,18 +11,15 @@ import io.vertx.core.Vertx;
 public class App81_TcpServer {
 	public static void main(String[] args) throws Exception {
 		System.out.println("start main(): thread="+Thread.currentThread().getId());
-		//get a new instance of Vertx => tương ứng 1 thread thì đúng hơn.
-		Vertx vertx = Vertx.vertx();
 		
-		//eventLoopPool là ở Vertx Option, ko phải ở Deploy Option
-		DeploymentOptions options = new DeploymentOptions()
-				.setWorkerPoolName("*TcpServerThreadPool")
-				.setWorkerPoolSize(10)  //thread for server, not client
-				.setWorker(false);   //true: mỗi event đc assign 1 thread trong pool (các event độc lập, ko phụ thuộc nhau).
-									//false: Standard-verticle sẽ ko dùng threadpool mà dùng eventloop tức dùng EventLoopPool của Vertx
+		//eventloop chỉ dùng cho Standard Verticle thôi
+		final VertxOptions vertxOptions = new VertxOptions().setEventLoopPoolSize(4);
 		
+		Vertx vertx = Vertx.vertx(vertxOptions);
+		
+	
 		// event là event Open Socket nên độc lập nhau
-		vertx.deployVerticle(new TcpServerVerticle(), options);	
+		vertx.deployVerticle(new TcpServerVerticle());	
 		
 		
 		// nếu undeploy(verticle) thì server hoặc socket trên đó sẽ tự động close (tài liệu Vertx chỉ ra vậy)

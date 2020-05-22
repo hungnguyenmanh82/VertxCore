@@ -1,16 +1,14 @@
 package hung.com.tcp.server2;
 
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Handler;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.NetServer;
 import io.vertx.core.net.NetServerOptions;
 import io.vertx.core.net.NetSocket;
 
 
-public class TcpServerVerticle_newSockets extends AbstractVerticle {
+public class TcpServerVerticle2_newSockets extends AbstractVerticle {
 
 	@Override
 	public void start() throws Exception {
@@ -25,15 +23,17 @@ public class TcpServerVerticle_newSockets extends AbstractVerticle {
 			//Asynchronous Event only 1 time when Socket client connect to server
 			@Override
 			public void handle(NetSocket netSocket) {
-				System.out.println("****incoming connect request!: thread="+Thread.currentThread().getId());
+				System.out.println("******** new socket connected : thread="+Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName());
 
 				DeploymentOptions options = new DeploymentOptions()
 						.setWorkerPoolName("*TcpServletThreadPool")
 						.setWorkerPoolSize(10)  //thread for server, not client
-						.setWorker(false);  //true: mỗi event đc assign 1 thread trong pool (các event độc lập, ko phụ thuộc nhau).
-											//false: Standard-verticle sẽ ko dùng threadpool mà dùng eventloop tức dùng EventLoopPool của Vertx
+						.setWorker(false);  //true: worker-vertical dùng WorkerPoolName1  (các event vẫn tuần tự, nhưng trên thread khác nhau)
+											//false: Standard-verticle dùng vert.x-eventloop-thread (fix thread to verticle)
+											//blockingCode luôn dùng WorkerPoolName
 
-				vertx.deployVerticle(new TcpServletVerticle(netSocket),options); //change netSocket to other Context and Stardard Verticle Threadpool
+				// Standard-verticle sẽ lấy Thread của Verticle (ko lấy của EventLoop thread)
+				vertx.deployVerticle(new TcpServletVerticle2(netSocket),options); //change netSocket to other Context and Stardard Verticle Threadpool
 
 				//==========================close socket ======================
 				//              netSocket.close();

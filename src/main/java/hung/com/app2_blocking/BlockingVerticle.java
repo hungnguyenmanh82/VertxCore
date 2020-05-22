@@ -47,10 +47,8 @@ public class BlockingVerticle extends AbstractVerticle {
 		System.out.println(this.getClass().getName()+ ".start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 
 
-		//mấu chốt là khái niệm Future
-		// BlockingHandler vẫn thuộc context của Verticle, nhưng chạy trên thread khác (xem DeploymentId ở log sẽ thấy).
-		// => BlockingHandler vẫn lưu trong 1 task queue order của Verticle context
-		// Verticle context có 2 task
+		//blockingHandler run trên workerThreadPool => độc lập với verticle thread
+		// nó trigger Verticle context qua Promise
 		Handler<Promise<String>> blockingHandler = new Handler<Promise<String>>() {
 			public String test = "abc";
 			@Override
@@ -67,7 +65,6 @@ public class BlockingVerticle extends AbstractVerticle {
 		};
 
 		//returnHandler run trên Verticle Thread
-		// Type trong Future<Type> và AsyncResult<Type> phải giống nhau =>nếu ko để kiểu Object và check type
 		Handler<AsyncResult<String>> returnHandler =  new Handler<AsyncResult<String>>() {
 			public void handle(AsyncResult<String> event) {
 
@@ -77,15 +74,14 @@ public class BlockingVerticle extends AbstractVerticle {
 					System.out.println("failed");
 				}
 
-				System.out.println("returnHandler: thread=" + Thread.currentThread().getId()+
+				System.out.println("returnHandler: thread=" + Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName()+
 						", result=" + event.result());
 			};
 		};
 
-		//order = false: blockingHandler.handle(AsyncResult<resultType>) chạy trên thread khác với Verticle, ko đợi Handler queue của verticle
+		//order = false: các blockingHandler của Verticle này chạy trên WorkerThreadPool độc lập nhau (ko quan trọng order).
 		//by default (function 2 tham số): order = true => chạy theo order trong queue của Verticle
-		// blocking-code run trên threadpool của vertx context
-		// bản chất là call future.setHandler(returnHandler) sau khi blockingHandler đc thực hiện trên Verticle Eventloop Thread
+		// blocking-code run trên Workerthreadpool của vertx context
 		vertx.executeBlocking(blockingHandler, false, returnHandler);
 
 		//Cách 2: Java lambda syntax  => ko nên dùng vì cú pháp này ko tường minh

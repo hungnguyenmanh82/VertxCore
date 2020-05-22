@@ -26,7 +26,7 @@ public class TcpServerVerticle extends AbstractVerticle {
             // current thread => TcpServerVerticle context
             @Override
             public void handle(NetSocket netSocket) {
-            	System.out.println("******** new socket connected : thread="+Thread.currentThread().getId());
+            	System.out.println("******** new socket connected : thread="+Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName());
                  
             	
                 //=============== read data from socket ====================== 

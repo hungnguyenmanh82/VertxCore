@@ -27,10 +27,8 @@ public class BlockingVerticle_WorkerExecutor extends AbstractVerticle {
 		System.out.println(this.getClass().getName()+ ".start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		
-		//BlockingHanderler: thuộc Vertx context => chạy trên threadpool của Vertx context
-		//bất key Event, hay task nào tạo ra trong Blocking code đều thuộc quản lý của Context hiện tại => đều run trên thread của Verticle
-		//Trong khi Event, task sinh ra ở Blocking-code lại thuộc context của Verticle tạo ra “blocking-code” => 
-		//event hay task này sẽ chạy trên thread (or threadpool) của Verticle (ko chạy trên vertx context).
+		//blockingHandler run trên WorkerExecutor => độc lập với verticle thread
+		// nó trigger Verticle context qua Promise
 		Handler<Promise<String>> blockingHandler = new Handler<Promise<String>>() {
 			public String test = "abc";
 			//Future này quản lý bởi Vertx, ko phải Verticle
@@ -59,7 +57,7 @@ public class BlockingVerticle_WorkerExecutor extends AbstractVerticle {
 		// ko dùng chung threadpool với Vertx nữa
 		int poolSize = 2;
 		long maxExecuteTime = 1000; //mini second
-		String threadPoolName = "my-worker-pool"; //tên là id duy nhất. 2 tham số còn lại chỉ dùng lần đầu tạo threadpool
+		String threadPoolName = "my-WorkerExecutor-pool"; //tên là id duy nhất. 2 tham số còn lại chỉ dùng lần đầu tạo threadpool
 												  // có thể dùng tên lại ở 1 verticle khác vẫn ok.	
 		
 		// nếu đã tồn tại threadpoolName này rồi, thì nó lấy luôn threadpool đó (ko tạo mới)

@@ -25,7 +25,7 @@ public class App82_TcpServer {
 									//false: Standard-verticle sẽ ko dùng threadpool mà dùng eventloop tức dùng EventLoopPool của Vertx
 		
 		// event là event Open Socket nên độc lập nhau
-		vertx.deployVerticle(new TcpServerVerticle_newSockets(), options);	
+		vertx.deployVerticle(new TcpServerVerticle2_newSockets(), options);	
 		
 		
 		// nếu undeploy(verticle) thì server hoặc socket trên đó sẽ tự động close (tài liệu Vertx chỉ ra vậy)
