@@ -28,15 +28,17 @@ public class App21_Promise {
 		System.out.println("main(): thread=" + Thread.currentThread().getId());
 
 		Vertx vertx = Vertx.vertx();
-		// toàn bộ quá trình tạo file đc thực hiện trên threadpool của Vertx context
-		FileSystem fs = vertx.fileSystem();
+
 
 		//tạo promise đồng thời sẽ tạo 1 Future luôn và ngược lại
 		Promise<String> promise = Promise.<String>promise();
 
-		promise.future().setHandler(new Handler<AsyncResult<String>>() {
-			// code này run trên cùng thread với fs.createFile() đc cấp phát bởi threadpool của vertx context (đã test)
-			// nghĩa là fs.createFile() sẽ gọi future.complete() và future.fail() thì 2 hàm này sẽ gọi tới Hander trong hàm future.setHandler()
+		// setHandler() =>  onComplete(): chuẩn hóa lại tên với prefix = "on" giống android cho callback function
+		/**
+		 * compose() = setHandler() = onComplete() = addHandler() xem code FutureImpl class
+		 * addHandler() ở FutureImpl làm giảm performance của code 
+		 */
+		promise.future().onComplete(new Handler<AsyncResult<String>>() {
 			@Override
 			public void handle(AsyncResult<String> event) {
 				if( event.succeeded()){
@@ -50,10 +52,14 @@ public class App21_Promise {
 			}
 		});
 
-		// Handler callback: asyncResult.succeeded() = true
+		/**
+		 * Promise: đc tách riêng để phụ trách phần trigger callback => Promise đc truyền cho các Asynchronouse Object để trigger future
+		 * Future: phụ trách phần xử lý còn lại.
+		 */
+		// trigger callback: asyncResult.succeeded() = true
 		promise.complete("ko co viec gi kho");
 		
-		// Handler callback: asynResult.failed() = true
+		// trigger callback: asynResult.failed() = true
 		//promise.fail("test fail");
 
 		System.out.println("main(): end of main()");

@@ -28,9 +28,4 @@ public class Verticle_startBlocking extends AbstractVerticle {
 		System.out.println(this.getClass().getName()+ ".stop()"+ ": thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 	}
 
-
-
-
-
-
 }

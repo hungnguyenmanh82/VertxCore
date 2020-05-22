@@ -38,7 +38,7 @@ public class App23_CompositeFuture_all {
 		});
 		// future để quản lý event => thông báo khi http Server listen thành công trên port (port ko bị chiếm dụng bởi app khac) 
 		// future đc tạo gắn với context nào sẽ tạo event để gửi về context đó
-		// future extends Handler<AsynResultc<Object>> vì thế dùng future như Handler đc
+		// future và Promise extends Handler<AsynResultc<Object>> vì thế dùng future như Handler đc
 		// Handler của future khi đc handle() sẽ gửi Event tới Context gắn với nó cung AsyncResult
 		// Handler bản chất là runable thôi
 		int httpPort = 8080;
@@ -70,7 +70,7 @@ public class App23_CompositeFuture_all {
 		//CompositeFuture: nếu 1 trong 2 fail thì tất cả fail
 		// đăng ký nhận future ở context hiện tại
 		CompositeFuture.all(httpServerFuture, netServerFuture, futureTest)
-					 .setHandler(new Handler<AsyncResult<CompositeFuture>>() {
+					 .onComplete(new Handler<AsyncResult<CompositeFuture>>() {
 			// code này sẽ run tren thread của Future hoàn thành cuối cùng futureTest
 			// hàm này bản chất là kết hợp của các hàm sau để chờ Event. Khi có Event nó sẽ check các Future còn lại đã finish suceeded hay chưa
 			// httpServerFuture.setHandler(), netServerFuture.setHandler(), futureTest.setHandler()

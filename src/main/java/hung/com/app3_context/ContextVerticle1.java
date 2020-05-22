@@ -45,6 +45,12 @@ public class ContextVerticle1 extends AbstractVerticle {
 		} else if (! Context.isOnVertxThread()) {
 			System.out.println("ContextVerticle1: Context not attached to a thread managed by vert.x: deploymentId= "+ context.deploymentID());
 		}
+		
+		//Context đc gắn với HashMap cho CRUD dữ liệu trên đó.
+		/**
+		 * context.put(key, value); 
+		 * context.get(key);
+		 */
 
 		//Future<String>  => String là giá trị trả về của Future 
 		//BlockingHanderler: thuộc Vertx context => chạy trên threadpool của Vertx context

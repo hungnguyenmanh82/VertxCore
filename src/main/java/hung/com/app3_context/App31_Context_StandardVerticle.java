@@ -27,10 +27,16 @@ public class App31_Context_StandardVerticle {
 				 									.setEventLoopPoolSize(4);  //threadpool của EventLoop cho standard Verticle
 		Vertx vertx = Vertx.vertx(vertxOptions);
 
-		//vertx.getOrCreateContext() sẽ trả về context gắn với Thread hiện tại:
+		//vertx.getOrCreateContext() sẽ trả về context gắn với current-thread
 		// convert Current Thread => Context và trả về
 		// Verticle.start() luôn chạy trên thread của Verticle context hiện tại nên sẽ trả về Verticle context	
 		Context context = vertx.getOrCreateContext();
+		
+		//Context đc gắn với HashMap cho CRUD dữ liệu trên đó.
+		/**
+		 * context.put(key, value); 
+		 * context.get(key);
+		 */
 
 		if (context.isEventLoopContext()) {
 			System.out.println("main: Context attached to Event Loop: "+ context.deploymentID());

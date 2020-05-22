@@ -16,10 +16,12 @@ import io.vertx.core.net.NetServer;
  App81_https_Server.class.getResource("/") = root = main/resources/ = main/java/
  App81_https_Server.class.getResource("/abc") = main/resource/abc  = main/java/abc  
  //
- App81_https_Server.class.getResource("..") = root/pakage_name       => package_name của class này
- App81_https_Server.class.getResource(".") = root/pakage_name/ 
+ App81_https_Server.class.getResource(".") = root/pakage_name/     => package_name của class này
  App81_https_Server.class.getResource("abc") = root/pakage_name/abc
  App81_https_Server.class.getResource("abc").getPath()
+ //
+   App81_https_Server.class.getResource("..") = parent folder of root/pakage_name/
+   App81_https_Server.class.getResource("../..") = parent of parent of root/pakage_name/  
   //===========================
   + Run or Debug mode trên Eclipse lấy ./ = project folder 
   
@@ -34,6 +36,8 @@ public class App23_read_file_async {
 	public static void main(String[] args) throws InterruptedException{
 
 		Vertx vertx = Vertx.vertx();
+		
+		// dùng Event-Loop thread để đọc file
 		FileSystem fs = vertx.fileSystem();
 
 		/**
@@ -43,7 +47,7 @@ public class App23_read_file_async {
 		// promise extends handler
 		Future<Buffer> future1 = Future.<Buffer>future(promise -> fs.readFile("./foo1.txt", promise));
 
-		future1.setHandler(ar->{
+		future1.onComplete(ar->{
 			if(ar.succeeded()){
 				System.out.println(ar.result());	
 			}else{ //ar.failed()

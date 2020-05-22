@@ -23,9 +23,10 @@ public class App13_MultiInstance {
 				.setWorkerPoolSize(3)
 				.setWorker(true); 	//true: worker-vertical dùng WorkerPoolName1  (các event vẫn tuần tự, nhưng trên thread khác nhau)
 									//false: Standard-verticle dùng vert.x-eventloop-thread (fix thread to verticle)
-									//blockingCode luôn dùng WorkerPoolName1
+									//blockingCode luôn dùng WorkerPoolName
 		
-		//register Verticale with Vertex instance to capture event.
+		//register Verticale with Vertx instance to capture event.
+		// 
 		vertx.deployVerticle("hung.com.basicSample.MyVerticle",options);//asynchronous call MyVerticle.start() in worker thread
 
 		Thread.currentThread().sleep(3000);

@@ -30,12 +30,21 @@ public class App22_PromiseFile2 {
 		FileSystem fs = vertx.fileSystem();
 
 		
-		// "foo.txt" đc tạo ra ở project folder khi Debug Run
+		/**
+		  //===========================
+		  + Run or Debug mode trên Eclipse lấy ./ = project folder 	  
+		  + run thực tế:  ./ = folder run "java -jar *.jar"
+		 //========= 
+		 File("loginTest.json"):   file ở ./ folder    (tùy run thực tế hay trên eclipse)
+		 File("./abc/test.json"):   
+		 File("/abc"): root folder on linux (not window)
+		 */
 		// nếu "foo.txt" exit thì fut1 trả về fail
 		//tạo promise đồng thời sẽ tạo 1 Future luôn và ngược lại
 		Future<Void> future = Future.future(promise -> fs.createFile("foo.txt", promise));
 
-		future.setHandler(new Handler<AsyncResult<Void>>() {
+		// setHandler() =>  onComplete(): chuẩn hóa lại tên với prefix = "on" giống android cho callback function
+		future.onComplete(new Handler<AsyncResult<Void>>() {
 			// code này run trên cùng thread với fs.createFile() đc cấp phát bởi threadpool của vertx context (đã test)
 			// nghĩa là fs.createFile() sẽ gọi future.complete() và future.fail() thì 2 hàm này sẽ gọi tới Hander trong hàm future.setHandler()
 			@Override

@@ -54,11 +54,11 @@ public class BlockingVerticle extends AbstractVerticle {
 		Handler<Promise<String>> blockingHandler = new Handler<Promise<String>>() {
 			public String test = "abc";
 			@Override
-			public void handle(Promise<String> future) {
+			public void handle(Promise<String> promise) {
 				System.out.println("******blockingHandler: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 				
 				String result = "blockingHandler: thread="+Thread.currentThread().getId();
-				future.complete(result);   //sẽ gọi future.handle(AsyncResult<resultType>) ngay trên Thread này
+				promise.complete(result);   //sẽ gọi future.handle(AsyncResult<resultType>) ngay trên Thread này
 
 				//future.fail(result);   //sẽ gọi future.handle(AsyncResult<resultType>) ngay trên Thread này
 				System.out.println(test);
@@ -85,7 +85,7 @@ public class BlockingVerticle extends AbstractVerticle {
 		//order = false: blockingHandler.handle(AsyncResult<resultType>) chạy trên thread khác với Verticle, ko đợi Handler queue của verticle
 		//by default (function 2 tham số): order = true => chạy theo order trong queue của Verticle
 		// blocking-code run trên threadpool của vertx context
-		// bản chất là call future.setHandler(returnHandler) sau khi blockingHandler đc thực hiện 
+		// bản chất là call future.setHandler(returnHandler) sau khi blockingHandler đc thực hiện trên Verticle Eventloop Thread
 		vertx.executeBlocking(blockingHandler, false, returnHandler);
 
 		//Cách 2: Java lambda syntax  => ko nên dùng vì cú pháp này ko tường minh

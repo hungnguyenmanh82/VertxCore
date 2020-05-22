@@ -18,17 +18,23 @@ public class App14_MultiVertxHttpServerMain {
 		
 		//========================== vertx 1 ===========================
 		//Ctrl+ T: để tìm implement Class sẽ thấy Vertx.vertx() sẽ new instance (ko phải Singleton)
-		Vertx vertx = Vertx.vertx();
-		vertx.deployVerticle(new HttpServerVerticle()); //asynchronous call MyVerticle1.start() in worker thread
-
-
-		//================== Vertx2==================
 		Vertx vertx1 = Vertx.vertx();
-		vertx1.deployVerticle(new HttpServerVerticle(), new Handler<AsyncResult<String>>(){
+		vertx1.deployVerticle(new MyVerticle(), new Handler<AsyncResult<String>>(){
 			//hàm này trigger khi VertxHttpServerVerticle.start(future) hoàn thành asynchronous
 			@Override
 			public void handle(AsyncResult<String> stringAsyncResult) {
-				System.out.println(" handler => vertx.deployVerticle(): thread="+Thread.currentThread().getId());
+				System.out.println(" vertx1=> vertx.deployVerticle(): thread="+Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName());
+			}
+		});
+
+
+		//================== Vertx2==================
+		Vertx vertx2 = Vertx.vertx();
+		vertx2.deployVerticle(new MyVerticle(), new Handler<AsyncResult<String>>(){
+			//hàm này trigger khi VertxHttpServerVerticle.start(future) hoàn thành asynchronous
+			@Override
+			public void handle(AsyncResult<String> stringAsyncResult) {
+				System.out.println(" vertx2 => vertx.deployVerticle(): thread="+Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName());
 			}
 		});
 	}

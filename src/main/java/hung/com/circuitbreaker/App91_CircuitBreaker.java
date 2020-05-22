@@ -51,23 +51,21 @@ public class App91_CircuitBreaker {
 		 * cần hiểu tính chất của Future và AsyncResult trc đã thì đọc phần này sẽ hiểu.
 		 */
 		// circuitBreaker run handlerFutureRequest
-		// khi future.fail() hoặc future.complete() => nó sẽ gọi Handler của handlerFutureRequest
-		// tai handler của future nó sẽ xử lý các logic của circuitBreaker dựa vào AsyncResult của fail(), complete(): vd count failure
-		// vì run trên nhiều thread nên bắt buộc phải synchronize(object) khi read/write count faile or state => performance sẽ ko tốt
+		// promise sẽ thông báo cho CircuitBreaker về tình trạng request => promise.fail()/promise.complete()
 		Handler<Promise<String>> handlerFutureRequest = new Handler<Promise<String>>() {
 
 			@Override
-			public void handle(Promise<String> future) {
+			public void handle(Promise<String> promise) {
 				System.out.println("run circuitBreaker.execute()"+ formatter.format(new Date()));
 				System.out.println("handlerFutureRequest: thread=" + Thread.currentThread().getId());
 
 				vertx.createHttpClient().getNow(8080, "localhost", "/", response -> {
 					if (response.statusCode() != 200) {
-						future.fail("HTTP error");
+						promise.fail("HTTP error");
 					} else { //statusCode = 200
-						response.exceptionHandler(future::fail)
+						response.exceptionHandler(promise::fail)
 						.bodyHandler(buffer -> {
-							future.complete(buffer.toString());
+							promise.complete(buffer.toString());
 						});
 					}
 				});
@@ -76,9 +74,11 @@ public class App91_CircuitBreaker {
 
 		};
 		
-		//handlerAsyncResultResponse run tren thread của hàm future.complete() or future.fail() của handlerFutureRequest
+		//handlerAsyncResultResponse run tren thread của hàm promise.complete() or promise.fail() của handlerFutureRequest
 		// circuitBreaker sẽ gọi tơi future.handler() trc de change State sau do moi gọi tiep tơi handlerAsyncResultResponse
-		// Handler này ko cần cũng ko sao => nó ko liên quan tới biến đổi State của Circuit Breaker
+		/**
+		 *  Handler này ko cần cũng ko sao => nó ko liên quan tới biến đổi State của Circuit Breaker
+		 */
 		Handler<AsyncResult<String>> handlerAsyncResultResponse = new Handler<AsyncResult<String>>() {
 
 			@Override
@@ -96,7 +96,7 @@ public class App91_CircuitBreaker {
 
 
 
-		//=============================  Event State change Handler ============================
+		//=============================  Event State change Handler: Close, Open, HalfOpen ============================
 		// API gateway có thể dựa vào các event này để biết đc state hiện tại của API gateway là gì dể loadbalancing or routing
 		// cần xem State diagram mới hiểu các concept và cách vận hành.
 		// Close State: là trạng thái cho phép gửi request
@@ -143,24 +143,28 @@ public class App91_CircuitBreaker {
 		// lệnh circuitBreaker.execute() đầu tiên chạy rất chậm vì nó phải chờ Java compile runtime (mất 500ms) các lệnh tiếp theo rất nhanh (1ms)
 		if(circuitBreaker.state() == CircuitBreakerState.CLOSED 
 				|| circuitBreaker.state() == CircuitBreakerState.HALF_OPEN){
-			circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
+			
+			/**
+			 *  onComplete() ko cần cũng ko sao => nó ko liên quan tới biến đổi State của Circuit Breaker
+			 */
+			circuitBreaker.execute(handlerFutureRequest).onComplete(handlerAsyncResultResponse);
 		}
 		
 		
 		// Ko nên chạy liên tiếp các lệnh liên tiếp => nên check State trc khi chạy
-		circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
-		circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
-//		circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
+		circuitBreaker.execute(handlerFutureRequest).onComplete(handlerAsyncResultResponse);
+		circuitBreaker.execute(handlerFutureRequest).onComplete(handlerAsyncResultResponse);
+//		circuitBreaker.execute(handlerFutureRequest).onComplete(handlerAsyncResultResponse);
 		
 		
 		Thread.currentThread().sleep(3000); //wait for vertx.close() finished
 		//handlerFutureRequest sẽ ko dc thuc hien (ko tạo thread pending) vì State=Open
 		//handlerAsyncResultResponse sẽ đc thuc hien luon tren current thread circuitBreaker.execute
-		circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
+		circuitBreaker.execute(handlerFutureRequest).onComplete(handlerAsyncResultResponse);
 		
 		//handlerFutureRequest đc gọi trở lại vì State=HalfOpen
 		Thread.currentThread().sleep(6000); //wait for vertx.close() finished
-		circuitBreaker.execute(handlerFutureRequest).setHandler(handlerAsyncResultResponse);
+		circuitBreaker.execute(handlerFutureRequest).onComplete(handlerAsyncResultResponse);
 		
 		//fallback đc gọi khi state = Open vì bất kỳ lý do gì (exception or failed) => dùng Open state event thay thế ok.
 		//circuitBreaker.executeWithFallback(Handler<Future<T>> command, Function<Throwable, T> fallback)

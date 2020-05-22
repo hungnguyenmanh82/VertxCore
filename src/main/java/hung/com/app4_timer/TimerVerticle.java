@@ -20,9 +20,9 @@ public class TimerVerticle extends AbstractVerticle {
 		
 //		vertx.setTimer(delay, handler)
 //		vertx.setPeriodic(delay, handler)
-		//timer này chạy trên cùng context với Vertical => nghĩa là chạy tuần tự
+		//timer này chạy trên cùng context với Verticle => nó là 1 Task của Verticle
 	    //trường hợp Stardard verticle vẫn chạy tuần tự (đã test)
-	    //trường hợp working thread thì vẫn phải chạy tuần tự (đã test)
+	    //trường hợp working verticle thì vẫn phải chạy tuần tự (đã test)
 
 		long timerID = vertx.setTimer(300,new  Handler<Long>() {
 			//run on thread of Verticle

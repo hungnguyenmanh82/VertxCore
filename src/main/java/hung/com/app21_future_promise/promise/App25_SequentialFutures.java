@@ -44,16 +44,17 @@ public class App25_SequentialFutures {
 		 * future.setHandler(handler<AsyncResult<T>)  thì Handler<AsynResult<T>> đc gọi khi promise.complete()/fail() 
 		 * compose() = setHandler() = addHandler() xem code FutureImpl class
 		 * 
-		 * compose(Funtion<T,Future<T>) return new Future.  Ko phải Future<T> do Function trả về. 
-		 *                              Vì future cũ có thể chứa List<handler> rất phức tạp.  Future<T>.setHanlder(new Future).
+		 * compose(Funtion<T,Future<T>) return new Future.  Ko phải return Future<T> do Function trả về. 
+		 *                              Vì nó còn chứa cả Failure cause của các future trc đó
 		 * setHandler() return old Future.
 		 * 
 		 *  Function: lấy theo tên javascript là 1 method có giá trị trả về
 		 *  Handler: là 1 method trả về void
+		 *  future<T> va promise<T> đều implement Handler<AsyncResult<T>> để trigger cho setHandler()
 		 */
 		// compose() tạo new future
 		Future<Void> startFuture = future1
-				.compose(v -> {  //function này chỉ dc gọi khi Future.completed(). fail() sẽ ko gọi nó
+				.compose(v -> {  //function này chỉ dc gọi khi Promise.completed(). sẽ ko gọi nó nếu Promise.fail() 
 					System.out.println("compose 1st: future1 finish");
 					
 					// When the file is created (fut1), execute this:
@@ -65,7 +66,8 @@ public class App25_SequentialFutures {
 					return Future.future(promise -> fs.move("./foo1.txt", "./bar.txt", promise));
 				});
 
-		future1.setHandler(ar->{
+		// compose() = setHandler() = onComplete() = addHandler() xem code FutureImpl class
+		future1.onComplete(ar->{
 			if(ar.succeeded()){
 				System.out.println("end future1: succeeded");	
 			}else{ //ar.failed()
@@ -73,14 +75,17 @@ public class App25_SequentialFutures {
 			}
 			
 		});
-		
-		startFuture.setHandler(ar->{
+				
+		// setHandler() =>  onComplete(): chuẩn hóa lại tên với prefix = "on" giống android cho callback function
+		startFuture.onComplete(ar->{
 			if(ar.succeeded()){
 				System.out.println("end of all futures: succeeded");	
 			}else{ //ar.failed()
 				System.out.println("end of all futures: failed");	
 			}
 		});
+		
+		
 	}
 
 }

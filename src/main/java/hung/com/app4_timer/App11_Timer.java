@@ -19,7 +19,7 @@ public class App11_Timer {
 		vertx.deployVerticle(new TimerVerticle());  //default = standard verticle
 		vertx.deployVerticle(new TimerVerticle2());	 //default = standard verticle
 		
-		//==============================case2: timer ở ngoài ========================
+		//==============================case2: timer ở ngoài thuộc Vertx context ========================
 		long timerID = vertx.setTimer(400,new  Handler<Long>() {
 			//run on thread of Verticle
 		    @Override

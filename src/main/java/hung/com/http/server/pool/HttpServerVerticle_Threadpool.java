@@ -39,6 +39,11 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 				.setReceiveBufferSize(8000)
 				.setSendBufferSize(8000);
 
+		/**
+		 *  HttpServer luôn run trên 1 thread dù option Deploy thế nào đi nữa
+		 *  ok => vì quá trình read socket buffer ko nên có nhiều thread (sẽ gây áp lực lên server)
+		 *  Thread nên tập trung vào write socket buffer  (khi write free thì từ nhiên read-thread sẽ có CPU để thực hiện)
+		 */
 		httpServer = vertx.createHttpServer(httpServerOptions);
 
 
@@ -50,7 +55,9 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 		 * command = ejm
 		 */
 
-
+		/**
+		 * Lưu ý http1.x thì 1 connect socket sẽ cho nhiều request
+		 */
 		httpServer.connectionHandler(new Handler<HttpConnection>() {		
 			@Override
 			public void handle(HttpConnection connect) {
@@ -61,7 +68,9 @@ public class HttpServerVerticle_Threadpool extends AbstractVerticle{
 				// 1 http request/reponse context nen xu ly tren 1 thread (threadpool worker= false) de dam bao Order
 				//truong hop context lay du lieu tu 2 service khac nhau thi phai dam bao tinh thu tu
 
-
+				/**
+				 * http 1.1 dùng keep alive connect, nên nhiều request chung 1 socket connect (đã test với Chrome và Wireshark)
+				 */
 			}
 		});
 

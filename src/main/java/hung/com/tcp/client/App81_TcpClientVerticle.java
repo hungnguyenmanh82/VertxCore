@@ -3,6 +3,7 @@ package hung.com.tcp.client;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.NetClient;
 import io.vertx.core.net.NetSocket;
@@ -11,11 +12,18 @@ import io.vertx.core.net.NetSocket;
  * read/write socket of server and client are the same
  * Phần này test với phần Server
  */
-public class TcpClientVerticle extends AbstractVerticle {
+public class App81_TcpClientVerticle extends AbstractVerticle {
+
+	public static void main(String[] args) {
+		System.out.println("start main(): thread="+Thread.currentThread().getId());
+		//get a new instance of Vertx => tương ứng 1 thread thì đúng hơn.
+		Vertx vertx = Vertx.vertx();
+		vertx.deployVerticle(new App81_TcpClientVerticle());	
+	}
 
 	public void start() {
 		NetClient tcpClient = vertx.createNetClient();
-		
+
 		// server port = 10000
 		tcpClient.connect(10000, "localhost",
 				new  Handler<AsyncResult<NetSocket>>(){
@@ -45,10 +53,10 @@ public class TcpClientVerticle extends AbstractVerticle {
 						System.out.println(buffer.getString(0, buffer.length()));
 					}
 				});
-				
-                //========================== close socket ======================
-//              netSocket.close();
-              netSocket.closeHandler(new Handler<Void>() {
+
+				//========================== close socket ======================
+				//              netSocket.close();
+				netSocket.closeHandler(new Handler<Void>() {
 					@Override
 					public void handle(Void event) {
 						System.out.println("socket is closed: ");

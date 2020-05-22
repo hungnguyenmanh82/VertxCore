@@ -46,7 +46,12 @@ public class App34_ContextOfVerticle_fromOtherThread {
 			System.out.println(depId);
 		}
 		
-		//nếu verticle.start() chưa đc gọi thì Context = NULL
+		/**
+		 * nếu verticle.start() chưa đc gọi thì Context = NULL
+		 * Hàm này là do ta viết để lấy context thật
+		 * => bản chất là đẩy Handler vào event-queue của context thôi
+		 * Cần lưu ý multi-thread cùng truy xuất vào event-queue này ??? để chắc chắn thread-safe
+		 */
 		Context verticleContext = verticle.getRealContext();
 		
 		//================================== risk ==================================================
