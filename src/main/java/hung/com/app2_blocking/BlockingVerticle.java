@@ -84,14 +84,6 @@ public class BlockingVerticle extends AbstractVerticle {
 		// blocking-code run trên Workerthreadpool của vertx context
 		vertx.executeBlocking(blockingHandler, false, returnHandler);
 
-		//Cách 2: Java lambda syntax  => ko nên dùng vì cú pháp này ko tường minh
-		/*		vertx.executeBlocking(future -> {
-			  // Call some blocking API that takes a significant amount of time to return
-			  String result = "hello";
-			  future.complete(result);
-			}, res -> {
-			  System.out.println("The result is: " + res.result());
-			});*/
 	}
 
 	@Override
