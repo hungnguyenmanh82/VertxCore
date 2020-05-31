@@ -41,7 +41,7 @@ public class App22_PromiseFile2 {
 		 */
 		// nếu "foo.txt" exit thì fut1 trả về fail
 		//tạo promise đồng thời sẽ tạo 1 Future luôn và ngược lại
-		Future<Void> future = Future.future(promise -> fs.createFile("foo.txt", promise));
+		Future<Void> future = Future.<Void>future(promise -> fs.createFile("foo.txt", promise));
 
 		// setHandler() =>  onComplete(): chuẩn hóa lại tên với prefix = "on" giống android cho callback function
 		future.onComplete(new Handler<AsyncResult<Void>>() {

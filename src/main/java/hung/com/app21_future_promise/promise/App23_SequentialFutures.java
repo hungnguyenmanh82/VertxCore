@@ -19,7 +19,7 @@ Future<Type>:  extends Handler<type> và AsyncResult<type> => là kết hợp 2 
 Future là function point => thread nào gọi nó thì nó chạy trên thread đó (đã test).
 
  */
-public class App25_SequentialFutures {
+public class App23_SequentialFutures {
 
 	public static void main(String[] args) throws InterruptedException{
 
@@ -36,7 +36,7 @@ public class App25_SequentialFutures {
 		 File("/abc"): root folder on linux (not window)
 		 */
 		//khi create 1 future đồng thời sẽ tạo 1 promise tương ứng, và ngược lại
-		Future<Void> future1 = Future.future(promise -> fs.createFile("./foo1.txt", promise));
+		Future<Void> future1 = Future.<Void>future(promise -> fs.createFile("./foo1.txt", promise));
 
 		/**
 		 * compose(): cũng lấy tên từ reactive programing của javascript => Builder Pattern
@@ -54,16 +54,16 @@ public class App25_SequentialFutures {
 		 */
 		// compose() tạo new future
 		Future<Void> startFuture = future1
-				.compose(v -> {  //function này chỉ dc gọi khi Promise.completed(). sẽ ko gọi nó nếu Promise.fail() 
+				.<Void>compose(v -> {  //function này chỉ dc gọi khi Promise.completed(). sẽ ko gọi nó nếu Promise.fail() 
 					System.out.println("compose 1st: future1 finish");
 					
 					// When the file is created (fut1), execute this:
 					return Future.<Void>future(promise -> fs.writeFile("./foo1.txt", Buffer.buffer("ko co viec gi kho"), promise));
 				})
-				.compose(v -> { 
+				.<Void>compose(v -> { 
 					System.out.println("compose 2rd: future 2 finish");
 					// When the file is written (fut2), execute this:
-					return Future.future(promise -> fs.move("./foo1.txt", "./bar.txt", promise));
+					return Future.<Void>future(promise -> fs.move("./foo1.txt", "./bar.txt", promise));
 				});
 
 		// compose() = setHandler() = onComplete() = addHandler() xem code FutureImpl class

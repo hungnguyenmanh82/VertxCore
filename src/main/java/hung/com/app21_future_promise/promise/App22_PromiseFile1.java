@@ -59,7 +59,7 @@ public class App22_PromiseFile1 {
 		 File("/abc"): root folder on linux (not window)
 		 */
 		// promise.complete()/fail() sẽ đc gọi khi create file
-		fs.createFile("foo.txt", promise);  // promise = future = handler luôn => rất cơ động
+		fs.createFile("foo.txt", promise);  // promise và future extends  handler<asyncResult<T>> luôn => rất cơ động
 
 		System.out.println("main(): end of main()");
 		// app ko stop với Main() stop vì có 1 worker thread quản lý Vertx có loop bắt Event

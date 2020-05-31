@@ -31,7 +31,7 @@ public class App21_WaitFutureComplete {
 		FileSystem fs = vertx.fileSystem();
 		// "foo.txt" đc tạo ra ở project folder khi Debug Run
 		// nếu "foo.txt" exit thì fut1 trả về fail
-		fs.createFile("foo.txt", future); //fut1.completer()
+		fs.createFile("foo.txt", future); // Future extends Handler<AsyncResult<T>>
 
 
 		// Future<Void> và AsyncResult<Void> cùng kiểu <Void>
