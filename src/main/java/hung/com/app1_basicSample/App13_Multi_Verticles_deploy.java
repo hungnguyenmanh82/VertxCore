@@ -17,7 +17,7 @@ public class App13_Multi_Verticles_deploy {
 		Vertx vertx = Vertx.vertx();
 		
 		//Deploy Option chi hieu quả với Multi Instance
-		DeploymentOptions options = new DeploymentOptions()
+		DeploymentOptions deploymentOptions = new DeploymentOptions()
 				.setInstances(6)          //create 6 instances of Verticles
 				.setWorkerPoolName("WorkerPoolName")
 				.setWorkerPoolSize(3)
@@ -27,7 +27,7 @@ public class App13_Multi_Verticles_deploy {
 		
 		//register Verticale with Vertx instance to capture event.
 		// 
-		vertx.deployVerticle("hung.com.basicSample.MyVerticle",options);//asynchronous call MyVerticle.start() in worker thread
+		vertx.deployVerticle("hung.com.basicSample.MyVerticle",deploymentOptions);//asynchronous call MyVerticle.start() in worker thread
 
 		Thread.currentThread().sleep(3000);
 

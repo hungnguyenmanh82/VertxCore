@@ -6,6 +6,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 import io.vertx.core.WorkerExecutor;
 
 /**
@@ -17,13 +18,25 @@ import io.vertx.core.WorkerExecutor;
    có thể tạo threadpool riêng để thực hiện Blocking code. Thay vì dùng chung threadpool với Vertx   
 
  */
-public class BlockingVerticle_WorkerExecutor extends AbstractVerticle {
+public class App23_BlockingVerticle_WorkerExecutor extends AbstractVerticle {
 
+	public static void main(String[] args) throws InterruptedException{
+		System.out.println("start main(): thread="+Thread.currentThread().getId());
+		//create a new instance Vertx => a worker thread
+		VertxOptions vertxOptions = new VertxOptions().setWorkerPoolSize(4)  // threadPool của blocking code 
+														.setEventLoopPoolSize(4);  //threadpool của EventLoop cho standard Verticle
+		Vertx vertx = Vertx.vertx(vertxOptions);
+
+		//register Verticale with Vertex instance to capture event.
+		vertx.deployVerticle(new App23_BlockingVerticle_WorkerExecutor()); //asynchronous call MyVerticle1.start() in worker thread
+
+		// app ko stop với Main() stop vì có 1 worker thread quản lý Vertx có loop bắt Event
+		//vertx.close();
+	}
+	
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {	
-//		this.context;  //quản lý tất cả tài nguyên của Verticle
-//		this.context.isWorkerContext()
-//		this.context.isMultiThreadedWorkerContext()
+		super.start(startFuture);
 		System.out.println(this.getClass().getName()+ ".start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
 		

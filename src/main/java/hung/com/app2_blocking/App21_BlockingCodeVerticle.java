@@ -6,21 +6,24 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxOptions;
 
 /**
  * 
+http://vertx.io/docs/vertx-core/java/#blocking_code
+
 Vertical:  được hiểu như là 1 đối tượng (đơn vị quản lý tài nguyên) 
    by default: vertical sẽ đc asign thread để đảm bảo tài nguyên ko bị tranh chấp giữa 2 thread.
     1 Thời điểm chỉ 1 thread đc assyn truy cập tài nguyên vertical
    //=======
-   Các Vertical tương tác với nhau qua cơ chế message (có thể tương tác với ngoài), 
+   Các Vertical tương tác với nhau qua cơ chế Event queue (có thể tương tác với ngoài), 
    chứa các function callback để nhận event đăng ký với Vertx. 
    Và gửi event (or message) tới Vertx.  
    //=======
    VertX sẽ quản lý cấp phát thread cho Vertical từ thread pool.  
    1 thread có thể dùng lại cho nhiều vertical
    //=============
-   blocking execute code: Là 1 đoạn code đc Verticle trigger để chạy Asynchronous với Verticle (chạy song song).
+   blocking execute code: Là 1 đoạn code đc Verticle trigger để chạy Asynchronous với Verticle (chạy song song) trên workerThreadPool (ko chạy trên EventLoop ThreadPool)
     Sau khi chạy xong đoạn code này nó sinh event gửi tới Verticle qua Vertx. 
 
    //=============
@@ -37,13 +40,26 @@ Vertical:  được hiểu như là 1 đối tượng (đơn vị quản lý tà
 
 
  */
-public class BlockingVerticle extends AbstractVerticle {
+public class App21_BlockingCodeVerticle extends AbstractVerticle {
 
+	public static void main(String[] args) throws InterruptedException{
+		System.out.println("start main(): thread="+Thread.currentThread().getId());
+		
+		//create a new instance Vertx => a worker thread
+		VertxOptions vertxOptions = new VertxOptions().setWorkerPoolSize(4)  // threadPool của blocking code 
+														.setEventLoopPoolSize(4);  //threadpool của EventLoop cho standard Verticle
+		Vertx vertx = Vertx.vertx(vertxOptions);
+
+		//register Verticale with Vertex instance to capture event.
+		vertx.deployVerticle(new App21_BlockingCodeVerticle()); //asynchronous call MyVerticle1.start() in worker thread
+
+		// app ko stop với Main() stop vì có 1 worker thread quản lý Vertx có loop bắt Event
+		//vertx.close();
+	}
+	
 	@Override
 	public void start(Future<Void> startFuture) throws Exception {	
-		//		this.context;  //quản lý tất cả tài nguyên của Verticle
-		//		this.context.isWorkerContext()
-		//		this.context.isMultiThreadedWorkerContext()
+		super.start(startFuture);
 		System.out.println(this.getClass().getName()+ ".start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 
 
