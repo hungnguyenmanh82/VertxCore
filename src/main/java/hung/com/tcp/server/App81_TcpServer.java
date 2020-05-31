@@ -18,7 +18,7 @@ public class App81_TcpServer {
 		Vertx vertx = Vertx.vertx(vertxOptions);
 		
 	
-		// event là event Open Socket nên độc lập nhau
+		//TCP server run tren 1 fix thread của EventLoop pool
 		vertx.deployVerticle(new TcpServerVerticle());	
 		
 		

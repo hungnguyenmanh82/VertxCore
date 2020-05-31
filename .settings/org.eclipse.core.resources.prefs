@@ -4,8 +4,8 @@ encoding//src/main/java/hung/com/app1_basicSample/App11_DeploySingleVerticle.jav
 encoding//src/main/java/hung/com/app1_basicSample/App12_DeployVerticle_startFuture.java=UTF-8
 encoding//src/main/java/hung/com/app1_basicSample/App13_Multi_Verticles_deploy.java=UTF-8
 encoding//src/main/java/hung/com/app1_basicSample/App14_Multi_Vertx_instance.java=UTF-8
-encoding//src/main/java/hung/com/app1_basicSample/App152_VertxEventLoopPoolSize.java=UTF-8
-encoding//src/main/java/hung/com/app1_basicSample/App15_VertxThreadPool.java=UTF-8
+encoding//src/main/java/hung/com/app1_basicSample/App152_VertxWorkerThreadPool.java=UTF-8
+encoding//src/main/java/hung/com/app1_basicSample/App15_VertxEventLoopThreadPoolSize.java=UTF-8
 encoding//src/main/java/hung/com/app1_basicSample/App16_UndeployVerticle_stopFuture.java=UTF-8
 encoding//src/main/java/hung/com/app1_basicSample/App17_deployStartBlockingVerticle.java=UTF-8
 encoding//src/main/java/hung/com/app1_basicSample/MyVerticle.java=UTF-8

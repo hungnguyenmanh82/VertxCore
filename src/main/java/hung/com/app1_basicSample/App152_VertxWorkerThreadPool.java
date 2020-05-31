@@ -8,17 +8,19 @@ import io.vertx.core.VertxOptions;
  * vd: Asign Threadpool cho verticle
  *
  */
-public class App15_VertxThreadPool {
+public class App152_VertxWorkerThreadPool {
 
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("main(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
-		//lưu ý threadpool của vertx có thể dùng chung khi deploy nhiều Verticle
-		// hoặc dùng rieng cho từng Verticle đc (add vào lúc deploy Verticle).
-		// add threadpool lúc Deploy Verticle sẽ có nhiều tùy nhọn hơn
-		// 1 vertx quản lý nhiều Verticle
-		// Nếu ko tạo threadpool thì mỗi lần DeployVerticle, hoặc execute Block code nó lại khởi tạo 1 thread mới.
-		VertxOptions option = new VertxOptions().setWorkerPoolSize(4);
+		/**
+		 * Vertx có 2 threadpool: 
+		 *  + EventLoopPool Thread là cho standard Verticle
+		 *  + workerPool Thread là cho blocking code
+		 */
+		VertxOptions option = new VertxOptions()
+								.setEventLoopPoolSize(4)        //dùng cho Standard Verticle							
+								.setWorkerPoolSize(4);         //dùng cho blocking code (ko phải Verticle)
 		Vertx vertx = Vertx.vertx(option);
 		
 		//register Verticale with Vertex instance to capture event.

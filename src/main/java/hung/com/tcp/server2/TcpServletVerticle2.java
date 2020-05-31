@@ -36,11 +36,14 @@ public class TcpServletVerticle2 extends AbstractVerticle {
         	
 			@Override
 			public void handle(Buffer buffer) {
-				// đoạn này phải chạy trên Server Thread (tested). ko run tren Verticle thread
+				// run Server Thread (tested). ko run tren Verticle thread
 				System.out.println("mNetSocket.handler(): thread="+Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName());
 
                 
                 //========================= context of Verticle ============================
+				/**
+				 * Java compile sẽ add TcpServletVerticle2.this vào biến của new anonymous Handler class
+				 */
                 TcpServletVerticle2.this.context.runOnContext( v->{
                 	System.out.println("=> read: thread="+Thread.currentThread().getId()+ ", ThreadName="+Thread.currentThread().getName());
                     System.out.println("bufferSize = "+buffer.length());

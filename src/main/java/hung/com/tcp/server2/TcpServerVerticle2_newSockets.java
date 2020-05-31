@@ -13,10 +13,13 @@ public class TcpServerVerticle2_newSockets extends AbstractVerticle {
 	@Override
 	public void start() throws Exception {
 		super.start();  //phải gọi hàm này thì vertx.deploymentIDs() mới cập nhật giá trị.
-
+		System.out.println(this.getClass().getName()+ ".start()"+ ": thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
+		
 		NetServerOptions netServerOptions = new NetServerOptions().setPort(10000)
-				.setHost("localhost");
-		//																.setIdleTimeout(3000);
+																.setHost("localhost");
+		//																
+		
+		//TCP server run on Thread của Verticle
 		NetServer server = vertx.createNetServer(netServerOptions);
 
 		server.connectHandler(new Handler<NetSocket>() {
@@ -32,7 +35,7 @@ public class TcpServerVerticle2_newSockets extends AbstractVerticle {
 											//false: Standard-verticle dùng vert.x-eventloop-thread (fix thread to verticle)
 											//blockingCode luôn dùng WorkerPoolName
 
-				// Standard-verticle sẽ lấy Thread của Verticle (ko lấy của EventLoop thread)
+				// TcpServletVerticle2 sẽ đc cấp phát 1 Thread trong EventLoop Pool (ko liên quan tới TcpServerVerticle2_newSockets)
 				vertx.deployVerticle(new TcpServletVerticle2(netSocket),options); //change netSocket to other Context and Stardard Verticle Threadpool
 
 				//==========================close socket ======================

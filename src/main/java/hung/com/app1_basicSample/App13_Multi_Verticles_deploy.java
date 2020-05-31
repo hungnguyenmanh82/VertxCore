@@ -22,7 +22,7 @@ public class App13_Multi_Verticles_deploy {
 				.setWorkerPoolName("WorkerPoolName")
 				.setWorkerPoolSize(3)
 				.setWorker(true); 	//true: worker-vertical dùng WorkerPoolName1  (các event vẫn tuần tự, nhưng trên thread khác nhau)
-									//false: Standard-verticle dùng vert.x-eventloop-thread (fix thread to verticle)
+									//false (default): Standard-verticle dùng vert.x-eventloop-thread (fix thread to verticle)
 									//blockingCode luôn dùng WorkerPoolName
 		
 		//register Verticale with Vertx instance to capture event.

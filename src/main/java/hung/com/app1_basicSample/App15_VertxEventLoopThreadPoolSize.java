@@ -8,12 +8,12 @@ import io.vertx.core.VertxOptions;
  * vd: Asign Threadpool cho verticle
  *
  */
-public class App152_VertxEventLoopPoolSize {
+public class App15_VertxEventLoopThreadPoolSize {
 
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("main(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 		
-		//eventloop chỉ dùng cho Standard Verticle thôi
+		//eventloopPool Thread chỉ dùng cho Standard Verticle thôi
 		final VertxOptions vertxOptions = new VertxOptions().setEventLoopPoolSize(4);
 		
 		Vertx vertx = Vertx.vertx(vertxOptions);
