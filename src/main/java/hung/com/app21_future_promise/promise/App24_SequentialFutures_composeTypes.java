@@ -26,16 +26,18 @@ public class App24_SequentialFutures_composeTypes {
 	public static void main(String[] args) throws InterruptedException{
 
 		Future.<String>future(promise-> asyncFuntion1("success",promise))
-		      .<Integer>compose(str ->{  // str là return của  asyncFuntion1()
+		      .<Integer>compose(str ->{  // str là return của  asyncFuntion1() => lưu ý: Kiểu String của Future
 		    	  int count;
 		    	  if(str.equals("success")) {
 		    		  count = 1;
 		    	  }else {
 		    		  count = 0;
 		    	  }
+		    	  
+		    	  // Kiểu của compose và return future giống nhau = <integer>
 		    	  return Future.<Integer>future(promise-> asyncFuntion2(count, promise)); 
 		      })
-		      .<JsonObject>compose(count ->{   // count là return của  asyncFuntion2()
+		      .<JsonObject>compose(count ->{   // count là return của  asyncFuntion2() => lưu ý: kiểu <Integer> của Compose
 		    	  boolean result;
 		    	  if(count == 1) {
 		    		  result = true;
@@ -43,10 +45,11 @@ public class App24_SequentialFutures_composeTypes {
 		    		  result = false;
 		    	  }
 		    	  
+		    	// Kiểu của compose và return future giống nhau = <JsonObject>
 		    	  return Future.<JsonObject>future(promise-> asyncFuntion3(result, promise));
 		    	  
 		      })
-		      .onSuccess(json ->{  // json là return của  asyncFuntion3()
+		      .onSuccess(json ->{  // json là return của  asyncFuntion3() => lưu ý kiểu <JsonObject> của compose
 		    	  System.out.println(json.toString());
 		       })
 		      .onFailure(throwable -> System.out.println(throwable.getMessage() ) );
