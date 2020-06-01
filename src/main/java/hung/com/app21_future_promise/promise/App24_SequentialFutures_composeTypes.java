@@ -52,7 +52,7 @@ public class App24_SequentialFutures_composeTypes {
 		      .onSuccess(json ->{  // json là return của  asyncFuntion3() => lưu ý kiểu <JsonObject> của compose
 		    	  System.out.println(json.toString());
 		       })
-		      .onFailure(throwable -> System.out.println(throwable.getMessage() ) );
+		      .onFailure(throwable -> System.out.println("Error: " + throwable.getMessage() ) );
 		
 	}
 	
@@ -61,7 +61,7 @@ public class App24_SequentialFutures_composeTypes {
 			//do something asynchronous: Vertx Webclient, SQL async, Redis Async, readFile async
 			promise.complete(str);
 		}else {
-			promise.fail("failed1");
+			promise.fail("asyncFuntion1() failed");
 		}
 	}
 	
@@ -70,7 +70,7 @@ public class App24_SequentialFutures_composeTypes {
 			//do something asynchronous: Vertx Webclient, SQL async, Redis Async, readFile async
 			promise.complete(1);
 		}else {
-			promise.fail("failed2");
+			promise.fail("asyncFuntion2() failed");
 		}
 	}
 	
@@ -79,7 +79,7 @@ public class App24_SequentialFutures_composeTypes {
 			//do something asynchronous: Vertx Webclient, SQL async, Redis Async, readFile async
 			promise.complete(new JsonObject().put("key", "value"));
 		}else {
-			promise.fail("failed3");
+			promise.fail("asyncFuntion3() failed");
 		}
 	}
 
