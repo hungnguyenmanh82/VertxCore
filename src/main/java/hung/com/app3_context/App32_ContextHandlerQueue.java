@@ -47,6 +47,7 @@ public class App32_ContextHandlerQueue {
 		Thread.currentThread().sleep(200); //chờ Verticle khởi tạo thành công
 		
 		//================================= case 1: context từ Vertx
+		// Ctrl+T:  lệnh này gọi vertx.getOrCreateContext() sẽ trả về context gắn với Thread hiện tại
 		//Handler đc add trên Thread của Context nào thì sẽ chạy trên Threadpool của context ấy
 		// trường hợp Thread ko thuộc Verticle nào thì sẽ do Vertx chỉ định từ Threadpool của nó
 		// code này ko run trên thread của verticle, mà của Vertx
@@ -60,7 +61,11 @@ public class App32_ContextHandlerQueue {
 			}
 		});
 		
-		// lặp lại case 1
+		/**
+		 *  lặp lại case 1
+		 * code này chạy giống hệt code trên
+		 * code này ko run trên thread của verticle, mà của Vertx
+		 */
 		vertx.runOnContext(new Handler<Void>() {
 			 
 			@Override
@@ -72,14 +77,25 @@ public class App32_ContextHandlerQueue {
 		});
 		
 		//================================= case2: context từ Vertx
-		//Handler đc add trên Thread của Context nào thì sẽ chạy trên Threadpool của context ấy
-		// trường hợp Thread ko thuộc Verticle nào thì sẽ do Vertx chỉ định từ Threadpool của nó
-		// code này ko run trên thread của verticle, mà của Vertx quản lý verticle này
-		verticle.getVertx().getOrCreateContext().runOnContext(new Handler<Void>() {
+		//code này chạy giống hệt code trên
+		//code này ko run trên thread của verticle, mà của Vertx
+		verticle.getVertx().runOnContext(new Handler<Void>() {
 			
 			@Override
 			public void handle(Void event) {
 				System.out.println("case21: run Handler on Context of Vertx: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
+				
+			}
+		});
+		
+		//================================= case3: context từ Vertx
+		//code này chạy giống hệt code trên
+		//code này ko run trên thread của verticle, mà của Vertx
+		verticle.getVertx().getOrCreateContext().runOnContext(new Handler<Void>() {
+			
+			@Override
+			public void handle(Void event) {
+				System.out.println("case31: run Handler on Context of Vertx: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 				
 			}
 		});
@@ -89,7 +105,7 @@ public class App32_ContextHandlerQueue {
 			
 			@Override
 			public void handle(Void event) {
-				System.out.println("case22: run Handler on Context of Vertx: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
+				System.out.println("case32: run Handler on Context of Vertx: thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 			}
 		});
 		
