@@ -21,7 +21,7 @@ public class App11_DeploySingleVerticle {
 		//tạo 1 Verticle context và chạy trên Thread đc chỉ định bởi Vertx
 		vertx.deployVerticle(new MyVerticle()); //asynchronous call MyVerticle1.start() in worker thread
 		
-		// waiting for Verticle context is allocate by Vertx
+		// waiting for Verticle context is allocated by Vertx 
 		Thread.currentThread().sleep(500);
 		
 		Set<String> deploymentIDs = vertx.deploymentIDs();

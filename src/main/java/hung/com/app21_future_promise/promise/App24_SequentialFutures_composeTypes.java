@@ -52,10 +52,16 @@ public class App24_SequentialFutures_composeTypes {
 		      .onSuccess(json ->{  // json là return của  asyncFuntion3() => lưu ý kiểu <JsonObject> của compose
 		    	  System.out.println(json.toString());
 		       })
-		      .onFailure(throwable -> System.out.println("Error: " + throwable.getMessage() ) );
+		      .onFailure(throwable-> {
+					System.out.println("Error:"+ throwable.getMessage());
+					throwable.printStackTrace();
+				}); 
 		
 	}
 	
+	/**
+	 * Thiết kế asyncFuntion mới dùng Promise<T>. Thiết kế cũ dùng Handler<AsyncResult<T>>
+	 */
 	 private static void asyncFuntion1(String str, Promise<String> promise) {
 		if(str.equals("success")) {
 			//do something asynchronous: Vertx Webclient, SQL async, Redis Async, readFile async

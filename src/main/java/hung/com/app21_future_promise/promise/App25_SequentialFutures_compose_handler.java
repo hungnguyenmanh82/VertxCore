@@ -52,17 +52,23 @@ public class App25_SequentialFutures_compose_handler {
 		      .onSuccess(json ->{  // json là return của  asyncFuntion3() => lưu ý kiểu <JsonObject> của compose
 		    	  System.out.println(json.toString());
 		       })
-		      .onFailure(throwable -> System.out.println("Error: " + throwable.getMessage() ) );
+		      .onFailure(throwable-> {
+					System.out.println("Error:"+ throwable.getMessage());
+					throwable.printStackTrace();
+				}); 
 		
 	}
 	
-	 private static void asyncFuntion1(String str, Handler<AsyncResult<String>> handler) {
+	/**
+	 * Thiết kế asyncFuntion mới dùng Promise<T>. Thiết kế cũ dùng Handler<AsyncResult<T>>
+	 */
+	private static void asyncFuntion1(String str, Handler<AsyncResult<String>> handler) {
 		if(str.equals("success")) {
 			//do something asynchronous: Vertx Webclient, SQL async, Redis Async, readFile async
 			/**
 			 * Future extends AsyncResult<T>
 			 */
-			handler.handle(Future.succeededFuture(str));
+			handler.handle(Future.<String>succeededFuture(str));
 		}else {
 			handler.handle(Future.failedFuture("asyncFuntion1() failed"));
 		}
@@ -74,9 +80,9 @@ public class App25_SequentialFutures_compose_handler {
 			/**
 			 * Future extends AsyncResult<T>
 			 */
-			handler.handle(Future.succeededFuture(count));
+			handler.handle(Future.<Integer>succeededFuture(count));
 		}else {
-			handler.handle(Future.failedFuture("asyncFuntion2() failed"));
+			handler.handle(Future.failedFuture("asyncFuntion2() failed")); //AsyncResult<T>
 		}
 	}
 	
@@ -86,7 +92,7 @@ public class App25_SequentialFutures_compose_handler {
 			/**
 			 * Future extends AsyncResult<T>
 			 */
-			handler.handle(Future.succeededFuture(new JsonObject().put("key", "value")));
+			handler.handle(Future.<JsonObject>succeededFuture(new JsonObject().put("key", "value")));
 		}else {
 			handler.handle(Future.failedFuture("asyncFuntion3() failed"));
 		}

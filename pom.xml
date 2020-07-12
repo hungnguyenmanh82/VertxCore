@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hung.com</groupId>
@@ -13,12 +14,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
-	
-	<!-- các dependencies version ở đây sẽ đc ưu tiên dùng-->
+
+	<!-- các dependencies version ở đây sẽ đc ưu tiên dùng -->
 	<dependencyManagement>
 		<dependencies>
 			<!-- all vertx dependencies will use ${vertx.version} -->
-			<!-- nếu vertx depedencies khai báo version cũng ko sao  -->
+			<!-- nếu vertx depedencies khai báo version cũng ko sao -->
 			<dependency>
 				<groupId>io.vertx</groupId>
 				<artifactId>vertx-dependencies</artifactId>
@@ -28,7 +29,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
+
 	<dependencies>
 		<!-- vertx > 3.7.0 need Netty Lib -->
 		<!-- vertx 3.4.2 ko can Netty -->
@@ -79,6 +80,25 @@
 			<version>3.9.1</version>
 		</dependency>
 
+		<!-- Log4j2 working with Vertx -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.11.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.11.1</version>
+		</dependency>
+
+		<!-- Asynchronous Logging with Log4j2 -->
+		<dependency>
+			<groupId>com.lmax</groupId>
+			<artifactId>disruptor</artifactId>
+			<version>3.4.2</version>
+		</dependency>
+
 
 	</dependencies>
 
@@ -90,9 +110,9 @@
 				<version>3.7.0</version>
 				<configuration>
 					<source>${project.java.version}</source>
-                    <target>${project.java.version}</target>
-                    <!-- Eclipse use it-->
-                    <encoding>${project.build.sourceEncoding}</encoding>
+					<target>${project.java.version}</target>
+					<!-- Eclipse use it -->
+					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
 
@@ -100,7 +120,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.1</version>
+				<version>3.2.4</version>
 				<executions>
 					<execution>
 						<!-- id phải duy nhất ko trùng lặp -->
