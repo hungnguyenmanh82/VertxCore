@@ -24,7 +24,12 @@ Future là function point => thread nào gọi nó thì nó chạy trên thread 
 public class App24_SequentialFutures_composeTypes {
 
 	public static void main(String[] args) throws InterruptedException{
-
+		
+		/**
+		 * cách này phải khởi tạo khá nhiều Future => JVM có cơ chế tạo Pool để cấp phát và thu hồi Object => performance và RAM ko bị ảnh hưởng.
+		 * Hi sinh một chút performance và RAM để source code sáng sủa => ok
+		 * Cách này làm giảm số số code tree lồng nhau
+		 */
 		Future.<String>future(promise-> asyncFuntion1("success",promise))
 		      .<Integer>compose(str ->{  // str là return của  asyncFuntion1() => lưu ý: Kiểu String của Future
 		    	  int count;

@@ -1,5 +1,6 @@
 package hung.com.json;
 
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,11 +23,16 @@ import io.vertx.core.http.HttpClientResponse;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
-/*
+/**
  vertx JsonObject lib rất cơ động, hay hơn Gson và Jackson nhiều
- Có thể dùng JsonObject để convert JDBC Resultset về java Object dễ dàng
-
+ Có thể dùng JsonObject để convert JDBC Resultset về java Object dễ dàng => varChar(UTF8) sẽ chuyển thành String
  https://vertx.io/docs/vertx-core/java/#_json
+ 
+ JsonObject chứa dữ liệu String (ko phải UTF8) vì trên java các phép toán UTF8 rất chậm.
+ JsonObject save byte dạng Base64 => tránh các ký tự đặc biệt của Json.
+ 
+ JsonObject.toString().getbytes(UTF-8) để trả về cho back-end.
+
  */
 public class App81_Json {
 
@@ -43,9 +49,29 @@ public class App81_Json {
 		
 //		JsonFileToJava();
 		
-		JsonArray();
-		JsonArray2List();
+//		JsonArray();
+//		JsonArray2List();
+		
+		JsonObject_BytesArray();
 
+	}
+	
+	public static void JsonObject_BytesArray() {
+		 
+		byte[] bytes = new byte[] {(byte) 0xAB,(byte) 0xCD,(byte) 0xEF, 0x00};
+		
+		//================================ bytes Array to JsonObject ========================
+		// sử dụng Base64 để convert bytes array về String và lưu trong Json
+		JsonObject object = new JsonObject().put("byte", bytes);
+		System.out.println(object.toString());
+		
+		System.out.println("base64 = " + Base64.getEncoder().encodeToString(bytes));
+		
+		//=============================== JsonObject to bytes Array ================
+		byte[] bytes2 = object.getBinary("byte");
+		
+		
+		System.out.println("bytes2 base64 = " + Base64.getEncoder().encodeToString(bytes2));
 	}
 	
 	public static void JsonArray(){
@@ -165,7 +191,10 @@ public class App81_Json {
 		//=================================== convert JsonObject => Java Object ================
 		JsonObject jsonUser = new JsonObject().put("name", "Happy")
 											.put("yearOld", 18);
-
+		
+		/**
+		 *  lấy tên field ở JavaObject (giống Gson và Jackson) => dùng JPA để gen từ Table ra ok
+		 */
 		User user = jsonUser.mapTo(User.class);
 		System.out.println("************* {" + user.getName() + "," + user.getYearOld() + "}" );
 	}
