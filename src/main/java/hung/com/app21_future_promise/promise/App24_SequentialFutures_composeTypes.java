@@ -35,8 +35,11 @@ public class App24_SequentialFutures_composeTypes {
 		    	  int count;
 		    	  if(str.equals("success")) {
 		    		  count = 1;
+		    		  
 		    	  }else {
 		    		  count = 0;
+		    		  //
+		    		  return Future.failedFuture("fail here");
 		    	  }
 		    	  
 		    	  // Kiểu của compose và return future giống nhau = <integer>
@@ -48,6 +51,8 @@ public class App24_SequentialFutures_composeTypes {
 		    		  result = true;
 		    	  }else {
 		    		  result = false;
+		    		  
+		    		  return Future.failedFuture("fail here");
 		    	  }
 		    	  
 		    	// Kiểu của compose và return future giống nhau = <JsonObject>
