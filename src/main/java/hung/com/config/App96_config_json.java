@@ -28,7 +28,7 @@ public class App96_config_json {
 		Vertx vertx = Vertx.vertx();
 
 		ConfigStoreOptions configStoreOptions = new ConfigStoreOptions()
-											  .setType("json")          // lay option tu Json file
+											  .setType("json")          // lay option tu Json Object
 											  .setConfig(new JsonObject().put("api.gateway.http.port", 8081)         //lấy từ JsonObject
 													  					 .put("api.gateway.http.address","127.0.0.1"));
 		

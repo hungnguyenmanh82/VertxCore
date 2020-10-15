@@ -44,8 +44,8 @@ public class App942_config_file_properties {
 		 * config file thường đặt ở ngoài *.jar file
 		 */
 		ConfigStoreOptions configStoreOptions = new ConfigStoreOptions()
-									.setType("file")          // lay option tu Json file
-									.setFormat("properties")  //format của file default = json
+									.setType("file")          // lay config tu file
+									.setFormat("properties")  //format của file là propertice (ko phải Json)
 									.setConfig(new JsonObject()
 													.put("path", "./src/config/config.properties")
 													.put("hierarchical", false)    //true or false

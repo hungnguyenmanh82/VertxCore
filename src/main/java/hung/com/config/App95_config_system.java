@@ -28,7 +28,7 @@ public class App95_config_system {
 		Vertx vertx = Vertx.vertx();
 		
 		ConfigStoreOptions  optionStore = new ConfigStoreOptions()
-													  .setType("event-bus")  //lấy từ system
+													  .setType("event-bus")  //lấy config từ event-bus => nếu ko chỉ định format thì lấy default = json
 													  .setConfig(new JsonObject().put("cache", true)); // ko lấy system properties từ cache (ko lấy từ file)
 		
 		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(optionStore);

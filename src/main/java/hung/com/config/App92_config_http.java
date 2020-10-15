@@ -40,6 +40,7 @@ public class App92_config_http {
 			public void handle(AsyncResult<JsonObject> ar) {
 				if (ar.failed()) {
 					// Failed to retrieve the configuration
+					System.out.println("fail: "+ar.cause());
 				} else {
 					//===========================================================================
 					// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject

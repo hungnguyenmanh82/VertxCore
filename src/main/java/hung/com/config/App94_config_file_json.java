@@ -47,8 +47,8 @@ public class App94_config_file_json {
 		 File("/abc/test.json"):   path theo root folder
 		 */
 		ConfigStoreOptions fileOptions = new ConfigStoreOptions()
-											  .setType("file")          // lay option tu Json file
-//											  .setFormat("properties")  //format của file default = json
+											  .setType("file")          // lay config từ file
+//											  .setFormat("properties")  //nếu ko xác định format của config file là gì thì lấy default = json
 											  .setConfig(new JsonObject().put("path", "./src/config/local.json")); //run or debug mode lấy Root = project folder
 		
 		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(fileOptions);
