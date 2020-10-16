@@ -21,7 +21,7 @@ Future<Type>:  extends Handler<type> và AsyncResult<type> => là kết hợp 2 
 Future là function point => thread nào gọi nó thì nó chạy trên thread đó (đã test).
 
  */
-public class App24_SequentialFutures_composeTypes {
+public class App24_SequentialFutures_composeTypes_cach1 {
 
 	public static void main(String[] args) throws InterruptedException{
 		
