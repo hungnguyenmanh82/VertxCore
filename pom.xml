@@ -83,7 +83,7 @@
 	</dependencies>
 
 	<build>
-		<!-- tạo file *.jar ko include lib vào -->
+		<!-- tạo file output *.jar ko include lib vào -->
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -96,7 +96,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- include all lib(*.jar) to output jar file -->
+			<!-- include all dependencies lib(*.jar) to output jar file -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
