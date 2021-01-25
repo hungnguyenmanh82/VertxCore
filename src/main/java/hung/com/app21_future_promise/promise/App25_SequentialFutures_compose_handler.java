@@ -61,6 +61,7 @@ public class App25_SequentialFutures_compose_handler {
 	
 	/**
 	 * Thiết kế asyncFuntion mới dùng Promise<T>. Thiết kế cũ dùng Handler<AsyncResult<T>>
+	 * Promise<T> extend Handler<AsyncResult<T>>
 	 */
 	private static void asyncFuntion1(String str, Handler<AsyncResult<String>> handler) {
 		if(str.equals("success")) {
@@ -74,6 +75,10 @@ public class App25_SequentialFutures_compose_handler {
 		}
 	}
 	
+	/**
+	 * Thiết kế asyncFuntion mới dùng Promise<T>. Thiết kế cũ dùng Handler<AsyncResult<T>>
+	 * Promise<T> extend Handler<AsyncResult<T>>
+	 */
 	private static void asyncFuntion2(int count, Handler<AsyncResult<Integer>> handler) {
 		if(count == 1) {
 			//do something asynchronous: Vertx Webclient, SQL async, Redis Async, readFile async
@@ -86,6 +91,10 @@ public class App25_SequentialFutures_compose_handler {
 		}
 	}
 	
+	/**
+	 * Thiết kế asyncFuntion mới dùng Promise<T>. Thiết kế cũ dùng Handler<AsyncResult<T>>
+	 * Promise<T> extend Handler<AsyncResult<T>>
+	 */
 	private static void asyncFuntion3(boolean result, Handler<AsyncResult<JsonObject>> handler) {
 		if(result == true) {
 			//do something asynchronous: Vertx Webclient, SQL async, Redis Async, readFile async

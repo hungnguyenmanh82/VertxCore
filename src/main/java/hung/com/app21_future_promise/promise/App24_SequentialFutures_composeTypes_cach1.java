@@ -42,7 +42,7 @@ public class App24_SequentialFutures_composeTypes_cach1 {
 		    		  return Future.failedFuture("fail here");
 		    	  }
 		    	  
-		    	  // Kiểu của compose và return future giống nhau = <integer>
+		    	  // Kiểu của <Interger>compose và return future giống nhau = <integer>
 		    	  return Future.<Integer>future(promise-> asyncFuntion2(count, promise)); 
 		      })
 		      .<JsonObject>compose(count ->{   // count là return của  asyncFuntion2() => lưu ý: kiểu <Integer> của Compose

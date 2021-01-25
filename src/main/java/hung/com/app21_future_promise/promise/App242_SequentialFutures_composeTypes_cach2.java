@@ -26,7 +26,7 @@ public class App242_SequentialFutures_composeTypes_cach2 {
 	public static void main(String[] args) throws InterruptedException{
 
 		/**
-		 * cách này ko tường minh, ko nên dùng => khó nhìn Kiểu trả về hơn
+		 * cách này ko tường minh, ko nên dùng => khó nhìn Kiểu trả về hơn. Nên dùng cách 1
 		 */
 		asyncFuntion1("success")
 		.<Integer>compose(str ->{  // str là return của  asyncFuntion1() => lưu ý: Kiểu String của Future

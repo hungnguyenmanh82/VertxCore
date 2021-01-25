@@ -53,6 +53,7 @@ public class App21_Promise {
 		});
 
 		/**
+		 * từ Vertx version >= 3.8
 		 * Promise: đc tách riêng để phụ trách phần trigger callback => Promise đc truyền cho các Asynchronouse Object để trigger future
 		 * Future: phụ trách phần xử lý còn lại.
 		 */

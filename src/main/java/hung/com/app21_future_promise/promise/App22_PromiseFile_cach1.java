@@ -29,6 +29,7 @@ public class App22_PromiseFile_cach1 {
 		// toàn bộ quá trình tạo file đc thực hiện trên threadpool của Vertx context
 		FileSystem fs = vertx.fileSystem();
 
+		//Cách 1: để hiểu bản chất. Đa phần là dùng cách 2
 		//tạo promise đồng thời sẽ tạo 1 Future luôn và ngược lại
 		Promise<Void> promise = Promise.<Void>promise();
 
@@ -59,6 +60,7 @@ public class App22_PromiseFile_cach1 {
 		 File("/abc"): root folder on linux (not window)
 		 */
 		// promise.complete()/fail() sẽ đc gọi khi create file
+		// lưu ý Promise extend Handler<AsyncResult<T>>
 		fs.createFile("foo.txt", promise);  // promise và future extends  handler<asyncResult<T>> luôn => rất cơ động
 
 		System.out.println("main(): end of main()");
