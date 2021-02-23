@@ -29,7 +29,7 @@ import io.vertx.core.json.JsonObject;
  https://vertx.io/docs/vertx-core/java/#_json
  
  JsonObject chứa dữ liệu String (ko phải UTF8) vì trên java các phép toán UTF8 rất chậm.
- JsonObject save byte dạng Base64 => tránh các ký tự đặc biệt của Json.
+ JsonObject save bytes dạng Base64 string=> tránh các ký tự đặc biệt của Json.
  
  JsonObject.toString().getbytes(UTF-8) để trả về cho back-end.
 
@@ -61,14 +61,16 @@ public class App81_Json {
 		byte[] bytes = new byte[] {(byte) 0xAB,(byte) 0xCD,(byte) 0xEF, 0x00};
 		
 		//================================ bytes Array to JsonObject ========================
-		// sử dụng Base64 để convert bytes array về String và lưu trong Json
+		
 		JsonObject object = new JsonObject().put("byte", bytes);
-		System.out.println(object.toString());
+		System.out.println(object.toString()); // json String: các thành phần đã đc convert ra Base64 thì mới lưu vào đc Json
 		
 		System.out.println("base64 = " + Base64.getEncoder().encodeToString(bytes));
 		
 		//=============================== JsonObject to bytes Array ================
-		byte[] bytes2 = object.getBinary("byte");
+		// trong jsonObject lưu ở định dạng String (ko có ký tự đặc biệt vi phạm chuẩn Json)
+		// khi gọi getBinary() thì nó tự hiểu là convert String Base64 về dạng byte[]
+		byte[] bytes2 = object.getBinary("byte"); 
 		
 		
 		System.out.println("bytes2 base64 = " + Base64.getEncoder().encodeToString(bytes2));
@@ -217,11 +219,14 @@ public class App81_Json {
 
 		//===========================================convert String => JsonObject ===================
 		JsonObject jsonObject = new JsonObject(buffer);
+//		JsonObject jsonObject = buffer.toJsonObject();
 		System.out.println(jsonObject.toString());
 		
 		Map<String, Object> map = jsonObject.getMap();
 		
+		
 	}
+
 
 	public static void JsonFileToJava(){
 
@@ -229,7 +234,7 @@ public class App81_Json {
 		Buffer buffer = vertx.fileSystem().readFileBlocking(App81_Json.class.getResource("googleAuth2.json").getPath());
 
 		//===========================================convert String => JsonObject ===================
-		JsonObject jsonObject = new JsonObject(buffer);
+		JsonObject jsonObject = buffer.toJsonObject();
 		System.out.println(jsonObject.toString());
 		
 		//=================================== convert JsonObject => Java Object ================

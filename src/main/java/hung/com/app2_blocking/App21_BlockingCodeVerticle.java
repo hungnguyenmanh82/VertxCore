@@ -80,7 +80,7 @@ public class App21_BlockingCodeVerticle extends AbstractVerticle {
 
 		};
 
-		//returnHandler run trên Verticle Thread
+		//returnHandler run trên Verticle Thread context
 		Handler<AsyncResult<String>> returnHandler =  new Handler<AsyncResult<String>>() {
 			public void handle(AsyncResult<String> event) {
 

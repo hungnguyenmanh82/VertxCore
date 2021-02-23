@@ -21,6 +21,33 @@ Future<Type>:  extends Handler<type> và AsyncResult<type> => là kết hợp 2 
 Future là function point => thread nào gọi nó thì nó chạy trên thread đó (đã test).
 
  */
+
+/**
+Future<T1> future1;
+Future<T2> future2;
+Future<T3> future3;
+Future<T4> future4;
+
+future1.<T2>compose( (T1 t1)->{  // <T2> là kiểu return 
+			return future2<T2>;
+		})
+		.<T3>compose( (T2 t2)->{ // <T3> là kiểu return
+			return future3<T3>;
+		})
+		.<T4> compose( (T3 t3)->{ // 
+			return future4<T4>;
+		})
+		.onsucess( (T4 t4)->{ //
+			//future4 ok
+		})
+		.onfailure( (throwable thr)->{
+			// nếu 1 trong các quá trình trên fail
+		})
+		.<R>eventually((Void v)->{
+			//giống finally của try-catch
+			return future<R>;  // thiết kế chỗ này có vẻ ko tốt vì thừa code return future<R> ko gọi tiếp .onSuccess().onFailure()
+		}); 
+*/ 
 public class App242_SequentialFutures_composeTypes_cach2 {
 
 	public static void main(String[] args) throws InterruptedException{
@@ -62,7 +89,7 @@ public class App242_SequentialFutures_composeTypes_cach2 {
 	}
 
 	/**
-	 * Thiết kế asyncFuntion mới dùng Promise<T>. Thiết kế cũ dùng Handler<AsyncResult<T>>
+	 * cách này ko tường minh, ko nên dùng => khó nhìn Kiểu trả về hơn. Nên dùng cách 1
 	 */
 	private static Future<String> asyncFuntion1(String str) {
 		Promise<String> promise = Promise.<String>promise();

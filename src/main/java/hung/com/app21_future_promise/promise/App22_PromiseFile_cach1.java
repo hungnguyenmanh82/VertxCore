@@ -60,7 +60,7 @@ public class App22_PromiseFile_cach1 {
 		 File("/abc"): root folder on linux (not window)
 		 */
 		// promise.complete()/fail() sẽ đc gọi khi create file
-		// lưu ý Promise extend Handler<AsyncResult<T>>
+		// lưu ý: Promise extend Handler<AsyncResult<T>>
 		fs.createFile("foo.txt", promise);  // promise và future extends  handler<asyncResult<T>> luôn => rất cơ động
 
 		System.out.println("main(): end of main()");

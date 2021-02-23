@@ -12,7 +12,7 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.core.net.NetServer;
 
 /**
- * lúc compile sẽ gộp "main/resources/" và "main/java/" vào 1 folder chung
+ * lúc compile sẽ gộp "main/resources/" và "main/java/" vào 1 folder chung và nén vào *.jar file
  App81_https_Server.class.getResource("/") = root = main/resources/ = main/java/
  App81_https_Server.class.getResource("/abc") = main/resource/abc  = main/java/abc  
  //
@@ -27,7 +27,7 @@ import io.vertx.core.net.NetServer;
   
   + run thực tế:  ./ = folder run "java -jar *.jar"
  //========= 
- File("loginTest.json"):   file ở ./ folder    (tùy run thực tế hay trên eclipse)
+ File("loginTest.json"):   file ở ./ folder    (tùy run thực tế CMD hay trên eclipse)
  File("./abc/test.json"):   
  File("/abc"): root folder on linux (not window)
  */

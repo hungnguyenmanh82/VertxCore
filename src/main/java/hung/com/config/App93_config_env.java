@@ -9,7 +9,6 @@ import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 /**
- * 
 https://vertx.io/docs/vertx-config/java/
 
 By default, the Config Retriever is configured with the following stores (in this order):
@@ -17,7 +16,14 @@ The Vert.x verticle config()
 The system properties
 The environment variables
 A conf/config.json file. This path can be overridden using the vertx-config-path system property or VERTX_CONFIG_PATH environment variable.
- *
+ */
+
+/**
+ * system properties có thể add vào ở commandline hoặc từ source code java System.setProperty() :
+ *   > java -Dvertx.hazelcast.config=./src/config/cluster.xml -jar ./target/vertx-docker-config-launcher.jar -cluster -conf ./src/config/local.json
+ * 
+ * System properties chỉ JavaApp add nó vào mới đọc đc 
+ * Environment Variable add vào từ OS thì các app (process)  khác đều đọc đc.   
  */
 public class App93_config_env {
 	public static void main(String[] args) throws InterruptedException{

@@ -21,10 +21,40 @@ Future<Type>:  extends Handler<type> và AsyncResult<type> => là kết hợp 2 
 Future là function point => thread nào gọi nó thì nó chạy trên thread đó (đã test).
 
  */
-public class App25_SequentialFutures_compose_handler {
+
+/**
+Future<T1> future1;
+Future<T2> future2;
+Future<T3> future3;
+Future<T4> future4;
+
+future1.<T2>compose( (T1 t1)->{  // <T2> là kiểu return 
+			return future2<T2>;
+		})
+		.<T3>compose( (T2 t2)->{ // <T3> là kiểu return
+			return future3<T3>;
+		})
+		.<T4> compose( (T3 t3)->{ // 
+			return future4<T4>;
+		})
+		.onsucess( (T4 t4)->{ //
+			//future4 ok
+		})
+		.onfailure( (throwable thr)->{
+			// nếu 1 trong các quá trình trên fail
+		})
+		.<R>eventually((Void v)->{
+			//giống finally của try-catch
+			return future<R>;  // thiết kế chỗ này có vẻ ko tốt vì thừa code return future<R> ko gọi tiếp .onSuccess().onFailure()
+		}); 
+*/
+
+public class App25_SequentialFutures_compose_handler_cach3 {
 
 	public static void main(String[] args) throws InterruptedException{
-
+		/**
+		 * Thư viện Vertx hiện tại đang dùng cách 3 là chủ yếu
+		 */
 		Future.<String>future(promise-> asyncFuntion1("success",promise))
 		      .<Integer>compose(str ->{  // str là return của  asyncFuntion1() => lưu ý: Kiểu String của Future
 		    	  int count;

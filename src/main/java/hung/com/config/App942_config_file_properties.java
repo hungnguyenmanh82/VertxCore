@@ -20,6 +20,14 @@ The environment variables
 A conf/config.json file. This path can be overridden using the vertx-config-path system property or VERTX_CONFIG_PATH environment variable.
  *
  */
+
+/**
+ * system properties có thể add vào ở commandline hoặc từ source code java System.setProperty() :
+ *   > java -Dvertx.hazelcast.config=./src/config/cluster.xml -jar ./target/vertx-docker-config-launcher.jar -cluster -conf ./src/config/local.json
+ * 
+ * System properties chỉ JavaApp add nó vào mới đọc đc 
+ * Environment Variable add vào từ OS thì các app (process)  khác đều đọc đc.   
+ */
 public class App942_config_file_properties {
 	public static void main(String[] args) throws InterruptedException{
 
@@ -40,14 +48,14 @@ public class App942_config_file_properties {
 		 */
 
 		/**
-		 * "./" = là folder chưa *.jar file
+		 * "./" = là folder chạy CMD gọi tới java app ( thường là folder chưa *.jar file)
 		 * config file thường đặt ở ngoài *.jar file
 		 */
 		ConfigStoreOptions configStoreOptions = new ConfigStoreOptions()
 									.setType("file")          // lay config tu file
 									.setFormat("properties")  //format của file là propertice (ko phải Json)
 									.setConfig(new JsonObject()
-													.put("path", "./src/config/config.properties")
+													.put("path", "./src/config/config.properties")   //Debug F11 chạy ở Project folder
 													.put("hierarchical", false)    //true or false
 												);
 
