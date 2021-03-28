@@ -19,11 +19,12 @@ A conf/config.json file. This path can be overridden using the vertx-config-path
  */
 
 /**
- * system properties có thể add vào ở commandline hoặc từ source code java System.setProperty() :
+ * system properties có thể add vào ở commandline hoặc từ source code java System.setProperty() hoặc từ Pom.xml file cho Debug F11 trên Eclipse :
  *   > java -Dvertx.hazelcast.config=./src/config/cluster.xml -jar ./target/vertx-docker-config-launcher.jar -cluster -conf ./src/config/local.json
  * 
  * System properties chỉ JavaApp add nó vào mới đọc đc 
  * Environment Variable add vào từ OS thì các app (process)  khác đều đọc đc.   
+ * search: "java system variable", "java system properties"
  */
 public class App93_config_env {
 	public static void main(String[] args) throws InterruptedException{

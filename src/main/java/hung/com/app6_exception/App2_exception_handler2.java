@@ -26,6 +26,8 @@ public class App2_exception_handler2 extends AbstractVerticle {
 			
 			@Override
 			public void handle(Throwable event) {
+				// Vertx 4.0 Milestone5 ko hiển thị Vertx-Log => lỗi
+				// chỉ có cách dùng Try/catch bắt exception ở đoạn code nghi vấn
 				System.out.println("=====" + event.getCause());
 				
 			}

@@ -65,6 +65,14 @@ public class App81_Json {
 		JsonObject object = new JsonObject().put("byte", bytes);
 		System.out.println(object.toString()); // json String: các thành phần đã đc convert ra Base64 thì mới lưu vào đc Json
 		
+		/**
+		 * Base64 sẽ lưu 6bits = 1 char = 1 byte
+		 * vd: 
+		 *    32 bytes array = 256 bit/6 = 42.6 = 43 bytes Base64
+		 * Lưu trên SQL Base64 dùng char-set = ASCII, 1 char = 1 byte (vì Base64 ko có ký tự đặc biệt)
+		 * ko nên lưu SQL Base64 với char-set = UTF8   
+		 */
+		System.out.println("o.getString() = " + object.getString("byte"));
 		System.out.println("base64 = " + Base64.getEncoder().encodeToString(bytes));
 		
 		//=============================== JsonObject to bytes Array ================

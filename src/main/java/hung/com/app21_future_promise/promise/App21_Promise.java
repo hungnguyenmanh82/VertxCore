@@ -30,6 +30,9 @@ public class App21_Promise {
 		Vertx vertx = Vertx.vertx();
 
 
+		/**
+		 * chỗ này chỉ để hiểu bản chất của Future và promise thôi
+		 */
 		//tạo promise đồng thời sẽ tạo 1 Future luôn và ngược lại
 		Promise<String> promise = Promise.<String>promise();
 

@@ -29,6 +29,7 @@ public class App1_exception extends AbstractVerticle {
 		super.start();
 		
 		// Vertx 4.0 Milestone5 ko hiển thị Vertx-Log => lỗi
+		// chỉ có cách dùng Try/catch bắt exception ở đoạn code nghi vấn
 		throw new Exception("test Exception Handler");
 	}
 
