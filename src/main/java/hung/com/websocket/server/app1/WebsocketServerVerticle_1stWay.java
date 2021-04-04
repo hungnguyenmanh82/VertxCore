@@ -43,6 +43,14 @@ public class WebsocketServerVerticle_1stWay extends AbstractVerticle{
 	public void start(Future<Void> startFuture) throws Exception {
 		System.out.println("MyVerticle started! port=8080: thread="+Thread.currentThread().getId());
 
+		/**
+		 * Chrome và Firefox, IE idleTimeout = 1 minutes
+		 * nếu dùng websocket thì phải dùng ping để duy trì kết nối
+		 * ping ở phía Server, vì server phải kiểm soát Load
+		 * nếu Ping từ phía client thì server sẽ quá tải.
+		 * Các browser sẽ ko gửi ping (sure). 
+		 * 
+		 */
 		HttpServerOptions httpServerOptions = new HttpServerOptions()
 				.setMaxHeaderSize(4000)
 				.setReceiveBufferSize(8000)

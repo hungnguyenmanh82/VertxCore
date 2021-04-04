@@ -22,6 +22,7 @@ Future là function point => thread nào gọi nó thì nó chạy trên thread 
 
  */
 
+
 /**
 Future<T1> future1;
 Future<T2> future2;
@@ -37,19 +38,22 @@ future1.<T2>compose( (T1 t1)->{  // <T2> là kiểu return
 		.<T4> compose( (T3 t3)->{ // 
 			return future4<T4>;
 		})
-		.onsucess( (T4 t4)->{ //
-			//future4 ok
+		.<T5> map(t5) // Future<T5>
+		.onsucess( (T5 t5)->{ //
+			//future5 ok
 		})
-		.onfailure( (throwable thr)->{
+		onfailure( (throwable thr)->{
 			// nếu 1 trong các quá trình trên fail
 		})
-		.<R>eventually((Void v)->{
+		.eventually((Void v)->{
 			//giống finally của try-catch
-			return future<R>;  // thiết kế chỗ này có vẻ ko tốt vì thừa code return future<R> ko gọi tiếp .onSuccess().onFailure()
-		}); 
-*/
 
-public class App25_SequentialFutures_compose_handler_cach3 {
+		}); 
+		
+.<T5>map(t5) là cách mà ta có thể truyền tham số từ compose ra ngoài rất hay	
+ */
+
+public class App25_SequentialFutures_compose_handler_cach2 {
 
 	public static void main(String[] args) throws InterruptedException{
 		/**

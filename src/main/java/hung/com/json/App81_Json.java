@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import hung.com.files.App22_read_file_sync;
 import hung.com.json.model.GoogleOauth2;
 import hung.com.json.model.User;
+import hung.com.json.model.User2;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -52,38 +53,69 @@ public class App81_Json {
 //		JsonArray();
 //		JsonArray2List();
 		
-		JsonObject_BytesArray();
+//		JsonObject_BytesArray();
+		testUTF8_String_bytes();
 
 	}
+	
+	/**
+	 * Base64 sẽ lưu 6bits = 1 char = 1 byte
+	 * vd: 
+	 *    32 bytes array = 256 bit/6 = 42.6 = 43 bytes Base64
+	 * 1 char base64 value = 1 char ASCII = 1char UTF8 = 1 byte  (2 bít đầu = 0)   
+	 * Lưu trên SQL Base64 dùng char-set = ASCII, 1 char = 1 byte (vì Base64 ko có ký tự đặc biệt)
+	 * UTF8 sql chỉ lưu character từ 1 tới 3 bytes (ko hỗ trợ 4 bytes).
+	 * String in java là UTF16 ko phải Unicode. Nghĩa là có character sẽ chiếm 4bytes
+	 * 
+	 *  JsonObject vertx cho phép lưu ByteArray và tự động chuyển qua Base64 nếu JsonObject.getString() or .toString
+	 *  SQL cho phép lưu dữ liệu dạng binary, BLOB => vì thế JDBC đương nhiên phải cung cấp cách truyền Binary và BLOB
+	 *  
+	 */
 	
 	public static void JsonObject_BytesArray() {
 		 
 		byte[] bytes = new byte[] {(byte) 0xAB,(byte) 0xCD,(byte) 0xEF, 0x00};
 		
 		//================================ bytes Array to JsonObject ========================
-		
-		JsonObject object = new JsonObject().put("byte", bytes);
-		System.out.println(object.toString()); // json String: các thành phần đã đc convert ra Base64 thì mới lưu vào đc Json
-		
 		/**
-		 * Base64 sẽ lưu 6bits = 1 char = 1 byte
-		 * vd: 
-		 *    32 bytes array = 256 bit/6 = 42.6 = 43 bytes Base64
-		 * Lưu trên SQL Base64 dùng char-set = ASCII, 1 char = 1 byte (vì Base64 ko có ký tự đặc biệt)
-		 * ko nên lưu SQL Base64 với char-set = UTF8   
+		 * Json chỉ có kiểu String UTF8, và number, boolean. Kiểu bytes bản chất là utf8 bytes
+		 * nhưng JsonObject lại cho phép lưu kiểu Byte[] thuần trong nó => điểm mạnh.
+		 * nếu dùng JsonObject.getBinary() nó sẽ convert ngược Base64.decode(StringBase64) = byte[] => sai
+		 *  
 		 */
-		System.out.println("o.getString() = " + object.getString("byte"));
-		System.out.println("base64 = " + Base64.getEncoder().encodeToString(bytes));
+		JsonObject object = new JsonObject().put("byte", bytes);
+
+		System.out.println("object.getString('byte') = " + object.getString("byte"));   //bytes đc convert ra base64
+		System.out.println("base64 = " + Base64.getEncoder().encodeToString(bytes));   //bytes đc convert ra base 64 như trên
 		
 		//=============================== JsonObject to bytes Array ================
 		// trong jsonObject lưu ở định dạng String (ko có ký tự đặc biệt vi phạm chuẩn Json)
 		// khi gọi getBinary() thì nó tự hiểu là convert String Base64 về dạng byte[]
-		byte[] bytes2 = object.getBinary("byte"); 
+		byte[] bytes2 = object.getBinary("byte"); // = bytes
 		
+		
+		System.out.println("bytes2 base64 = " + Base64.getEncoder().encodeToString(bytes2)); //kết quả như trên
+	}
+	
+	public static void testUTF8_String_bytes() {
+		//
+		JsonObject o = new JsonObject().put("password", "tự học");
+		
+		/**
+		 * Json chỉ có kiểu String UTF8, và number, boolean. Kiểu bytes bản chất là utf8 bytes
+		 * nhưng JsonObject lại cho phép lưu kiểu Byte[] thuần trong nó => điểm mạnh.
+		 * nếu dùng JsonObject.getBinary() nó sẽ convert ngược Base64.decode(StringBase64) = byte[] => sai
+		 *  
+		 */
+		// exception vì string ko phải base64, ko convert ngược đc
+//		byte[] bytes1 = o.getBinary("password");
+		
+//		System.out.println("bytes1 base64 = " + Base64.getEncoder().encodeToString(bytes1));
+		
+		byte[] bytes2 = o.getString("password").getBytes(); //default charset = utf8
 		
 		System.out.println("bytes2 base64 = " + Base64.getEncoder().encodeToString(bytes2));
 	}
-	
 	public static void JsonArray(){
 
 		
@@ -191,22 +223,36 @@ public class App81_Json {
 	
 	public static void Java2JsonObject(){
 		//================================ convert java Object => JsonObject ================
-		
+		// các thành phần của user phải có hàm .toString()
 		User user  = new User("Hungbeo",11);
 		JsonObject  jsonObjectFromUser = JsonObject.mapFrom(user);
 		System.out.println(jsonObjectFromUser.toString());
 	}
 	
 	public static void JsonObject2Java(){
-		//=================================== convert JsonObject => Java Object ================
-		JsonObject jsonUser = new JsonObject().put("name", "Happy")
-											.put("yearOld", 18);
+		try {
+			//=================================== convert JsonObject => Java Object ================
+			JsonObject jsonUser = new JsonObject().put("name", "Happy")
+												.put("yearOld", 18);
+			
+			/**
+			 *  lấy tên field ở JavaObject (giống Gson và Jackson) ko cần anotation=> dùng JPA để gen từ Table ra ok
+			 *  dùng tool online cũng ok: https://www.site24x7.com/tools/json-to-java.html
+			 *  Dùng constructor cho final field => ko dùng set()
+			 */
+			User user = jsonUser.mapTo(User.class);
+			System.out.println("************* {" + user.getName() + "," + user.getYearOld() + "}" );
+			
+			/**
+			 * ko cần construction, chỉ cần hàm set() là đủ
+			 */
+			User2 user2 = jsonUser.mapTo(User2.class);
+			System.out.println("************* {" + user2.getName() + "," + user2.getYearOld() + "}" );
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		/**
-		 *  lấy tên field ở JavaObject (giống Gson và Jackson) => dùng JPA để gen từ Table ra ok
-		 */
-		User user = jsonUser.mapTo(User.class);
-		System.out.println("************* {" + user.getName() + "," + user.getYearOld() + "}" );
 	}
 	
 	

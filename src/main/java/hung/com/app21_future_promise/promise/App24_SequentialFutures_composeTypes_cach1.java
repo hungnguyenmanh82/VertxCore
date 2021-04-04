@@ -51,14 +51,25 @@ future1.<T2>compose( (T1 t1)->{  // <T2> là kiểu return
 */
 
 /**
+ Jump code xem khai báo Map(), flatmap(), compose() sẽ thấy khác biệt ở kiểu trả về của funtionPoint:
+ 
  future
       .<V>map(V value)   // return Future<V> to replace old future when Old Future success (not failed)
       .onSuccess( value->  System.out.println(value) )
      .onFailure( thr -> thr.printStacktrace());
 
- future.<T>flatMap()  =  future.<T>compose()    // xem code sẽ rõ
+future<T>.<V>map( (T t)->{ return V;} ) 
+
+ 
  
  Khái niệm "map" ko đổi so với ngôn ngữ javaScript
+ */
+
+/**
+ * map() vs flatmap(): cả 2 đều lấy đầu vào là stream 
+ *  https://stackoverflow.com/questions/26684562/whats-the-difference-between-map-and-flatmap-methods-in-java-8
+ *  map() trả về 1-1:  nhận 1 item trả về 1 item khác khiểu
+ *  flatmap() trả về 1-n: nhân 1 item trả về 1 stream item khác kiểu
  */
 public class App24_SequentialFutures_composeTypes_cach1 {
 
