@@ -10,9 +10,11 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import hung.com.files.App22_read_file_sync;
+import hung.com.json.model.EUserState;
 import hung.com.json.model.GoogleOauth2;
 import hung.com.json.model.User;
 import hung.com.json.model.User2;
+import hung.com.json.model.UserEnum;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -43,7 +45,7 @@ public class App81_Json {
 //		JsonObject2String();
 //		
 //		JsonObject2Java();
-//		Java2JsonObject();
+		Java2JsonObject();
 //		
 //		Map2JsonObject();
 //		JsonObject2Map();
@@ -54,7 +56,9 @@ public class App81_Json {
 //		JsonArray2List();
 		
 //		JsonObject_BytesArray();
-		testUTF8_String_bytes();
+//		testUTF8_String_bytes();
+		
+//		Java2JsonObject2();
 
 	}
 	
@@ -227,6 +231,32 @@ public class App81_Json {
 		User user  = new User("Hungbeo",11);
 		JsonObject  jsonObjectFromUser = JsonObject.mapFrom(user);
 		System.out.println(jsonObjectFromUser.toString());
+		
+		// empty string
+		User user1  = new User("",11);
+		JsonObject  jsonObject1 = JsonObject.mapFrom(user1);
+		System.out.println(jsonObject1.toString());
+		
+		// null string
+		User user2  = new User(null,11);
+		JsonObject  jsonObject2 = JsonObject.mapFrom(user2);
+		System.out.println(jsonObject2.toString());
+	}
+	
+	public static void Java2JsonObject2(){
+		//================================ convert java Object => JsonObject ================
+		// các thành phần của user phải có hàm .toString()
+		/**
+		 * kiểu Enum ok
+		 */
+		try {
+			UserEnum user  = new UserEnum("Hungbeo",11, EUserState.BAN);
+			JsonObject  jsonObjectFromUser = JsonObject.mapFrom(user);
+			
+			System.out.println(jsonObjectFromUser.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void JsonObject2Java(){
