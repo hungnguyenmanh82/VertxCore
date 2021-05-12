@@ -103,15 +103,22 @@ public class App91_CircuitBreaker {
 
 
 		//==================================== run request ========================================
+		// có thể kiểm tra State trc khi thực hiện. Nếu 
 		// circuitBreaker.execute() sẽ chạy trên context của current Thread gọi nó
 		// lệnh circuitBreaker.execute() đầu tiên chạy rất chậm vì nó phải chờ Java compile runtime (mất 500ms) các lệnh tiếp theo rất nhanh (1ms)
 		if(circuitBreaker.state() == CircuitBreakerState.CLOSED 
 				|| circuitBreaker.state() == CircuitBreakerState.HALF_OPEN){
 
-			/**
-			 *  Nếu state = OPEN thì Future này sẽ trả về luôn mà ko thực hiện handlerFutureRequest
-			 *  Vì thế ko cần kiểm tra State trc khi call .execute()
-			 */
+	
+			circuitBreaker.execute(handlerFutureRequest)    // return Future<String>
+			.onSuccess((String res)->{
+				System.out.println(res);
+			})
+			.onFailure((Throwable thr)->{
+				thr.printStackTrace();
+			});
+		}else {// CircuitBreakerState.OPEN
+			// chuyển Route request tới CircuitBreaker khác quản lý Microservice mà state = ClOSED.
 		}
 
 
