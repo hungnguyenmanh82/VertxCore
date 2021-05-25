@@ -7,7 +7,6 @@ import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 /**
  * 
@@ -20,23 +19,15 @@ The environment variables
 A conf/config.json file. This path can be overridden using the vertx-config-path system property or VERTX_CONFIG_PATH environment variable.
  *
  */
-
-/**
- * system properties có thể add vào ở commandline hoặc từ source code java System.setProperty() :
- *   > java -Dvertx.hazelcast.config=./src/config/cluster.xml -jar ./target/vertx-docker-config-launcher.jar -cluster -conf ./src/config/local.json
- * 
- * System properties chỉ JavaApp add nó vào mới đọc đc 
- * Environment Variable add vào từ OS thì các app (process)  khác đều đọc đc.   
- */
-public class App942_config_file_properties {
+public class App941_config_file_yaml {
 	public static void main(String[] args) throws InterruptedException{
-
+		
 		/**
 		 * config đc lưu trong Vertx context.
 		 * Verticle khác nhau có context khác nhau => config khác nhau.
 		 */
 		Vertx vertx = Vertx.vertx();
-
+		
 		/**
 		 * lúc compile sẽ gộp "main/resources/" và "main/java/" vào 1 folder chung
 		 App81_https_Server.class.getResource("/") = root = main/resources/ = main/java/
@@ -45,36 +36,39 @@ public class App942_config_file_properties {
 		 App81_https_Server.class.getResource("..") = root/pakage_name       => package_name của class này
 		 App81_https_Server.class.getResource(".") = root/pakage_name/ 
 		 App81_https_Server.class.getResource("abc") = root/pakage_name/abc
+		 
+		 App81_https_Server.class.getResource("abc").getPath()
+		  //===========================
+		  + Run or Debug mode trên Eclipse lấy Root = project folder 
+		  
+		  + run thực tế:  root = folder run "java -jar *.jar"
+		 //========= 
+		 File("loginTest.json"):   file ở root folder    (tùy run thực tế hay trên eclipse)
+		 File("/abc/test.json"):   path theo root folder
 		 */
-
-		/**
-		 * "./" = là folder chạy CMD gọi tới java app ( thường là folder chưa *.jar file)
-		 * config file thường đặt ở ngoài *.jar file
-		 */
-		ConfigStoreOptions configStoreOptions = new ConfigStoreOptions()
-									.setType("file")          // lay config tu file
-									.setFormat("properties")  //format của file là propertice (ko phải Json)
-									.setConfig(new JsonObject()
-													.put("path", "./src/config/config.properties")   //Debug F11 chạy ở Project folder
-													.put("hierarchical", false)    //true or false
-												);
-
-		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(configStoreOptions);
-
+		ConfigStoreOptions fileOptions = new ConfigStoreOptions()
+											  .setType("file")          // lay config từ file
+											  .setFormat("yaml")  //nếu ko xác định format của config file là gì thì lấy default = json
+											  .setConfig(new JsonObject().put("path", "./src/config/order.yaml")); //run or debug mode lấy Root = project folder
+		
+		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(fileOptions);
+		
 		ConfigRetriever retriever = ConfigRetriever.create(vertx,options);
 		
 		retriever.getConfig()		// = Future<JsonObject>
-		.onSuccess((JsonObject config)->{
-			//===========================================================================
-			// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
-			// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
-			
-			System.out.println(config.toString()); //
-			System.out.println("server.host:"+ config.getString("server.host"));
+		.onSuccess( (JsonObject config)->{
+
+				//===========================================================================
+				// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
+				// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
+						
+				System.out.println(config.toString());
+
 		})
 		.onFailure(thr->{
 			thr.printStackTrace();
 		});
+		
 
 		//vertx.close();   //get config asynchronous => ko đc gọi hàm này
 	}

@@ -34,33 +34,21 @@ public class App92_config_http {
 
 		ConfigRetriever retriever = ConfigRetriever.create(vertx, options);
 
-		// Asynchronous get Json restful from http server
-		retriever.getConfig(new Handler<AsyncResult<JsonObject>>() {
-			@Override
-			public void handle(AsyncResult<JsonObject> ar) {
-				if (ar.failed()) {
-					// Failed to retrieve the configuration
-					System.out.println("fail: "+ar.cause());
-				} else {
-					//===========================================================================
-					// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
-					// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
-					JsonObject config = ar.result();
-					
-				}
+		retriever.getConfig()		// = Future<JsonObject>
+		.onSuccess((JsonObject config)->{
+			//===========================================================================
+			// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
+			// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
+			
+			System.out.println(config.toString()); //
 
-			}
+		})
+		.onFailure(thr->{
+			thr.printStackTrace();
 		});
 		
 
-		// dùng Lambda syntax
-/*		retriever.getConfig(ar -> {
-			if (ar.failed()) {
-				// Failed to retrieve the configuration
-			} else {
-				JsonObject config = ar.result();
-			}
-		});*/
+
 
 		//vertx.close();   //get config asynchronous => ko đc gọi hàm này
 	}

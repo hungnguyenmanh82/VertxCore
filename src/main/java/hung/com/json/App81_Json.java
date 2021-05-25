@@ -1,28 +1,18 @@
 package hung.com.json;
 
 import java.util.Base64;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import hung.com.files.App22_read_file_sync;
 import hung.com.json.model.EUserState;
 import hung.com.json.model.GoogleOauth2;
 import hung.com.json.model.User;
 import hung.com.json.model.User2;
 import hung.com.json.model.UserEnum;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.core.http.HttpClient;
-import io.vertx.core.http.HttpClientOptions;
-import io.vertx.core.http.HttpClientRequest;
-import io.vertx.core.http.HttpClientResponse;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
@@ -45,7 +35,7 @@ public class App81_Json {
 //		JsonObject2String();
 //		
 //		JsonObject2Java();
-		Java2JsonObject();
+//		Java2JsonObject();
 //		
 //		Map2JsonObject();
 //		JsonObject2Map();
@@ -59,6 +49,8 @@ public class App81_Json {
 //		testUTF8_String_bytes();
 		
 //		Java2JsonObject2();
+		
+		minifyJsonString();
 
 	}
 	
@@ -204,6 +196,11 @@ public class App81_Json {
 		//===========================================convert String => JsonObject ===================
 		// cách 1:
 		String jsonString = "{\"foo\":\"bar\"}";
+		
+		/**
+		 * cài Plugin cho Eclipse để xem *.Json file cho dễ => sau đó Minify để dùng
+		 * Vertx JsonObject tự động minify trc khi parse Json string => có thể comment thoải mái trong Json string
+		 */
 		JsonObject jsonObject = new JsonObject(jsonString);
 		System.out.println(jsonObject.toString());
 		System.out.println(jsonObject.getString("foo"));
@@ -224,6 +221,26 @@ public class App81_Json {
 					.put("mybool", true);
 		System.out.println(jsonObject2.toString());
 	} 
+	
+	/**
+	 * giả định Json chứa comment cần phải minify để loại bỏ comment và tab, whitespace trong đó
+	 */
+	public static void minifyJsonString() {
+		/**
+		 * Vertx JsonObject dùng Jackson tự động Minify comments trong Json string trc khi parser (đã test ok)
+		 * Chấp nhận cả 2 định dạng comment
+		 * 
+		 * Vertx dùng jackson => chắc cũng support minify
+		 */
+		Vertx vertx = Vertx.vertx();
+		Buffer buffer = vertx.fileSystem().readFileBlocking(App81_Json.class.getResource("testMinify.json").getPath());
+
+		//===========================================convert String => JsonObject ===================
+		JsonObject jsonObject = buffer.toJsonObject();
+		System.out.println(jsonObject.toString());
+		
+
+	}
 	
 	public static void Java2JsonObject(){
 		//================================ convert java Object => JsonObject ================
@@ -267,6 +284,7 @@ public class App81_Json {
 			
 			/**
 			 *  lấy tên field ở JavaObject (giống Gson và Jackson) ko cần anotation=> dùng JPA để gen từ Table ra ok
+			 *  Search: "convert json to java Jackson or Gson"
 			 *  dùng tool online cũng ok: https://www.site24x7.com/tools/json-to-java.html
 			 *  Dùng constructor cho final field => ko dùng set()
 			 */
@@ -313,11 +331,17 @@ public class App81_Json {
 
 
 	public static void JsonFileToJava(){
-
+		/**
+		 * Vertx JsonObject dùng Jackson tự động Minify comments trong Json string trc khi parser (đã test ok)
+		 */
 		Vertx vertx = Vertx.vertx();
 		Buffer buffer = vertx.fileSystem().readFileBlocking(App81_Json.class.getResource("googleAuth2.json").getPath());
 
 		//===========================================convert String => JsonObject ===================
+		/**
+		 * cài Plugin cho Eclipse để xem *.Json file cho dễ => sau đó Minify để dùng
+		 * Vertx JsonObject tự động minify trc khi parse Json string
+		 */
 		JsonObject jsonObject = buffer.toJsonObject();
 		System.out.println(jsonObject.toString());
 		

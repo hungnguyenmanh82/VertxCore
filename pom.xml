@@ -46,6 +46,20 @@
 			<!-- dùng version ở dependencyManagement -->
 			<!-- <version>${vertx.version}</version> -->
 		</dependency>
+		<!-- Vertx JsonObject cần thư viện này -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.10.3</version>
+		</dependency>
+
+		<!-- tìm class implement 1 interface -->
+		<!-- https://github.com/ronmamo/reflections -->
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.12</version>
+		</dependency>
 
 		<dependency>
 			<groupId>io.vertx</groupId>
@@ -53,13 +67,19 @@
 			<!-- dùng version ở dependencyManagement -->
 		</dependency>
 
+
 		<!-- only use for circuitBreaker example -->
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-circuit-breaker</artifactId>
 			<!-- dùng version ở dependencyManagement -->
 		</dependency>
-
+		<!-- YAML phải dùng cả 2 thư viện dưới đây mới đc -->
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-config-yaml</artifactId>
+			<!-- dùng version ở dependencyManagement -->
+		</dependency>
 		<!-- only use for vertx config example -->
 		<dependency>
 			<groupId>io.vertx</groupId>
@@ -115,6 +135,13 @@
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<mainClass>hung.com.tcp.server2.App82_TcpServer</mainClass>
+									<manifestEntries>
+										<!-- <Class-Path> a.jar \root\b.jar c.jar</Class-Path> -->
+										<!-- ko add đc Params cho exe ở Manifest file -->
+										<Created-By>Hungnm2</Created-By>
+										<!-- fix bug warning Java Reflex JDKOpen -->
+										<Multi-Release>true</Multi-Release>
+									</manifestEntries>
 								</transformer>
 							</transformers>
 							<finalName>App82_TcpServer</finalName>
@@ -131,6 +158,13 @@
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<mainClass>hung.com.tcp.server.App81_TcpServer</mainClass>
+									<manifestEntries>
+										<!-- <Class-Path> a.jar \root\b.jar c.jar</Class-Path> -->
+										<!-- ko add đc Params cho exe ở Manifest file -->
+										<Created-By>Hungnm2</Created-By>
+										<!-- fix bug warning Java Reflex JDKOpen -->
+										<Multi-Release>true</Multi-Release>
+									</manifestEntries>
 								</transformer>
 							</transformers>
 							<finalName>App81_TcpServer</finalName>

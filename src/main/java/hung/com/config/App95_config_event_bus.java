@@ -28,7 +28,7 @@ A conf/config.json file. This path can be overridden using the vertx-config-path
  * Environment Variable add vào từ OS thì các app (process)  khác đều đọc đc.   
  * search: "java system variable", "java system properties"
  */
-public class App95_config_system {
+public class App95_config_event_bus {
 	public static void main(String[] args) throws InterruptedException{
 		/**
 		 * config đc lưu trong Vertx context.
@@ -36,6 +36,7 @@ public class App95_config_system {
 		 */
 		Vertx vertx = Vertx.vertx();
 		
+		// lấy config từ Event-bus
 		ConfigStoreOptions  optionStore = new ConfigStoreOptions()
 													  .setType("event-bus")  //lấy config từ event-bus => nếu ko chỉ định format thì lấy default = json
 													  .setConfig(new JsonObject().put("cache", true)); // ko lấy system properties từ cache (ko lấy từ file)
@@ -44,26 +45,22 @@ public class App95_config_system {
 		
 		ConfigRetriever retriever = ConfigRetriever.create(vertx,options);
 		
-		// Asynchronous get Json restful from http server
-		retriever.getConfig(new Handler<AsyncResult<JsonObject>>() {
-			@Override
-			public void handle(AsyncResult<JsonObject> event) {
-				if (event.failed()) {
-					// Failed to retrieve the configuration
-				} else {
-					//===========================================================================
-					// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
-					// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
-					JsonObject config = event.result();
-					
-					System.out.println(config.toString());
-					
-					System.out.println("java.runtime.name:"+ config.getString("java.runtime.name"));
-					System.out.println("os.name:"+ config.getString("os.name"));
-				}
-
-			}
+		retriever.getConfig()		// = Future<JsonObject>
+		.onSuccess((JsonObject config)->{
+			//===========================================================================
+			// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
+			// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
+			
+			System.out.println(config.toString());
+			
+			System.out.println("java.runtime.name:"+ config.getString("java.runtime.name"));
+			System.out.println("os.name:"+ config.getString("os.name"));
+		})
+		.onFailure(thr->{
+			thr.printStackTrace();
 		});
+		
+
 		
 		//vertx.close();   //get config asynchronous => ko đc gọi hàm này
 	}

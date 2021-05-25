@@ -36,28 +36,20 @@ public class App96_config_json {
 		
 		ConfigRetriever retriever = ConfigRetriever.create(vertx,options);
 		
-		// Asynchronous get Json from config
-		retriever.getConfig(new Handler<AsyncResult<JsonObject>>() {
-			@Override
-			public void handle(AsyncResult<JsonObject> event) {
-				if (event.failed()) {
-					// Failed to retrieve the configuration
-				} else {
-					//===========================================================================
-					// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
-					// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
-					JsonObject config = event.result();
-					
-					System.out.println(config.toString());
-					
-					System.out.println("api.gateway.http.port:"+ config.getInteger("api.gateway.http.port"));
-					System.out.println("api.gateway.http.address:"+ config.getString("api.gateway.http.address"));
-				
-
-				}
-
-			}
+		retriever.getConfig()		// = Future<JsonObject>
+		.onSuccess((JsonObject config)->{
+			//===========================================================================
+			// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
+			// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
+			
+			System.out.println(config.toString()); //
+			System.out.println("api.gateway.http.port:"+ config.getInteger("api.gateway.http.port"));
+			System.out.println("api.gateway.http.address:"+ config.getString("api.gateway.http.address"));
+		})
+		.onFailure(thr->{
+			thr.printStackTrace();
 		});
+
 
 		//vertx.close();   //get config asynchronous => ko đc gọi hàm này
 	}

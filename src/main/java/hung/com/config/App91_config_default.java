@@ -37,26 +37,19 @@ public class App91_config_default {
 		// dùng defaut config để lấy System properties và Enviroment variables of Window or linux
 		ConfigRetriever retriever = ConfigRetriever.create(vertx);
 		
-		// Asynchronous get Json restful Environment (
-		retriever.getConfig(new Handler<AsyncResult<JsonObject>>() {
-			@Override
-			public void handle(AsyncResult<JsonObject> ar) {
-				if (ar.failed()) {
-					// Failed to retrieve the configuration
-					System.out.println("fail: get config from Enviroment Variable");
-				} else { //event.succeeded()
-					//===========================================================================
-					// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
-					// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
-					JsonObject config = ar.result();
-					
-					System.out.println(config.toString()); //
-					
-					System.out.println("Path:"+ config.getString("Path"));
-					System.out.println("JAVA_HOME:"+ config.getString("JAVA_HOME"));
-				}
-
-			}
+		retriever.getConfig()	// = Future<JsonObject>
+		.onSuccess((JsonObject config)->{
+			//===========================================================================
+			// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
+			// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
+			
+			System.out.println(config.toString()); //
+			
+			System.out.println("Path:"+ config.getString("Path"));
+			System.out.println("JAVA_HOME:"+ config.getString("JAVA_HOME"));
+		})
+		.onFailure(thr->{
+			thr.printStackTrace();
 		});
 
 		

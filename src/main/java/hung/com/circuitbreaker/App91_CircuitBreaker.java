@@ -22,6 +22,7 @@ https://vertx.io/docs/vertx-circuit-breaker/java/
 + CircuitBreaker ko đưa các handlerAsyncResultResponse về cùng Thread.
 + handlerAsyncResultResponse thread chính là thread của future.handler().
 
++ CircuitBreaker: tạo một Future để wrap lại Handler 
  */
 public class App91_CircuitBreaker {
 

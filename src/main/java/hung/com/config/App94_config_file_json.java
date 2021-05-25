@@ -48,39 +48,36 @@ public class App94_config_file_json {
 		 */
 		ConfigStoreOptions fileOptions = new ConfigStoreOptions()
 											  .setType("file")          // lay config từ file
-//											  .setFormat("properties")  //nếu ko xác định format của config file là gì thì lấy default = json
+//											  .setFormat("yaml")  //nếu ko xác định format của config file là gì thì lấy default = json
 											  .setConfig(new JsonObject().put("path", "./src/config/local.json")); //run or debug mode lấy Root = project folder
 		
 		ConfigRetrieverOptions options = new ConfigRetrieverOptions().addStore(fileOptions);
 		
 		ConfigRetriever retriever = ConfigRetriever.create(vertx,options);
 		
-		// Asynchronous get Json restful from http server
-		retriever.getConfig(new Handler<AsyncResult<JsonObject>>() {
-			@Override
-			public void handle(AsyncResult<JsonObject> event) {
-				if (event.failed()) {
-					// Failed to retrieve the configuration
-				} else {
-					//===========================================================================
-					// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
-					// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
-					JsonObject config = event.result();
-					
-					System.out.println(config.toString());
-					
-					System.out.println("api.gateway.http.port:"+ config.getInteger("api.gateway.http.port"));
-					System.out.println("api.gateway.http.address:"+ config.getString("api.gateway.http.address"));
-					
-					// child JsonObject
-					JsonObject circuitBreakerConfig = config.getJsonObject("circuit-breaker");
-					System.out.println("name:"+ circuitBreakerConfig.getString("name"));
-					System.out.println("timeout:"+ circuitBreakerConfig.getInteger("timeout"));
-				}
+		retriever.getConfig()		// = Future<JsonObject>
+		.onSuccess( (JsonObject config)->{
 
-			}
+				//===========================================================================
+				// hau het cac lib của Vertx đêu hỗ trợ options là JsonObject
+				// vd: vertx options, http server option, verticle deploy option, threadpool option, circuit Breaker options...
+						
+				System.out.println(config.toString());
+				
+				System.out.println("api.gateway.http.port:"+ config.getInteger("api.gateway.http.port"));
+				System.out.println("api.gateway.http.address:"+ config.getString("api.gateway.http.address"));
+				
+				// child JsonObject
+				JsonObject circuitBreakerConfig = config.getJsonObject("circuit-breaker");
+				System.out.println("name:"+ circuitBreakerConfig.getString("name"));
+				System.out.println("timeout:"+ circuitBreakerConfig.getInteger("timeout"));
+
+		})
+		.onFailure(thr->{
+			thr.printStackTrace();
 		});
 		
+
 
 		//vertx.close();   //get config asynchronous => ko đc gọi hàm này
 	}
