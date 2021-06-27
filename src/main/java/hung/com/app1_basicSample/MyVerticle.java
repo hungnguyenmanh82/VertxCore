@@ -21,22 +21,21 @@ Verticle:  được hiểu như là 1 đối tượng (đơn vị quản lý tà
 public class MyVerticle extends AbstractVerticle {
 
 	@Override
-	public void start(Future<Void> startFuture) throws Exception {	
+	public void start() throws Exception {
 		//hàm này phải đc gọi để xác định quá trình Deploy thành công (thì hàm vertx.deployIDs() mới trả về đúng giá trị).
 		//hoặc phải gọi hàm startFuture.complete()
-		super.start(startFuture);   // hàm này đã gọi startFuture.complete()
+		super.start();
 		System.out.println(this.getClass().getName()+ ".start()"+ ": thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
-		
-		
 	}
 
 	@Override
-	public void stop(Future<Void> stopFuture) throws Exception {
+	public void stop() throws Exception {
 		//function này cần đc gọi để xác nhận undeploy() thành công (sẽ xóa DeploymentId)
 		// hoặc phải gọi hàm stopFuture.complete()
-		super.stop(stopFuture);  //this function will call stopFuture.complete()
-//		stopFuture.complete();
+		super.stop();
 		System.out.println(this.getClass().getName()+ ".stop()"+ ": thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 	}
+
+
 
 }

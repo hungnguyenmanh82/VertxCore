@@ -4,6 +4,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Context;
 import io.vertx.core.Future;
 //import io.vertx.core.Vertx;
+import io.vertx.core.Promise;
 
 /**
  * 
@@ -32,31 +33,30 @@ public class Verticle_stopFuture extends AbstractVerticle {
 	}
 	
 	@Override
-	public void start(Future<Void> startFuture) throws Exception {	
-		//hàm này phải đc gọi để xác định quá trình Deploy thành công (sẽ add DeploymentId)
+	public void start(Promise<Void> startPromise) throws Exception {
+		//hàm này phải đc gọi để xác định quá trình Deploy thành công (thì vertx.deploymentIDs() cập nhật giá trị)
 		// hoặc phải gọi hàm startFuture.complete()
-//		super.start(startFuture);   
-		
+		//super.start(startFuture);   // function startFuture.complete() dc goi o day
+
 		System.out.println(this.getClass().getName()+ ".start()"+ ": thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
-		
+
 		// chìa khóa là khái niệm Future
 		// hàm này sẽ call Handler<AsyncResult<String>> của vertx.deploy(Verticle, Handler)
-		startFuture.complete();
-		
+		startPromise.complete();
+
 		// hàm này sẽ call Handler<AsyncResult<String>> của vertx.deploy(Verticle, Handler)
-//		startFuture.fail("MyVerticle_Finish failed");
-		
-		System.out.println("Verticle_stopFuture.start(): deployId=" + context.deploymentID());
-		
+		//		startFuture.fail("Verticle_startFuture failed");
+
+		System.out.println(this.getClass().getName()+ ": deployId=" + context.deploymentID());
 	}
 
 	@Override
-	public void stop(Future<Void> stopFuture) throws Exception {
+	public void stop(Promise<Void> stopPromise) throws Exception {
 		//function này cần đc gọi để xác nhận undeploy() thành công (sẽ xóa DeploymentId)
 		// hoặc phải gọi hàm stopFuture.complete()
-		super.stop(stopFuture);
+		super.stop(stopPromise);
+
 		System.out.println(this.getClass().getName()+ ".stop()"+ ": thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
-//		stopFuture.complete();
 	}
 
 }

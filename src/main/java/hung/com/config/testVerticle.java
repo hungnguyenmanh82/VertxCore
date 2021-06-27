@@ -18,8 +18,8 @@ public class testVerticle extends AbstractVerticle {
 		vertx.deployVerticle(new testVerticle());
 	}
 
-	public void start(Future<Void> startFuture) throws Exception {
-		super.start(startFuture);
+	public void start() throws Exception {
+		super.start();
 		System.out.println("\n\n<= testVerticle.start():"+ ",thread="+Thread.currentThread().getId());
 
 		// dùng defaut config để lấy System properties và Enviroment variables of Window or linux

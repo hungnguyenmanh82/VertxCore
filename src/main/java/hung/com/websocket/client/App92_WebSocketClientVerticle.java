@@ -42,7 +42,8 @@ public class App92_WebSocketClientVerticle extends AbstractVerticle {
 	}
 
 	@Override
-	public void start(Future<Void> startFuture) throws Exception {
+	public void start() throws Exception {
+		super.start();
 		io.vertx.core.http.HttpClient httpClient = vertx.createHttpClient(); 
 
 		// các header yêu cau của websocket da dc add vao roi

@@ -67,8 +67,8 @@ public class App22_BlockingCodeVerticle_DeployOption extends AbstractVerticle {
 	}
 	
 	@Override
-	public void start(Future<Void> startFuture) throws Exception {	
-		super.start(startFuture);
+	public void start() throws Exception {	
+		super.start();
 		System.out.println(this.getClass().getName()+ ".start(): thread="+Thread.currentThread().getId() + ", ThreadName="+Thread.currentThread().getName());
 
 
@@ -112,7 +112,8 @@ public class App22_BlockingCodeVerticle_DeployOption extends AbstractVerticle {
 	}
 
 	@Override
-	public void stop(Future<Void> stopFuture) throws Exception {
+	public void stop() throws Exception {
+		super.stop();
 		System.out.println("MyVerticle.stop(): thread=" + Thread.currentThread().getId());
 	}
 

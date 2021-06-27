@@ -4,6 +4,10 @@ package hung.com.json.model;
  * ko cần construction, chỉ cần hàm set() là đủ
  */
 public class User2 {
+	/**
+	 * Private: thì cần phải có hàm setter/getter
+	 * Public: thì ko cần
+	 */
 	private String name;
 	private int yearOld;
 

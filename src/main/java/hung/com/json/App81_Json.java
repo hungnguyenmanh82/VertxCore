@@ -2,8 +2,10 @@ package hung.com.json;
 
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import hung.com.json.model.EUserState;
@@ -11,6 +13,8 @@ import hung.com.json.model.GoogleOauth2;
 import hung.com.json.model.User;
 import hung.com.json.model.User2;
 import hung.com.json.model.UserEnum;
+import hung.com.json.model.UserMap;
+import hung.com.json.model.UserPublic;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonArray;
@@ -34,11 +38,12 @@ public class App81_Json {
 //		String2JsonObject();
 //		JsonObject2String();
 //		
-//		JsonObject2Java();
+//		JsonObject_to_Java();
 //		Java2JsonObject();
 //		
-//		Map2JsonObject();
-//		JsonObject2Map();
+//		Map_to_JsonObject();
+		Map_to_JsonObject2();
+//		JsonObject_to_Map();
 		
 //		JsonFileToJava();
 		
@@ -50,7 +55,7 @@ public class App81_Json {
 		
 //		Java2JsonObject2();
 		
-		minifyJsonString();
+//		minifyJsonString();
 
 	}
 	
@@ -165,7 +170,7 @@ public class App81_Json {
 
 	}
 	
-	public static void JsonArray2List(){
+	public static void JsonArray_to_List(){
 		//======================================================================
 		Vertx vertx = Vertx.vertx();
 		Buffer buffer = vertx.fileSystem().readFileBlocking(App81_Json.class.getResource("JWK.json").getPath());
@@ -192,7 +197,7 @@ public class App81_Json {
 		list.forEach(o-> System.out.println(o.toString()));
 	}
 	
-	public static void String2JsonObject() {
+	public static void String_to_JsonObject() {
 		//===========================================convert String => JsonObject ===================
 		// cách 1:
 		String jsonString = "{\"foo\":\"bar\"}";
@@ -213,7 +218,7 @@ public class App81_Json {
 		
 		System.out.println(jsonObject0.toString());
 	}
-	public static void JsonObject2String() {
+	public static void JsonObject_to_String() {
 		//==================================== create JsonObject ===============================
 		JsonObject jsonObject2 = new JsonObject();
 		jsonObject2.put("foo", "bar")
@@ -242,7 +247,7 @@ public class App81_Json {
 
 	}
 	
-	public static void Java2JsonObject(){
+	public static void Java_to_JsonObject(){
 		//================================ convert java Object => JsonObject ================
 		// các thành phần của user phải có hàm .toString()
 		User user  = new User("Hungbeo",11);
@@ -260,7 +265,7 @@ public class App81_Json {
 		System.out.println(jsonObject2.toString());
 	}
 	
-	public static void Java2JsonObject2(){
+	public static void Java_to_JsonObject2(){
 		//================================ convert java Object => JsonObject ================
 		// các thành phần của user phải có hàm .toString()
 		/**
@@ -276,7 +281,7 @@ public class App81_Json {
 		}
 	}
 	
-	public static void JsonObject2Java(){
+	public static void JsonObject_to_Java(){
 		try {
 			//=================================== convert JsonObject => Java Object ================
 			JsonObject jsonUser = new JsonObject().put("name", "Happy")
@@ -292,10 +297,16 @@ public class App81_Json {
 			System.out.println("************* {" + user.getName() + "," + user.getYearOld() + "}" );
 			
 			/**
-			 * ko cần construction, chỉ cần hàm set() là đủ
+			 * ko cần construction, chỉ cần hàm setter/getter là đủ
 			 */
 			User2 user2 = jsonUser.mapTo(User2.class);
 			System.out.println("************* {" + user2.getName() + "," + user2.getYearOld() + "}" );
+			
+			/**
+			 * chỉ cần Public là đủ. Ko cần setter/getter
+			 */
+			UserPublic user3 = jsonUser.mapTo(UserPublic.class);
+			System.out.println("************* {" + user3.name + "," + user3.yearOld + "}" );
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -304,33 +315,66 @@ public class App81_Json {
 	}
 	
 	
-	public static void Map2JsonObject() {
+	public static void Map_to_JsonObject() {
 		//===================================convert Map => JsonObject ===================
 		Map<String, Object> map = new HashMap<>();
 		map.put("foo", "bar");
 		map.put("xyz", 3);
 		JsonObject jsonObject = new JsonObject(map);
 		System.out.println(jsonObject.toString());
+	}
+	
+	public static void Map_to_JsonObject2() {
+		/**
+		 * trong biến user có chứa kiểu Java Map
+		 * Tự động convert java Map về Json luôn
+		 */
+		UserMap user = UserMap.newInstanceSample();
 		
+		JsonObject jsonObject = JsonObject.mapFrom(user); // vẫn convert đúng Map sang JsonObject
+		
+		System.out.println(jsonObject.toString());
+		
+		//================================ convert JsonObject to map  =========================
+		/**
+		 * convert ngược lại ko được. Vì đơn giản Map là interface 
+		 * Jackson sẽ ko biết nên implement Map<String,Object> với HashMap hay loại nào khác
+		 * 
+		 * Chỗ này phải làm bằng tay.
+		 * 
+		 * Gson hỗ trợ tính năng này
+		 */
+//		UserMap user2 = jsonObject.mapTo(UserMap.class);   // chỗ này bị lỗi
+		
+//		System.out.println(user2.mapInfo.toString());
 		
 	}
 	
-	public static void JsonObject2Map() {
+	public static void JsonObject_to_Map() {
 		Vertx vertx = Vertx.vertx();
 		Buffer buffer = vertx.fileSystem().readFileBlocking(App81_Json.class.getResource("googleAuth2.json").getPath());
 
 		//===========================================convert String => JsonObject ===================
-		JsonObject jsonObject = new JsonObject(buffer);
-//		JsonObject jsonObject = buffer.toJsonObject();
+		JsonObject jsonObject = buffer.toJsonObject();
 		System.out.println(jsonObject.toString());
 		
+		/**
+		 * chỉ map các sibling cùng cấp (ko map các children con của nó)
+		 */
 		Map<String, Object> map = jsonObject.getMap();
 		
+		// check value in map
+		System.out.println(" ======================== check: ");
+		Iterator<Entry<String, Object>> it = map.entrySet().iterator();
 		
+		while(it.hasNext()) {
+			Entry<String, Object> e = it.next();
+			System.out.println(e.toString());
+		}
 	}
 
 
-	public static void JsonFileToJava(){
+	public static void JsonFile_to_Java(){
 		/**
 		 * Vertx JsonObject dùng Jackson tự động Minify comments trong Json string trc khi parser (đã test ok)
 		 */
