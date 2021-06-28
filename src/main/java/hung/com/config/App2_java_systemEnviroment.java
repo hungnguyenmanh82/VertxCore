@@ -35,5 +35,8 @@ public class App2_java_systemEnviroment {
 			System.out.printf("{%s:%s}\n",key,value);
 		});
 		
+		//
+		System.out.println("========================");
+		System.out.println("JAVA_HOME = " + System.getenv().get("JAVA_HOME"));
 	}
 }

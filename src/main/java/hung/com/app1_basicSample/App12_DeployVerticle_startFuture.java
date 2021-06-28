@@ -40,7 +40,7 @@ public class App12_DeployVerticle_startFuture {
 		});
 		
 		// waiting for Verticle context is allocate by Vertx
-		Thread.currentThread().sleep(500);
+		Thread.sleep(500);
 		
 		Set<String> deploymentIDs = vertx.deploymentIDs();
 		System.out.println("==============  (sleeped 500ms wait for Context allocated), list of deploymentIDs: number Deployments =" + deploymentIDs.size());

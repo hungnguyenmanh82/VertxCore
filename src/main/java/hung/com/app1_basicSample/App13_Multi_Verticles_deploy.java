@@ -29,13 +29,14 @@ public class App13_Multi_Verticles_deploy {
 		// 
 		vertx.deployVerticle("hung.com.basicSample.MyVerticle",deploymentOptions);//asynchronous call MyVerticle.start() in worker thread
 
-		Thread.currentThread().sleep(3000);
+		Thread.sleep(3000);
+
 
 		//vertx.undeploy(DeploymentId) => DeploymentId đc cấp khi hàm Verticle.start() đc gọi
 		//asynchronous function
 		vertx.close();  //error: Vertical.stop() won't be called
 
-		Thread.currentThread().sleep(3000); //wait for vertx.close() finished
+		Thread.sleep(3000); //wait for vertx.close() finished
 	}
 
 }

@@ -40,5 +40,9 @@ public class App1_java_systemProperties {
 		System.out.println("user.name=" + System.getProperty("user.name"));
 		System.out.println("os.name=" + System.getProperty("os.name"));
 		
+		// put
+		System.getProperties().put("AppName", "App1_java_systemProperties");
+		System.out.println("AppName=" + System.getProperty("AppName"));
+		
 	}
 }
